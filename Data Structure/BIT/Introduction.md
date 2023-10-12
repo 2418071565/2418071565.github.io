@@ -8,11 +8,11 @@
 给定一个数组$\{a_1,a_2\dots ,a_8 \}$，我们如何快速的求其前缀和呢？
 一般我们求前缀和就是累加，时间复杂度是$O(n)$，一种容易想到的分治的优化策略是，对数组中的元素两两求和并且存到新的数组中，一直这样计算下去直到新数组中只有一个元素，如下：
 
- <div align=center><img src="https://note.youdao.com/yws/public/resource/f088b614bca1948bf4ed5bcac8f45d08/xmlnote/WEBRESOURCEb05163aba9fbe29258971d62b00800d9/10983" width="750"></div>
+ <div align=center><img src="img/01.png" width="750"></div>
 
 这样就优化成线段树了，求前缀和、修改元素值的复杂度就都是$O(\log n)$了，但是对于求前缀和有很多元素是多余的，如：我们要求$a_1$到$a_4$的前缀和，只需要用到$a_4$的父节点，并不需要`$a_4$其本身。我们将类似的节点都删掉，就得到树状数组：
 
- <div align=center><img src="https://note.youdao.com/yws/public/resource/f088b614bca1948bf4ed5bcac8f45d08/xmlnote/WEBRESOURCE438284e5fac14e63ebff89289d9a4e0b/10994" width="750"></div>
+ <div align=center><img src="img/02.png" width="750"></div>
 
 图中黑色节点都是被删除的节点，这样空间复杂度就优化为$O(n)$了，我们可以直接将节点值存到一个数组中。但是问题来了，我们该怎么在数组中正确快速的求前缀和呢？这就要用到大名鼎鼎的$lowbit$函数了
 
@@ -20,7 +20,7 @@
 
 我们将每个节点下标对应的二进制形式写出来，就能看出一些规律：
 
- <div align=center><img src="https://note.youdao.com/yws/public/resource/f088b614bca1948bf4ed5bcac8f45d08/xmlnote/WEBRESOURCE18397ebb5aa5bba0fc53c59e4afafc3b/11030" width="750"></div>
+ <div align=center><img src="img/03.png" width="750"></div>
 
 *   每个节点覆盖的长度是其二进制表示下的最低位$1$及其后面的$0$构成的数值
 *   每个节点的父节点的下标就是在其二进制的最低位$1$加上$1$。
@@ -190,7 +190,7 @@ void change(int l, int r, int d)
 
 二维树状数组，也被称作**树状数组套树状数组**，用来维护二维数组上的单点修改和前缀信息问题。其实就是一维树状数组上的每个节点变成了一个一维树状数组：
 
- <div align=center><img src="https://note.youdao.com/yws/public/resource/f088b614bca1948bf4ed5bcac8f45d08/xmlnote/WEBRESOURCEc09d9c0467f69d04d3ad55b1fc660a1c/11292" width="750"></div>
+ <div align=center><img src="img/04.png" width="750"></div>
 
 基本的二维树状数组可以实现单点修改，子矩阵查询
 
@@ -213,7 +213,7 @@ void update(int x,int y,int d)
 
 现在我们可以求$\sum_{i=1}^{n}\sum_{j=1}^{m}a[i][j]$的值，要我们计算下图中黑色矩阵的值
 
- <div align=center><img src="https://note.youdao.com/yws/public/resource/f088b614bca1948bf4ed5bcac8f45d08/xmlnote/WEBRESOURCE9a8cd34e8e3b962af96bf9cfc6f6e4ee/11313" width="750"></div>
+ <div align=center><img src="img/05.png" width="750"></div>
 
 很明显，计算黑色矩阵的面积有下面的公式：
 
@@ -257,7 +257,7 @@ $$
 
 现在，假设我们要在顶点为$(a,b)、(c,d)$的矩阵内的每个元素加上$k$，如下图
 
- <div align=center><img src="https://note.youdao.com/yws/public/resource/f088b614bca1948bf4ed5bcac8f45d08/xmlnote/WEBRESOURCEc71727842feaa8cffdacaaa54a95235c/11350" width="750"></div>
+ <div align=center><img src="img/06.png" width="750"></div>
 
 因为我们维护的是差分数组，所以我分别修改四个顶点即可完成对区间的修改，实现如下：
 
