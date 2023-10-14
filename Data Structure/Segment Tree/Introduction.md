@@ -191,6 +191,7 @@ int ask(int& k,int l,int r,int s,int t);
 参考文章：<br>
 《算法竞赛-上册》-罗永军<br>
 [CSDN_动态开点线段树](https://blog.csdn.net/qq_41673789/article/details/102773885)<br>
+[线段树-Oi Wiki](https://oi-wiki.org/ds/seg/)
 
 
 
