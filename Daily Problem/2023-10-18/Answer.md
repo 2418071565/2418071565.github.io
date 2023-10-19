@@ -1,4 +1,4 @@
-[灵神的题解](https://www.luogu.com.cn/blog/endlesscheng/solution-at-arc147-c)
+
 
 让我们按照从小到大的顺序排列 s的所有符号，并构造一个答案 tmax。
 
