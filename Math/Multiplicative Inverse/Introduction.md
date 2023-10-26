@@ -62,7 +62,7 @@ ll inv(ll a,ll p){
 
 首先我们知道$1\times 1\equiv 1(mod\space p)$，所以在模$p$的情况下，$1$的逆元就是$1$。
 
-我们再来看其他情况：设我们要求$i$的逆元$i^{-1}$，我们令$k=\left \lfloor \frac{p}{i}\right \rfloor $，$j=p\ mod\ i$，有$p=ki+j$。我们会得到$ki+j\equiv 0(mod\ p)$，我们左右同时乘以$i^{-1}\times j^{-1}$，就可已得到：
+我们再来看其他情况：设我们要求$i$的逆元$i^{-1}$，我们令$k=\left \lfloor \frac{p}{i}\right \rfloor $，$j=p\space mod\space i$，有$p=ki+j$。我们会得到$ki+j\equiv 0(mod\space p)$，我们左右同时乘以$i^{-1}\times j^{-1}$，就可已得到：
 $$
 kj^{-1}+i^{-1}\equiv 0(mod\space p)\\
 ~\\
