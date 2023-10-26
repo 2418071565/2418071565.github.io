@@ -39,7 +39,7 @@ ll inv(ll a,ll p){
 ```
 时间复杂度位：$O(\log n)$，适用于任何数
 ### 费马小定理
-定理内容：如果$p$是质数，而整数$a$不是$p$的倍数，则有$a^{p-1}\equiv 1(mod\ p)$，将式左边拆开就能得到$a\cdot a^{p-2}\equiv 1(mod\ p)$，根据逆元定义可以知道$a^{p-2}$就是$a$的逆元，直接利用快速幂计算即可
+定理内容：如果$p$是质数，而整数$a$不是$p$的倍数，则有$a^{p-1}\equiv 1(mod\space p)$，将式左边拆开就能得到$a\cdot a^{p-2}\equiv 1(mod\space p)$，根据逆元定义可以知道$a^{p-2}$就是$a$的逆元，直接利用快速幂计算即可
 
 ```cpp
 ll qpow(ll a,ll b){
@@ -60,19 +60,19 @@ ll inv(ll a,ll p){
 ### 递推打表
 上面两种方法只适用于对单个数进行逆元求解，如果对$1\dots n$，的所有数求关于$p$的逆元，用上面的方法肯会超时。下面介绍一种$O(n)$的方法。
 
-首先我们知道$1\times 1\equiv 1(mod\ p) $，所以在模$p$的情况下，$1$的逆元就是$1$。
+首先我们知道$1\times 1\equiv 1(mod\space p)$，所以在模$p$的情况下，$1$的逆元就是$1$。
 
 我们再来看其他情况：设我们要求$i$的逆元$i^{-1}$，我们令$k=\left \lfloor \frac{p}{i}\right \rfloor $，$j=p\ mod\ i$，有$p=ki+j$。我们会得到$ki+j\equiv 0(mod\ p)$，我们左右同时乘以$i^{-1}\times j^{-1}$，就可已得到：
 $$
-kj^{-1}+i^{-1}\equiv 0(mod\ p)\\
+kj^{-1}+i^{-1}\equiv 0(mod\space p)\\
 ~\\
-i^{-1}\equiv -kj^{-1}(mod\ p)
+i^{-1}\equiv -kj^{-1}(mod\space p)
 $$
-我们再将$j=p\ mod\ i$和$k=\left \lfloor \frac{p}{i}\right \rfloor$带入，得到：
+我们再将$j=p\ mod\space i$和$k=\left \lfloor \frac{p}{i}\right \rfloor$带入，得到：
 $$
-i^{-1}\equiv -\left \lfloor \frac{p}{i}\right \rfloor (p\ mod\ i)^{-1}(mod \ p)
+i^{-1}\equiv -\left \lfloor \frac{p}{i}\right \rfloor (p\space mod\space i)^{-1}(mod \space p)
 $$
-因为$p\ mod\ i$一定是小于$i$的，所以我们可以从以前算过的逆元推导得$i$的逆元，然后将其存入到一个数组里，使用时直接查询即可。
+因为$p\space mod\space i$一定是小于$i$的，所以我们可以从以前算过的逆元推导得$i$的逆元，然后将其存入到一个数组里，使用时直接查询即可。
 
 为了防止出现负数，计算时可以加上一个$p$再模$p$
 ```cpp
