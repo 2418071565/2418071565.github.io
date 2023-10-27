@@ -2,7 +2,6 @@
 
 二分答案即可
 
-
 ```cpp
 
 #include <bits/stdc++.h>
