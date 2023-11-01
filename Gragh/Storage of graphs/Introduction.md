@@ -36,7 +36,7 @@ vector<int> edge[MAX];
 
 ```cpp
 //邻接边信息
-struct edge {
+struct ed {
     int to;         //边的终点
     int next;       //下一个邻接边在边数组的下标
     int w;          //边的权值
