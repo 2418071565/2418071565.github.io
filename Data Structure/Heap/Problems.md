@@ -49,17 +49,8 @@ public:
 #include <bits/stdc++.h>
 using namespace std;
 #define MAX int(2e6+7)
-#define inf INT_MAX
-#define fi first
-#define se second
 typedef long long ll;
 //const int p = 998244353;
-typedef pair<int, int> pi;
-typedef pair<ll, ll> pl;
-//typedef vector<p> vp;
-typedef vector<int> vi;
-typedef vector<char> vc;
-typedef vector<pl> vp;
 int T;
 inline int input() {
     bool sym = false; int res = 0; char ch = getchar();
