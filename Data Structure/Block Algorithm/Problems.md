@@ -4,7 +4,6 @@ Exercise
 |:-:|:-:|:-:|:-:|
 |[P2801](https://www.luogu.com.cn/problem/P2801)|提高+/省选−|P2801.cpp|区间k大值|
 |[P3203](https://www.luogu.com.cn/problem/P3203)|省选/NOI−|P3203.cpp|分块单点修改，单点查询|
-||
 
 
 
