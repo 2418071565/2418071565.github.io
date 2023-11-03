@@ -4,7 +4,7 @@ Exercise
 |:-:|:-:|:-:|:-:|
 |[P2801](https://www.luogu.com.cn/problem/P2801)|提高+/省选−|P2801.cpp|区间k大值|
 |[P3203](https://www.luogu.com.cn/problem/P3203)|省选/NOI−|P3203.cpp|分块单点修改，单点查询|
-
+|[区间与绝对值](https://ac.nowcoder.com/acm/problem/260786)||区间与绝对值|莫队+树状数组|
 
 
 #### P2801.cpp
@@ -223,5 +223,114 @@ void solve()
 		if (op == 1)cout << ask(x + 1) << '\n';
 		else cin >> k, update(x + 1, k);
 	}
+}
+```
+
+#### 区间与绝对值
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+const int MAX = 5e5 + 100;
+typedef long long ll;
+const ll mod = 1e9 + 7;
+
+void solve();
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(0), cout.tie(0);
+	clock_t c1 = clock();
+#ifdef LOCAL
+	freopen("in.in", "r", stdin);
+	freopen("out.out", "w", stdout);
+#endif
+	// ll T;
+	// for (cin >> T; T--;)
+	solve();
+	// f()
+	cerr << "Time Used: " << clock() - c1 << " ms\n";
+	return 0;
+}
+
+
+ll ans[MAX];
+ll res = 0, c = 0;
+ll a[MAX];
+ll pos[MAX];
+ll n, q,ma;
+
+struct S
+{
+	ll l, r, id;
+}s[MAX];
+ll f1[MAX], f2[MAX];
+inline ll lowbit(ll x) { return x & -x; }
+inline void update1(ll x, ll d) { for (; x <= ma; x += lowbit(x))f1[x] += d; }
+inline ll ask1(ll x) { ll sum = 0; for (; x > 0; x -= lowbit(x))sum += f1[x]; return sum; }
+
+inline void update2(ll x, ll d) { for (; x <= ma; x += lowbit(x)) f2[x] += d; }
+inline ll ask2(ll x) { ll sum = 0; for (; x > 0; x -= lowbit(x))sum += f2[x]; return sum; }
+
+inline void add(ll x)
+{
+	update1(a[x], 1);
+	update2(a[x], a[x]);
+	c++;
+	ll pfs = ask2(a[x] - 1);
+	ll cnt = ask1(a[x] - 1);
+	res += cnt * a[x] - pfs;
+	pfs = ask2(ma) - ask2(a[x]);
+	cnt = c - ask1(a[x]);
+	res += pfs - cnt * a[x];
+}
+
+
+inline void sub(ll x)
+{
+	ll pfs = ask2(a[x] - 1);
+	ll cnt = ask1(a[x] - 1);
+	res -= cnt * a[x] - pfs;
+	pfs = ask2(ma) - ask2(a[x]);
+	cnt = c - ask1(a[x]);
+	res -= pfs - cnt * a[x];
+	c--;
+	update1(a[x], -1);
+	update2(a[x], -a[x]);
+}
+
+
+void solve()
+{
+	cin >> n >> q;
+	ll block = sqrt(n);
+	memset(f1, 0, sizeof f1);
+	memset(f2, 0, sizeof f2);
+	ma = 0;
+	for (ll i = 1; i <= n; ++i)
+	{
+		cin >> a[i];
+		ma = max(a[i], ma);
+		pos[i] = (i + block - 1) / block;
+	}
+	for (ll i = 1; i <= q; ++i)
+	{
+		cin >> s[i].l >> s[i].r;
+		s[i].id = i;
+	}
+	sort(s + 1, s + 1 + q, [](S& a, S& b)
+		{ return pos[a.l] == pos[b.l] ? a.r < b.r : pos[a.l] < pos[b.l]; });
+
+	ll l = 1, r = 0;
+	for (ll i = 1; i <= q; ++i)
+	{
+		while (s[i].l < l)add(--l);
+		while (s[i].l > l)sub(l++);
+		while (s[i].r > r)add(++r);
+		while (s[i].r < r)sub(r--);
+		ans[s[i].id] = 2 * res;
+	}
+	for (ll i = 1; i <= q; ++i)
+		cout << ans[i] << "\n";
 }
 ```
