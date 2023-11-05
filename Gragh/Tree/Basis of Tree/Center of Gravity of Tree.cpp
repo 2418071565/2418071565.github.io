@@ -11,6 +11,7 @@ const int MAX = 5e4 + 100;
 typedef long long ll;
 const ll mod = 1e9 + 7;
 
+
 void solve();
 int main()
 {
