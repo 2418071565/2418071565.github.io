@@ -14,7 +14,7 @@ inline int lowbit(int x) {return x & -x;}
 // 单点修改
 void update(int x, int d) { 
     while (x <= n) {
-        f[x] = d;
+        f[x] = max(d,a[x]);
         // 用当前节点的子节点更新当前节点
         for (int i = 1; i < lowbit(x); i <<= 1)
             f[x] = max(f[x], f[x - i]);
