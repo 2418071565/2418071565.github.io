@@ -18,7 +18,7 @@ $P$ 进制一般会选取$31,131,1313,13131$等，可以有效减少冲突。
 
 ### BKDRHash
 
-该函数在实现时采用了一种"隐式取余法"，即自然溢出法。我们将哈希值 $h$ 设定为$unsigned\space long\space long$，这样在累加过程中，超出$ull$的范围就相当于对其模$2^{64}−1$。这样避免的低效的取模运算。
+该函数在实现时采用了一种"隐式取余法"，即自然溢出法。我们将哈希值 $h$ 设定为$unsigned\space long\space long$，这样在累加过程中，超出$ull$的范围就相当于对其模$2^{64}−1$。这样可以避免的低效的取模运算。
 
 ```cpp
 typedef unsigned long long ull;
@@ -125,7 +125,9 @@ void add(char ch)
 参考文章：<br>
 
 《算法竞赛-下册》
+
 [Oi Wiki-字符串哈希](https://oi-wiki.org/string/hash/)
+
 [CSDN-【算法学习】字符串哈希（Hash）](https://blog.csdn.net/Mikchy/article/details/103995537)
 
 
