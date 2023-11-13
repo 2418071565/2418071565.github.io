@@ -55,5 +55,6 @@ Problems.md           //算法相关题目，及AC代码
 
 - **数论**
   - [数论基础](./Math/Foundation.md)
+  - [快速幂](./Math/Binary%20Exponentiation/)
   - [乘法逆元](./Math/Multiplicative%20Inverse/)
 
