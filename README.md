@@ -19,7 +19,7 @@ Problems.md           //算法相关题目，及AC代码
 - [每日一题](./Daily%20Problem/)
 
 ### 基础算法
-- [倍增](./Basic%20Algorithm/Binary%20Lifting/)
+- [倍增](./Algorithm/Binary%20Lifting/)
 
 ### 数据结构
 
