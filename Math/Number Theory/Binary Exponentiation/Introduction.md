@@ -1,8 +1,8 @@
 ## 模运算
 定义：设$a,b\in Z$且$b>0$,如果$q,r\in Z$满足$a=qb+r$且$0\le r<b$则称$a$模$b$等于$r$记作
-```math
+$$
 a\space mod \space b=r
-```
+$$
 - 负数取模：将$a$不断的加上$b$直到结果大于$0$，这个结果就是模运算的结果
 ### 模运算的性质
 - $b\mid a\Leftrightarrow a\space mod\space b=0$
