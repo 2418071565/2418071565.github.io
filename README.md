@@ -38,10 +38,10 @@ Problems.md           //算法相关题目，及AC代码
 
 ### 字符串
 
+- [字符串哈希](./String/String%20Hash/)
+- [字典树](./String/Trie/)
 - [KMP](./String/KMP/)
 - [马拉车](./String/Manacher/)
-- [字符串哈希](./String/String%20Hash/)
-
 
 ### 图
 
@@ -54,7 +54,7 @@ Problems.md           //算法相关题目，及AC代码
 ### 数学
 
 - **数论**
-  - [数论基础](./Math/Foundation.md)
-  - [快速幂](./Math/Binary%20Exponentiation/)
-  - [乘法逆元](./Math/Multiplicative%20Inverse/)
+  - [数论基础](./Math/Number%20Theory/Foundation.md)
+  - [快速幂](./Math/Number%20Theory/Binary%20Exponentiation/)
+  - [乘法逆元](./Math/Number%20Theory/Multiplicative%20Inverse/)
 
