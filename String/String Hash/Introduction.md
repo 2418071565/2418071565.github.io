@@ -10,7 +10,7 @@
 
 举个例子，设字符串 $S=abcde$，我们将它转化成 $P$ 进制数:
 $$
-h_S=(a\times P^4 + b\times P^3 + c\times + P^2 + d\times P^1 + e\times P^0) \% M
+h_S=(a\times P^4 + b\times P^3 + c\times  P^2 + d\times P^1 + e\times P^0) \% M
 $$
 这里的字符可以用在字母表中的次序替换，也可也用$ASCii$码来替换。
 
