@@ -56,19 +56,7 @@ double Newton_sqrt(double n)
 ```
 牛顿迭代法收敛速率是平方级的，所以时间复杂度为 $O(\log{n})$
 
-而由double Q_sqrt(double n)
-{
-	ll N,X;
-	double x;
-	N = *(ll*)&n;
-    // 0x1FF8000000000000ll -> 1023 * (1 << 51)
-	X = 0x1FF8000000000000ll + (N >> 1);
-	x = *(double*)&X;
-	x = (x + n / x) / 2;    // 1st iteration
-	x = (x + n / x) / 2;    // 2nd iteration
-	x = (x + n / x) / 2;    // 3th iteration
-	return x;
-}	提出的算法只要 $O(1)$ 就可以算出足够精确的平方根。
+而由格雷格·沃什提出的算法只要 $O(1)$ 就可以算出足够精确的平方根。
 
 # 快速平方根倒数算法
 
