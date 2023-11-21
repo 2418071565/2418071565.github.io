@@ -59,3 +59,11 @@ Problems.md           //算法相关题目，及AC代码
   - [快速幂](./Math/Number%20Theory/Binary%20Exponentiation/)
   - [乘法逆元](./Math/Number%20Theory/Multiplicative%20Inverse/)
 
+- **数值算法**
+  - [牛顿迭代法](.//Math/Numerical%20algorithms/Newton's%20method%20for%20finding%20roots/) 
+
+
+### 有趣的算法
+
+- [快速平方根算法](./Interesting%20Algorithm/Quick%20Sqrt/)
+
