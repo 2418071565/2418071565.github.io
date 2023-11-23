@@ -46,6 +46,7 @@ Problems.md           //算法相关题目，及AC代码
 
 - [图的存储](./Gragh/Storage%20of%20graphs/)
 - [拓扑排序](./Gragh/Topo%20Sort/)
+- [最小生成树](./Gragh/MST/)
 
 - **树上问题**
   
