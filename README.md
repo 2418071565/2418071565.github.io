@@ -26,10 +26,9 @@ Problems.md           //算法相关题目，及AC代码
 - **基础数据结构**
   - [哈希表](./Data%20Structure/Hash%20Table/)
   - [二叉堆](./Data%20Structure/Heap/)
-
+  - [并查集](./Data%20Structure/Union-Find/)
 
 - **高级数据结构**
-
   - [树状数组](./Data%20Structure/BIT/)
   - [分块数组、莫队](./Data%20Structure/Block%20Algorithm/)
   - [线段树](./Data%20Structure/Segment%20Tree/)
