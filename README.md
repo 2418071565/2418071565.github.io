@@ -58,6 +58,10 @@ Problems.md           //算法相关题目，及AC代码
   - [数论基础](./Math/Number%20Theory/Foundation.md)
   - [快速幂](./Math/Number%20Theory/Binary%20Exponentiation/)
   - [乘法逆元](./Math/Number%20Theory/Multiplicative%20Inverse/)
+  
+- **计算几何**
+  - [二维计算几何](./Math/Geometry/2D%20Computational%20Geometry/) 
+  - [凸包](./Math/Geometry/Convex%20Hull/)
 
 - **数值算法**
   - [牛顿迭代法](.//Math/Numerical%20algorithms/Newton's%20method%20for%20finding%20roots/) 
