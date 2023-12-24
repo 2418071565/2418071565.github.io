@@ -15,16 +15,19 @@
 就是向量坐标对应位置的值进行加减即可。
 ```cpp
 // 向量+
-p p::operator+(const p &a) const 
-{ 
-    return p{x + a.x, y + a.y}; 
+Point Point::operator+(const Point &a) const 
+{
+    return Point{x + a.x, y + a.y}; 
 }
 // 向量-
-p p::operator-(const p &a) const
+Point Point::operator-(const Point &a) const
 { 
     return p{x - a.x, y - a.y}; 
 }
 ```
+向量加减的几何意义通过下面两图很好理解：
+
+<div align="center"><img src="./img/06.png"width="500"></div>
 
 ##### 点乘（内积）
 我们知道点乘的结果是一个数，其几何意义为 $\vec{b}$ 在 $\vec{a}$ 上的投影与 $|\vec{a}|$ 的乘积。
@@ -42,7 +45,7 @@ $$
 
 ```cpp
 // 我们将点乘重载为 | 符号
-double p::operator|(const p &a) const 
+double Point::operator|(const Point &a) const 
 { 
     return x * a.x + y * a.y; 
 } // 点乘
@@ -66,13 +69,13 @@ $$
 $$
 
 ```cpp
-double p::operator*(const p &a) const 
+double Point::operator*(const Point &a) const 
 { 
     return x * a.y - y * a.x; 
 } // 叉乘
 ```
 
-利用坐标在程序中运算点乘叉乘，对于我们判断几何位置关系时非常有用。
+利用坐标在程序中运算点乘叉乘，对于判断几何位置关系时非常有用。
 
 ##### 向量取模
 
@@ -87,12 +90,12 @@ $$
 
 ```cpp
 // 向量取平方
-double p::pow() const 
+double Point::pow() const 
 { 
     return x * x + y * y; 
 }                    
 // 向量取模
-double abs(const p &p) 
+double abs(const Point &p) 
 { 
     return sqrt(p.pow()); 
 }
@@ -112,7 +115,7 @@ $$
 
 ```cpp
 // 点到点的欧式距离
-double p::disPoint(const p &a) const
+double Point::disPoint(const Point &a) const
 {
     return sqrt((x - a.x) * (x - a.x) + (y - a.y) * (y - a.y));
 }
@@ -150,14 +153,14 @@ $$
 d=\frac{\left | \vec{ap}\times \vec{ab} \right | }{\left | \vec{ab}\right |}
 $$
 
-我们一般采用这个方法计算点到直线的距离 $d$ 。
+因为一般题目只会给我们一些点做数据，所以我们一般采用这个方法计算点到直线的距离 $d$ 更方便。
 
 ```cpp
 // 点到直线的距离
 // a,b为直线上两点
-double p::disline(const p &a, const p &b) const
+double Point::disline(const Point &a, const Point &b) const
 {
-    p ap = (*this) - a, ab = b - a;
+    Point ap = (*this) - a, ab = b - a;
     return abs(ap * ab) / abs(ab);
 }
 ```
@@ -205,7 +208,7 @@ $$
 ```cpp
 // 点到线段的距离
 // a,b线段两端点
-double disSeg(const p &a, const p &b) const
+double Point::disSeg(const Point &a, const Point &b) const
 {
     // 判断点和线段的位置关系
     if ((((*this) - a) | (b - a)) <= -eps || (((*this) - b) | (a - b)) <= -eps)
@@ -217,13 +220,13 @@ double disSeg(const p &a, const p &b) const
 
 ### 利用向量求三角形面积
 我们了解的三角形面积公式有
-```math
+$$
 \begin{cases}
 s=\frac{ah}{2} \\
  s=\frac{ab\sin \theta }{2}\\
 s=\sqrt[]{p(p-a)(p-b)(p-c)} ,(p=\frac{a+b+c}{2} )  
 \end{cases}
-```
+$$
 而当给定三个顶点坐标$a=(x_1,y_1),b=(x_2,y_2),b=(x_3,y_3)$，求三角形面积，对计算机而言下面这个公式是最合适的：
 
 $$
@@ -233,11 +236,132 @@ $$
 众所周知，这个公式是由向量叉乘的来的，即我们求出向量$\vec{ab}，\vec{ac}$，二维向量叉乘的模的是以$ab，ac$为两条边，所围成的平行四边形面积，我们求得$ab，ac$，令其取二分之一即可得到上式
 
 ```cpp
-double triangle(p &a, p &b, p &c) 
+double triangle(Point &a, Point &b, Point &c) 
 { 
     return (b - a) * (b - c) / 2.0; 
 } // 求三角形面积
 ```
+
+## 线
+
+### 直线
+
+对于直线，我们一般记录其方程，如一般式 $Ax+By+C=0$ ，斜截式 $y=kx+b$ 等，针对题目所需采取不同的形式。
+
+更简便的，我们可以直接记录直线上的两点，这样在计算一些位置关系时更方便。
+
+#### 求两直线交点
+
+首先我们要判断两直线是否相交，因为我们记录的是直线上两个点，很容易算出其方向向量，算出方向向量后取叉乘的模，如果为 $0$ 则两直线平行。
+
+```cpp
+// 判断直线是否平行
+bool line::is_parallel(const line& b)const
+{
+    return abs(dVec * b.dVec) <= eps;
+}
+```
+
+确定两直线相交后，我们就可以计算交点了。
+
+计算过程需要初中三角形正弦定理的知识。
+
+$$
+\frac{a}{\sin{A}}=\frac{b}{\sin{B}}=\frac{c}{\sin{C}}
+$$
+
+首先我们用 $\vec{a}$ 表示向量 $\vec{pC}$ , 用 $\vec{b}$ 表示方向向量 $\vec{pD}$ 。
+
+<div align="center"><img src="./img/04.png"width="400"></div>
+
+但是这样好像看不出什么 ，连接 $D,C$ 两点。
+
+<div align="center"><img src="./img/05.png"width="400"></div>
+
+我们用正弦定义可以写出下式：
+
+$$
+\frac{|\vec{a}|}{\sin{\theta}}=\frac{|\vec{c}|}{\sin{\beta}}\\
+~\\
+|\vec{a}|=\left | \frac{|\vec{c}|\sin{\theta}}{\sin{\beta}} \right | 
+$$
+
+$\vec{c}$ 我们可以通过 $\vec{a}-\vec{b}$ 得到， $\sin{\theta}$ 和 $\sin{\beta}$ 角可以通过两直线方向向量 $\vec{AC},\vec{BD}$ 和 $\vec{c}$ 叉乘得到：
+
+$$
+\sin{\theta}=\frac{\vec{BD}\times \vec{c}}{|\vec{BD}||\vec{c}|}\\
+~\\
+\sin{\beta}=\frac{\vec{AC}\times \vec{BD}}{|\vec{AC}||\vec{BD}|}
+$$
+
+我们将两个正弦值带入上式，化简得：
+
+$$
+|\vec{a}|= |\vec{AC}| \cdot \frac{| \vec{BD}\times \vec{c}  |}{| \vec{AC}\times \vec{BD} |} 
+$$
+
+为了方便表示我们令 $K=\frac{| \vec{BD}\times \vec{c}  |}{| \vec{AC}\times \vec{BD} |} $，所以：
+
+$$
+|\vec{a}|=|\vec{AC}|\cdot K
+$$
+
+其中 $\vec{a}$ 和 $\vec{AC}$ 是同向的，那么 $\vec{a}$ 可以通过 $\vec{AC}$ 数乘得到：
+
+$$
+\vec{a} = K\cdot \vec{AC}
+$$
+
+知道 $\vec{a}$ 后，那么交点就相当于点 $C$ 沿着 $\vec{a}$ 移动 $|\vec{a}|$ 的长度，就得到交点 $p$。
+
+
+沿着向量移动，我可以转化成向量加法，我们把点 $p$，看成向量 $\vec{Op}$，这里 $O$ 是原点，吧点 $C$ 看成 $\vec{OC}$，那么 $\vec{Op}$ 可以写为：
+
+$$
+\vec{Op}=\vec{OC}+\vec{a}\\
+~\\
+\vec{Op}=\vec{OC}+K\cdot \vec{AC}
+$$
+
+
+```cpp
+// 求两直线交点
+Point line::get_intersection(const line& b) const
+{
+    // 直线平行返回无穷大
+    if(is_parallel(b))
+        return {INT_MAX,INT_MAX};
+        
+    // 带入公式
+    Point c = x2 - b.x2;
+    double K = (b.dVec * c) / (dVec * b.dVec);
+    Point res = x2 + dVec * K;
+    return res;
+}
+```
+
+### 线段
+
+和存储直线的方式一样。
+
+#### 求线段的交点
+
+求线段交点就要判断它们端点之间的位置关系。
+
+这里我们先不考虑平行的情况。两个不平行的的线段如果有交点，那么任意一个线段的两个端点一定在另一个线段的两侧，如下图：
+
+<div align="center"><img src="./img/07.png"width="200"></div>
+
+那么就要计算两对叉乘 $\vec{AB}\times\vec{AC}，\vec{AB}\times \vec{AD}$ 和 $\vec{CD}\times\vec{CA}，\vec{CD}\times\vec{CB}$ 如果第一对叉乘是一正一负，那么说明 $C,D$ 在 $AB$ 直线的两端，第二对同理。
+
+其次就考虑平行的情况，一般平行是没有交点的，但是要考虑共线的情况。
+
+共线又分为下面几种情况：
+
+<div align="center"><img src="./img/08.png"width="700"></div>
+
+
+
 
 
 ---------------------
