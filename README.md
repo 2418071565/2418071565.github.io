@@ -12,11 +12,8 @@ Introduction.md       //介绍算法思路及原理
 Problems.md           //算法相关题目，及AC代码
 ```
 
-并且我会在Daily Problem分享每日一题，有兴趣的可以做一下。
 
 ## 目录
-
-- [每日一题](./Daily%20Problem/)
 
 ### 基础算法
 - [倍增](./Algorithm/Binary%20Lifting/)
@@ -66,6 +63,10 @@ Problems.md           //算法相关题目，及AC代码
 - **数值算法**
   - [牛顿迭代法](.//Math/Numerical%20algorithms/Newton's%20method%20for%20finding%20roots/) 
 
+
+### 常见问题
+
+- [整数拆分问题]() 
 
 ### 有趣的算法
 
