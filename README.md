@@ -66,7 +66,7 @@ Problems.md           //算法相关题目，及AC代码
 
 ### 常见问题
 
-- [整数拆分问题]() 
+- [整数拆分问题](./Usual%20Qusetion/integer%20partition/) 
 
 ### 有趣的算法
 
