@@ -67,6 +67,7 @@ Problems.md           //算法相关题目，及AC代码
 ### 常见问题
 
 - [整数拆分问题](./Usual%20Qusetion/integer%20partition/) 
+- [最大子区间和](./Usual%20Qusetion/The%20maximum%20sum%20of%20subintervals/)
 
 ### 有趣的算法
 
