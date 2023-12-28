@@ -56,6 +56,11 @@ struct Point
 double triangle(Point &a, Point &b, Point &c) { return (b - a) * (b - c) / 2.0; } // 求三角形面积
 double abs(const Point &x) { return sqrt(x.pow()); }                              // 向量取模
 
+
+/*
+line类用来实现直线，线段
+记录直线上两点或线段两个端点，和直线的方向向量
+*/
 struct line
 {
     Point x1, x2;
@@ -89,7 +94,7 @@ struct line
 
     // 求两线段交点
     // 交点不存在返回 INT_MAX
-    Point seg_intersection(const line &b) const
+    Point seg_intersection(const line & b) const
     {
         // 判断平行
         if (is_parallel(b))
@@ -99,6 +104,7 @@ struct line
             {
                 Point mi = max(min(x1, x2), min(b.x1, b.x2));
                 Point ma = min(max(x1, x2), max(b.x1, b.x2));
+                // 判断两线段是否重合
                 if (ma.x >= mi.x && ma.y >= mi.y)
                     return mi;
             }

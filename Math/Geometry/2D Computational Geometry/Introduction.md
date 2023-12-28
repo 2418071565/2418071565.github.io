@@ -286,7 +286,7 @@ $$
 |\vec{a}|=\left | \frac{|\vec{c}|\sin{\theta}}{\sin{\beta}} \right | 
 $$
 
-$\vec{c}$ 我们可以通过 $\vec{a}-\vec{b}$ 得到， $\sin{\theta}$ 和 $\sin{\beta}$ 角可以通过两直线方向向量 $\vec{AC},\vec{BD}$ 和 $\vec{c}$ 叉乘得到：
+$\vec{c}$ 我们可以通过 $D，C$ 两点得到， $\sin{\theta}$ 和 $\sin{\beta}$ 角可以通过两直线方向向量 $\vec{AC},\vec{BD}$ 和 $\vec{c}$ 叉乘得到：
 
 $$
 \sin{\theta}=\frac{\vec{BD}\times \vec{c}}{|\vec{BD}||\vec{c}|}\\
@@ -306,7 +306,7 @@ $$
 |\vec{a}|=|\vec{AC}|\cdot K
 $$
 
-其中 $\vec{a}$ 和 $\vec{AC}$ 是同向的，那么 $\vec{a}$ 可以通过 $\vec{AC}$ 数乘得到：
+其中 $\vec{a}$ 和 $\vec{AC}$ 是平行的，那么 $\vec{a}$ 可以通过 $\vec{AC}$ 数乘得到：
 
 $$
 \vec{a} = K\cdot \vec{AC}
@@ -348,11 +348,19 @@ Point line::get_intersection(const line& b) const
 
 求线段交点就要判断它们端点之间的位置关系。
 
+**所在直线相交**
+
 这里我们先不考虑平行的情况。两个不平行的的线段如果有交点，那么任意一个线段的两个端点一定在另一个线段的两侧，如下图：
 
 <div align="center"><img src="./img/07.png"width="200"></div>
 
-那么就要计算两对叉乘 $\vec{AB}\times\vec{AC}，\vec{AB}\times \vec{AD}$ 和 $\vec{CD}\times\vec{CA}，\vec{CD}\times\vec{CB}$ 如果第一对叉乘是一正一负，那么说明 $C,D$ 在 $AB$ 直线的两端，第二对同理。
+那么就要计算两对叉乘 $\vec{AB}\times\vec{AC}，\vec{AB}\times \vec{AD}$ 和 $\vec{CD}\times\vec{CA}，\vec{CD}\times\vec{CB}$ ，如果第一对叉乘是一正一负，那么说明 $C,D$ 在 $AB$ 直线的两端，第二对同理。
+
+这里的 $\vec{AB},\vec{CD}$ 就是两个线段的方向向量，计算是拿方向向量替换即可。
+
+如果两线段满足这个情况，那么直接调用直线交点计算即可。
+
+**所在直线平行**
 
 其次就考虑平行的情况，一般平行是没有交点的，但是要考虑共线的情况。
 
@@ -360,9 +368,32 @@ Point line::get_intersection(const line& b) const
 
 <div align="center"><img src="./img/08.png"width="700"></div>
 
+我们观察发现，这时我们只要判断线段 $AB$ 的上端点 $B$ 和线段 $CD$ 的下端点 $C$ 的位置关系即可。
 
+如果 $C$ 位于 $B$ 的下端，则说明两个线段是有重合的。否则就是无重合的。
 
+对于两个点位置的比较我们可以重载 $<$ 操作符
 
+```cpp
+// 重载 < 方便找线段交点
+bool operator<(const Point &b) const
+{
+    if (y == b.y)
+        return x < b.x;
+    return y < b.y;
+}
+```
+如此重载如果两个线段都是与 $x$ 轴平行也可以找出正确的端点。
+
+我们这里规定当两个线段重合时，返回 $y$值最小的，$y$ 值相等就返回 $x$ 值最小的。重载上述 $<$ 找该点也很方便。
+
+```cpp
+Point mi = max(min(x1, x2), min(b.x1, b.x2));
+Point ma = min(max(x1, x2), max(b.x1, b.x2));
+// 判断两线段是否重合
+if (ma.x >= mi.x && ma.y >= mi.y)
+    return mi;
+```
 
 ---------------------
 
