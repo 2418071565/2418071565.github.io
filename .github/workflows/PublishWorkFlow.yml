@@ -1,4 +1,4 @@
-name: Publish Work Flow
+name: Publish Site Work Flow 
 on:
   push:
     branches:
