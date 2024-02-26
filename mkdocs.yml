@@ -14,7 +14,6 @@ theme:
     - navigation.instant.progress
 
 nav:
-  - : 
   - ACM: 
     - 算法: 
       - 倍增: Algorithm/BinaryLifting/BinaryLifting.md
