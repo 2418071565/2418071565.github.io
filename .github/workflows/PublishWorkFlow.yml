@@ -1,4 +1,4 @@
-name: publish site
+name: PublishWorkFlow
 
 on: # 在什么时候触发工作流
   push: # 在从本地main分支被push到GitHub仓库时
