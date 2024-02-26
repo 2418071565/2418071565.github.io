@@ -50,8 +50,6 @@ markdown_extensions:
   - pymdownx.arithmatex:
       generic: true
     
-plugins:
-  - glightbox
 
 extra_javascript:
   - javascripts/mathjax.js
