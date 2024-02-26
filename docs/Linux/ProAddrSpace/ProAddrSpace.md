@@ -89,7 +89,7 @@ int main()
 对于上面的程序，当子进程对变量 p 进行写入时，发生写时拷贝，操作系统便会在物理地址上重新开辟空间，但是它的虚拟地址并没有改变，所以才会输出相同的地址却有着不同的值。
 
 <figure markdown="span">
-  ![Image title](./04.png){ width="750" }
+  ![Image title](./04.png){ width="900" }
 </figure>
 
 <!-- <div align="center"><img src="./04.png"width="800"></div> -->
