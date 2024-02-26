@@ -1,0 +1,49 @@
+repo_url: https://github.com/2418071565/NBU_Algorithm.git
+
+theme:
+  name: material
+  palette:
+    primary: white
+  language: zh
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - navigation.path
+    - navigation.instant.progress
+
+site_name: CYB
+
+nav:
+  - ACM: 
+    - 算法: 
+      - 倍增: Algorithm/BinaryLifting/BinaryLifting.md
+      - 排序: 
+        - 冒泡排序: Algorithm/Sort/BubbleSort/Bubble.md
+    - 字符串:
+      - KMP: String/KMP/KMP.md
+      - 马拉车: String/Manacher/Manacher.md
+      - 字符串哈希: String/StringHash/StringHash.md
+      - 字典树: String/Trie/Trie.md
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - pymdownx.arithmatex:
+      generic: true
+    
+plugins:
+  - glightbox
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  - javascripts/katex.js
+  - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.js
+  - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/contrib/auto-render.min.js
+
+extra_css:
+  - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css
+
+
+
