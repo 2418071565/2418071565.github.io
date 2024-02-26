@@ -14,8 +14,10 @@ theme:
     - navigation.tabs
     - navigation.path
     - navigation.instant.progress
+    - navigation.footer
 
 nav:
+  - 关于: index.md
   - ACM: 
     - 算法: 
       - 倍增: Algorithm/BinaryLifting/BinaryLifting.md
@@ -73,6 +75,11 @@ extra_javascript:
 
 extra_css:
   - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/2418071565
 
 
 
