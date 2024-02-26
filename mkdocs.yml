@@ -1,13 +1,13 @@
-repo_url: https://github.com/2418071565/NBU_Algorithm.git
+repo_url: https://github.com/2418071565/Chen-Yibo.github.io.git
 site_name: CYB
 
 
 theme:
   name: material
-  palette:
+  palette: 
     primary: white
   language: zh
-  features:
+  features: 
     - navigation.instant
     - navigation.tabs
     - navigation.path
