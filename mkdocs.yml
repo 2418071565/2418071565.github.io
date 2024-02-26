@@ -16,7 +16,6 @@ theme:
     - navigation.instant.progress
 
 nav:
-  # - HOME: HOME.md
   - ACM: 
     - 算法: 
       - 倍增: Algorithm/BinaryLifting/BinaryLifting.md
@@ -53,9 +52,6 @@ nav:
     - 进程控制: Linux/ProCtrl/ProCtrl.md
     - 基础IO: Linux/FileIO/FileIO.md
 
-plugins:
-    - search
-    - mermaid2
 
 markdown_extensions:
   - attr_list
@@ -68,13 +64,7 @@ markdown_extensions:
       pygments_lang_class: true
   - pymdownx.inlinehilite
   - pymdownx.snippets
-  - pymdownx.superfences:
-  # - pymdownx.superfences:
-  #       # make exceptions to highlighting of code:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:mermaid2.fence_mermaid_custom
+  - pymdownx.superfences
     
 extra_javascript:
   - javascripts/mathjax.js
