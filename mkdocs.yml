@@ -41,12 +41,8 @@ nav:
         - 乘法逆元: Math/Inv/Inv.md
       - 数值计算:
         - 牛顿迭代法: Math/Numerical/NtsMethod/Nt.md
-  - c++:
-
-  - Linux: 
 
 
-    
 
 markdown_extensions:
   - attr_list
