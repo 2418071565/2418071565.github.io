@@ -8,12 +8,15 @@ theme:
     primary: white
   language: zh
   features: 
+    - content.code.select
+    - content.code.copy
     - navigation.instant
     - navigation.tabs
     - navigation.path
     - navigation.instant.progress
 
 nav:
+  - HOME: HOME.md
   - ACM: 
     - 算法: 
       - 倍增: Algorithm/BinaryLifting/BinaryLifting.md
@@ -41,14 +44,38 @@ nav:
         - 乘法逆元: Math/NumberTheory/Inv/Inv.md
       - 数值计算:
         - 牛顿迭代法: Math/Numerical/NtsMethod/Nt.md
+  - Linux:
+    - 体系结构及操作系统概念: Linux/SysConcept/SysConcept.md
+    - 进程状态: Linux/ProStatus/ProStatus.md
+    - 进程调度策略: Linux/PSStrategy/PSStrategy.md
+    - 环境变量: Linux/envir/envir.md
+    - 进程地址空间: Linux/ProAddrSpace/ProAddrSpace.md
+    - 进程控制: Linux/ProCtrl/ProCtrl.md
+    - 基础IO: Linux/FileIO/FileIO.md
 
-
+plugins:
+  - search
+  - mermaid2:
+      version: 10.0.2
 
 markdown_extensions:
   - attr_list
   - md_in_html
   - pymdownx.arithmatex:
       generic: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.superfences:
+        # make exceptions to highlighting of code:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:mermaid2.fence_mermaid_custom
     
 extra_javascript:
   - javascripts/mathjax.js
