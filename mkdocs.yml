@@ -14,6 +14,7 @@ theme:
     - navigation.instant.progress
 
 nav:
+  - : 
   - ACM: 
     - 算法: 
       - 倍增: Algorithm/BinaryLifting/BinaryLifting.md
@@ -24,6 +25,28 @@ nav:
       - 马拉车: String/Manacher/Manacher.md
       - 字符串哈希: String/StringHash/StringHash.md
       - 字典树: String/Trie/Trie.md
+    - 数据结构:
+      - 二叉堆: DS/heap/BinHp.md
+      - 并查集: DS/UnionFind/UF.md
+      - 树状数组: DS/BIT/BIT.md
+      - 线段树: DS/SegTr/SegTr.md
+      - 分块: DS/Block/Block.md
+    - 数学:
+      - 计算几何:
+        - 二维计算几何基础: Math/Geometry/2DGeometry/2D.md
+        - 凸包: Math/Geometry/CH.md
+      - 数论:
+        - 数论基础: Math/NumberTheory/Fd.md
+        - 快速幂: Math/Qpow/qpow.md
+        - 乘法逆元: Math/Inv/Inv.md
+      - 数值计算:
+        - 牛顿迭代法: Math/Numerical/NtsMethod/Nt.md
+  - c++:
+
+  - Linux: 
+
+
+    
 
 markdown_extensions:
   - attr_list
