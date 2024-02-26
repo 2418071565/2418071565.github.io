@@ -25,19 +25,20 @@ nav:
       - 字符串哈希: String/StringHash/StringHash.md
       - 字典树: String/Trie/Trie.md
     - 数据结构:
-      - 二叉堆: DS/heap/BinHp.md
+      - 二叉堆: DS/Heap/BinHp.md
       - 并查集: DS/UnionFind/UF.md
+      - 哈希表: DS/HTable/HTable.md
       - 树状数组: DS/BIT/BIT.md
       - 线段树: DS/SegTr/SegTr.md
       - 分块: DS/Block/Block.md
     - 数学:
       - 计算几何:
         - 二维计算几何基础: Math/Geometry/2DGeometry/2D.md
-        - 凸包: Math/Geometry/CH.md
+        - 凸包: Math/Geometry/ConvexHull/CH.md
       - 数论:
         - 数论基础: Math/NumberTheory/Fd.md
-        - 快速幂: Math/Qpow/qpow.md
-        - 乘法逆元: Math/Inv/Inv.md
+        - 快速幂: Math/NumberTheory/Qpow/qpow.md
+        - 乘法逆元: Math/NumberTheory/Inv/Inv.md
       - 数值计算:
         - 牛顿迭代法: Math/Numerical/NtsMethod/Nt.md
 

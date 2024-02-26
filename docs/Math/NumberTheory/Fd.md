@@ -1,4 +1,5 @@
-# **基本概念**
+# 数论基础
+
 ## **整除性与约数**
 整除的定义：设 $a,b\in\mathbf{Z}，a\ne 0$。如果$ \exists q\in\mathbf{Z}$，使得 $b=aq$，那么就说$ b$可被$a$ 整除，记作$a\mid b$，$b$不被$a$整除记作$a\nmid b$
 
@@ -80,4 +81,18 @@ $$
 a=P^{e_1}_1P^{e_2}_2\cdots P^{e_r}_r
 $$
 
-其中$P_i$为素数，$P_1<P_2<P_3\cdots <P_r$，且$e_i$为正整数 
+其中$P_i$为素数，$P_1<P_2<P_3\cdots <P_r$，且$e_i$为正整数。
+
+## **模运算**
+定义：设$a,b\in Z$且$b>0$,如果$q,r\in Z$满足$a=qb+r$且$0\le r<b$则称$a$模$b$等于$r$记作
+$$
+a\space mod \space b=r
+$$
+- 负数取模：将 $a$ 不断的加上 $b$ 直到结果大于 $0$ ，这个结果就是模运算的结果
+### **模运算的性质**
+
+- $b\mid a\Leftrightarrow a\space mod\space b=0$
+-  $(a+b)mod\space n=(a\space mod \space n+b\space mod\space n)mod\space n$ 
+-  $(a-b)mod\space n=(a\space mod \space n-b\space mod\space n)mod\space n$
+-  $(a\times  b)mod\space n=(a\space mod \space n\times b\space mod\space n)mod\space n$
+- 除法不具有这样的性质
