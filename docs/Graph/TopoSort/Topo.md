@@ -1,25 +1,38 @@
 
-## 引入
+## **引入**
 
 在生活中，我们在完成一个工作可能需要按一定顺序完成若干个任务。例如在完成 $B$ 前必须先完成 $A$ ，那么我们就说 $B$ 与 $A$ 存在偏序关系。我们用工作中任务之间的偏序关系建一个有向图，如下：
 
-<div align="center"><img src="img/01.png"width="250"></div>
+
+<figure markdown="span">
+  ![Image title](img/01.png){ width="250" }
+</figure>
+
+<!-- <div align="center"><img src="img/01.png"width="250"></div> -->
 
 **拓扑排序**其实就是找到一个执行任务的顺序，使这个顺序满足上述的偏序条件。如上图的的一个拓扑序就是 $A\rightarrow D\rightarrow B\rightarrow C$。
 
-### 定义
+## **定义**
 
 对于一个有向无环图$G=(V,E)$来说，其拓扑排序是$G$中所有节点的一种线性次序。即将图的所有节点在一条水平线上排开，图的所有有向边都从左指向右。
 
 上图的一种拓扑序：
 
-<div align="center"><img src="img/02.png"width="500"></div>
+<figure markdown="span">
+  ![Image title](img/02.png){ width="500" }
+</figure>
 
-但是对于一个有环图，是不能进行拓扑排序的，这很好理解。首先拓扑排序时，只要一个点没有前驱时，我们才能对其进行排序。但是对于一个环形的偏序关系，我们是找不到可以排序的点的。
+<!-- <div align="center"><img src="img/02.png"width="500"></div> -->
 
-<div align="center"><img src="img/03.png"width="250"></div>
+但是对于一个有环图，是不能进行拓扑排序的，这很好理解。首先拓扑排序时，只有一个点没有前驱时，我们才能对其进行排序。但是对于一个环形的偏序关系，我们是找不到可以排序的点的。
 
-## 拓扑排序
+<figure markdown="span">
+  ![Image title](img/03.png){ width="250" }
+</figure>
+
+<!-- <div align="center"><img src="img/03.png"width="250"></div> -->
+
+## **拓扑排序**
 
 我用数组 $deg[]$ 记录一个点的入度，用邻接表的形式存图。
 
@@ -62,7 +75,7 @@ void topo()
 }
 ```
 
-### 利用拓扑排序找环
+## **利用拓扑排序找环**
 
 我们进行一次拓扑排序之后，我们可以发现，所有不在环上的点入度都变成了 $0$ ，而在环上的点入度都不为 $0$。
 

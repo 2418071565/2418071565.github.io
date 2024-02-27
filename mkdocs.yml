@@ -35,6 +35,12 @@ nav:
       - 树状数组: DS/BIT/BIT.md
       - 线段树: DS/SegTr/SegTr.md
       - 分块: DS/Block/Block.md
+    - 图论: 
+      - 图的存储: Graph/StorageOfGraphs/Storage.md
+      - 拓朴排序: Graph/TopoSort/Topo.md
+      - 树: 
+        - 树基础: Graph/Tree/Basic/Basic.md
+        - 最小生成树: Graph/Tree/MST/MST.md
     - 数学:
       - 计算几何:
         - 二维计算几何基础: Math/Geometry/2DGeometry/2D.md
@@ -45,6 +51,9 @@ nav:
         - 乘法逆元: Math/NumberTheory/Inv/Inv.md
       - 数值计算:
         - 牛顿迭代法: Math/Numerical/NtsMethod/Nt.md
+    - 常见问题:
+      - 整数拆分: UsualQ/IntPartition/IntPartition.md
+      - 区间最大子段和: UsualQ/MaxSumOfSub/MaxSumOfSub.md
   - Linux:
     - 体系结构及操作系统概念: Linux/SysConcept/SysConcept.md
     - 进程状态: Linux/ProStatus/ProStatus.md
@@ -61,7 +70,8 @@ nav:
     - 继承多态:
       - 继承: C++/继承多态/继承.md
       - 多态: C++/继承多态/多态.md
-    
+  - 有趣的知识:
+    - 快速平方根倒数算法: InterestingAlgo/QSqrt/QSqrt.md
 
 
 markdown_extensions:
