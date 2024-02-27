@@ -1,6 +1,6 @@
+# 内存管理
 
-
-# **C/C++内存分布**
+## **C/C++内存分布**
 
 对于C/C++程序，我们可以将内存分为一下几个区：
 
@@ -9,14 +9,16 @@
 - 堆区：用于程序运行时动态分配内存。
 - 栈区：存放临时变量。
 
-# **C++中的内存管理**
+<figure markdown="span">
+  ![Image title](img/02.png){ width="550" }
+</figure>
 
-在C语言中我们使用malloc / realloc / calloc来在堆区申请空间。使用free来是否堆区内存。
-malloc是只申请空间，calloc是申请空间并且赋初始值，realloc是更改申请的空间大小。
+## **C++中的内存管理**
+
+在C语言中我们使用malloc / realloc / calloc来在堆区申请空间。使用free来释放堆区内存。malloc是只申请空间，calloc是申请空间并且赋初始值，realloc是更改申请的空间大小。
 
 
-
-这样进行申请空间的弊端是操作繁琐，并且在为类申请内存时，使用上面的函数开辟内存，还需要使用placement new去手动调用构造函数，非常麻烦。
+这样进行申请空间的弊端是操作繁琐，并且在为类申请内存时，使用上面的函数开辟内存，还需要使用 placement new(后文会介绍) 去手动调用构造函数，非常麻烦。
 
 为了解决这个问题，C++提供了new和delete操作符。
 
@@ -24,13 +26,14 @@ malloc是只申请空间，calloc是申请空间并且赋初始值，realloc是�
 
 
 
-## **operator new 和operator delete函数**
+### **operator new 和operator delete函数**
 
-new和delete是用户进行动态内存申请和释放的操作符，operator new 和operator delete是系统提供的全局函数，new在底层调用operator new全局函数来申请空间，delete在底层通过operator delete全局函数来释放空间。
+new 和 delete 是用户进行动态内存申请和释放的操作符，operator new 和 operator delete 是系统提供的全局函数，new 在底层调用 operator new 全局函数来申请空间，delete 在底层通过 operator delete 全局函数来释放空间。
 
 ```cpp
 /*
-operator new：该函数实际通过malloc来申请空间，当malloc申请空间成功时直接返回；申请空间失败，尝试执行空 间不足应对措施，如果改应对措施用户设置了，则继续申请，否则抛异常。
+operator new：该函数实际通过malloc来申请空间，当malloc申请空间成功时直接返回；
+申请空间失败，尝试执行空间不足应对措施，如果应对措施用户设置了，则继续申请，否则抛异常。
 */
 void* __CRTDECL operator new(size_t size) _THROW1(_STD bad_alloc)
 {
@@ -49,6 +52,11 @@ void* __CRTDECL operator new(size_t size) _THROW1(_STD bad_alloc)
 /*
 operator delete: 该函数最终是通过free来释放空间的
 */
+
+/*
+free的实现
+*/
+#define free(p) _free_dbg(p, _NORMAL_BLOCK)
 void operator delete(void* pUserData)
 {
     _CrtMemBlockHeader* pHead;
@@ -67,33 +75,30 @@ void operator delete(void* pUserData)
     __END_TRY_FINALLY
         return;
 }
-/*
-free的实现
-*/
-#define free(p) _free_dbg(p, _NORMAL_BLOCK)
 ```
 
-看了上面的代码我们知道operator new和operator delete就是对malloc和free的封装，这样的目的是为了更好的适应在C++代码中进行异常处理。
+看了上面的代码我们知道 operator new 和 operator delete 就是对 malloc 和 free 的封装，这样的目的是为了更好的适应在 C++ 代码中进行异常处理。
 
 
-c++的new和delete操作符在执行操作时会调用operator new和operator delete及其对应的构造函数和析构函数。
+#### **new[] 和 delete[] 、new 和 delete 为什么要匹配使用？**
 
-
-### **new[]和delete[]、new和delete为什么要匹配使用？**
-
-delete[]和delete都是调用free进行内存释放，唯一的区别是delete[]会调用多次析构函数，delete只会调用一次。当类中申请过堆区内存时，如果不使用delete[]就会出现内存泄漏的问题，但是如果类中没有申请过堆区内存，构造函数没有进行任何操作时，那调用这个两个不是就没区别了嘛？
+delete[] 和delete 都是调用 free 进行内存释放，唯一的区别是 delete[] 会调用多次析构函数， delete 只会调用一次。当类中申请过堆区内存时，如果不使用 delete[] 就会出现内存泄漏的问题，但是如果类中没有申请过堆区内存，构造函数没有进行任何操作时，那调用这个两个不是就没区别了嘛？
 
 这肯定是不对的。
 
-**原因出在new和new[]的区别上。**
+**原因出在 new 和 new[] 的区别上。**
 
-我们在new[]的时候，会给操作符输入一个元素个数，这样new操作符就能知道要调用几次构造函数；但是delete[]在使用时并不需要我们输入具体的数组大小，它时怎么知道要调用几次析构函数的？
+我们在 new[] 的时候，会给操作符输入一个元素个数，这样 new 操作符就能知道要调用几次构造函数；但是 delete[] 在使用时并不需要我们输入具体的数组大小，它时怎么知道要调用几次析构函数的？
 
-原因是new[]操作符在申请空间时，会额外申请一个元素大小的空间，这个额外的空间会存储这个数组的大小。而这多的空间是在new给我们返回的指针的前面。
+原因是 new[] 操作符在申请空间时，会额外申请一个元素大小的空间，这个额外的空间会存储这个数组的大小。而这多的空间是在new给我们返回的指针的前面。
 
-<div align="center"><img src="img/01.png"width="500"></div>
+<figure markdown="span">
+  ![Image title](img/01.png){ width="500" }
+</figure>
 
-在调用delete[]时会向前偏移指针，找到正确的动态内存的开始位置，来调用free，而delete不会这样做，就会出现报错。
+<!-- <div align="center"><img src="img/01.png"width="500"></div> -->
+
+在调用 delete[] 时会向前偏移指针，找到正确的动态内存的开始位置，来调用 free，而 delete 不会这样做，就会出现报错。
 
 但是有时编译器会做一些优化，就又会引发一些问题。
 
@@ -138,7 +143,7 @@ int main()
 
 所以我们一定要匹配使用，避免不必要的麻烦。
 
-## **定位new表达式(placement-new)**
+### **定位new表达式(placement-new)**
 
 定位new表达式是在已分配的原始内存空间中调用构造函数初始化一个对象。
 
@@ -151,7 +156,7 @@ new (place_address) type(initializer-list)
 
 定位new表达式在实际中一般是配合内存池使用。因为内存池分配出的内存没有初始化，所以如果是自定义类型的对象，需要使用new的定义表达式进行显示调构造函数进行初始化。
 
-# **new/delete和malloc/free的区别**
+## **new/delete和malloc/free的区别**
 
 说了这么多终于到了喜闻乐见的八股环节。
 

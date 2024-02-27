@@ -1,5 +1,5 @@
 repo_url: https://github.com/2418071565/2418071565.github.io.git
-site_name: CYB
+site_name: Made By CYB
 
 
 theme:
@@ -53,6 +53,15 @@ nav:
     - 进程地址空间: Linux/ProAddrSpace/ProAddrSpace.md
     - 进程控制: Linux/ProCtrl/ProCtrl.md
     - 基础IO: Linux/FileIO/FileIO.md
+  - C++:
+    - 简介: C++/intro.md
+    - 杂项: C++/c++初阶杂项.md
+    - 内存管理: C++/内存管理/new&delete.md
+    - 模板: C++/模板.md
+    - 继承多态:
+      - 继承: C++/继承多态/继承.md
+      - 多态: C++/继承多态/多态.md
+    
 
 
 markdown_extensions:
