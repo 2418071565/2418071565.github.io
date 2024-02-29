@@ -70,6 +70,10 @@ nav:
     - 继承多态:
       - 继承: C++/继承多态/继承.md
       - 多态: C++/继承多态/多态.md
+  - Qt: 
+    - 简介: Qt/start.md
+    - 初识Qt: Qt/QtBasis/QtBasis.md
+    - 信号与槽: Qt/SigAndSlot/SigAndSlot.md
   - 有趣的知识:
     - 快速平方根倒数算法: InterestingAlgo/QSqrt/QSqrt.md
 
