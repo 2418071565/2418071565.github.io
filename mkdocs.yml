@@ -33,8 +33,10 @@ nav:
       - 并查集: DS/UnionFind/UF.md
       - 哈希表: DS/HTable/HTable.md
       - 树状数组: DS/BIT/BIT.md
-      - 线段树: DS/SegTr/SegTr.md
       - 分块: DS/Block/Block.md
+      - 线段树: 
+        - 基础线段树: DS/SegTr/SegTr.md
+        - 吉如一线段树: DS/SegTr/JRYSegTr.md
     - 图论: 
       - 图的存储: Graph/StorageOfGraphs/Storage.md
       - 拓朴排序: Graph/TopoSort/Topo.md
