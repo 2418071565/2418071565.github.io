@@ -29,7 +29,8 @@ nav:
       - 字符串哈希: String/StringHash/StringHash.md
       - 字典树: String/Trie/Trie.md
     - 数据结构:
-      - 二叉堆: DS/Heap/BinHp.md
+      - 堆: 
+        - 二叉堆: DS/Heap/BinHp.md
       - 并查集: DS/UnionFind/UF.md
       - 哈希表: DS/HTable/HTable.md
       - 树状数组: DS/BIT/BIT.md
@@ -63,7 +64,9 @@ nav:
     - 环境变量: Linux/envir/envir.md
     - 进程地址空间: Linux/ProAddrSpace/ProAddrSpace.md
     - 进程控制: Linux/ProCtrl/ProCtrl.md
-    - 基础IO: Linux/FileIO/FileIO.md
+    - 文件系统:
+      - 文件 IO: Linux/FileSys/FileIO/FileIO.md
+      - 文件系统: Linux/FileSys/FileSys/FileSys.md
   - C++:
     - 简介: C++/intro.md
     - 杂项: C++/c++初阶杂项.md
