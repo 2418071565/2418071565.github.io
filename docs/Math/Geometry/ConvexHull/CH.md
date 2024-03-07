@@ -57,7 +57,7 @@ void solve()
 		f[i] = 1;
 		st[++tp] = i;
 	}
-	int cnt = tp;
+	int cnt = tp;	// 记录下凸壳点数量
 	for(int i = n - 1;i >= 0;--i)
 	{
 		while(tp > cnt and 
