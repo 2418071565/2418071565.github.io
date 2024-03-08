@@ -66,7 +66,8 @@ nav:
     - 进程控制: Linux/ProCtrl/ProCtrl.md
     - 文件系统:
       - 文件 IO: Linux/FileSys/FileIO/FileIO.md
-      - 文件系统: Linux/FileSys/FileSys/FileSys.md
+      - 磁盘文件系统: Linux/FileSys/FileSys/FileSys.md
+      - 虚拟文件系统: Linux/FileSys/VFS/VFS.md
   - C++:
     - 简介: C++/intro.md
     - 杂项: C++/c++初阶杂项.md
