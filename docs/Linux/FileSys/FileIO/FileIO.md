@@ -103,9 +103,10 @@ int open(const char *pathname, int flags, mode_t mode);
 **参数解释:**
 
 1.pathname:想要打开的文件路径名
+
 2.flags:标志位，表示打开文件所采用的操作
 
-标志位中必须下面三个常量的一种:
+标志位中必须有下面三个常量的一种:
 
 - O_RDONLY：只读模式
 - O_WRONLY：只写模式

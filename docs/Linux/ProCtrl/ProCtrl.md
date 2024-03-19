@@ -4,7 +4,7 @@
 
 fork函数前面已经见过，这里就简短说。
 
-我们使用 fork 函数来创建一个子进程，它位于头文件 <unistd.h> 中
+我们使用 fork 函数来创建一个子进程，它位于头文件 <unistd.h\> 中
 
 ```cpp
 pid_t fork(void);
