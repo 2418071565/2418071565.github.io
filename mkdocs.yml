@@ -89,6 +89,16 @@ nav:
   #   - 信号与槽: Qt/SigAndSlot/SigAndSlot.md
   - 有趣的知识:
     - 快速平方根倒数算法: InterestingAlgo/QSqrt/QSqrt.md
+  - IELTS:
+    - Writing:
+      - Develop Your Idea: "ielts/writing/develop_your_idea.md"
+      - 比较利弊: "ielts/writing/Advantages_and_Disadvantage.md"
+      - Discuss Both Views: "ielts/writing/Discuss_both_views.md"
+      - 同不同意: "ielts/writing/同不同意.md"
+      - Report型: "ielts/writing/Causes_and_solution.md"
+      - 小作文语料: "ielts/writing/小作文语料.md"
+      - 小作文数据图: "ielts/writing/数据图.md"
+      - 小作文地图&流程图: "ielts/writing/流程图&地图.md"
 
 
 markdown_extensions:
