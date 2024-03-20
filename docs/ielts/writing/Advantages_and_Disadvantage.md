@@ -17,27 +17,27 @@
 #### 背景句
 
 + **表示流行/普遍**
-  + In recent year, ... is becoming prevalent at an amazing rate.
-  + ... is gaining increasingly popularity, especially among sb.
+	+ In recent years, ... **is becoming prevalent** at an amazing rate.
+	+ ... is **gaining increasing popularity,** especially among sb.
 
 + **表示关注**
-  + There has always been an interest in xxx.
-  + Most people are concerned about xxx.
-  + be aware of
+	+ There has always been an interest in xxx.
+	+ Most people are concerned about xxx.
+	+ be aware of
 + **提出问题**
-  + xxx has been. a chronic problem in many societies.
+	+ xxx has been **a chronic problem** in many societies.
 + **引出争议**
-  + Much controversy has been aroused over whether ...
+	+ **Much controversy has been aroused** over whether ...
 
 #### 自己观点
 
 + From my point of view, 
-  + the advantages of this development **outweigh** disadvantages. 
-  + the disadvantages of this development **outweigh** advantages. 
+	+ the advantages of this development **outweigh** disadvantages. 
+	+ the disadvantages of this development **outweigh** advantages. 
 
 ### 主体段
 
-#### Advantages/Postive
+#### Advantages/Positive
 
 + On the one hand, this trend/development can bring a variety of benefits.
 
@@ -63,11 +63,9 @@
 
 
 
-
-
 XXX can be a deterrent to potential criminals 
 
-XXX have a deterring effect on potential criminals
+XXX has a deterring effect on potential criminals
 
 XXX can deter sb from doing sth. 
 
@@ -75,11 +73,11 @@ XXX can deter sb from doing sth.
 
  
 
-Facial expressions, body language and intonations => express meanings that cannot be easily conveyed by words through online tools. 
+Facial expressions, body language and intonations（声调，语调） => express meanings that cannot be easily conveyed by words through online tools. 
 
 Mutual understandings => mutual trust => deep friendship 
 
-Online socialization is unable to build deep friendship. 
+Online socialization is unable to build deep friendships. 
 
 Online => hang out with your friends (having meals, travelling) poor mutual understanding => lack of mutual trust. 
 
@@ -96,48 +94,48 @@ Online => hang out with your friends (having meals, travelling) poor mutual unde
 #### Advantages
 
 1. **全球性社交和拓展社交圈**
-   - 论据：通过在线社交，人们能够与世界各地的朋友和同行轻松保持联系，促进全球性的理解和合作。
-   - 论据：社交媒体提供了一个平台，让人们能够结交来自不同文化和地区的朋友，拓展社交圈。
+	- 论据1：通过在线社交，人们能够与世界各地的朋友和同行轻松保持联系，促进全球性的理解和合作。
+	- 论据2：社交媒体提供了一个平台，让人们能够结交来自不同文化和地区的朋友，拓展社交圈。
 
 2. **信息获取的便利性**
-   - 论据：通过社交媒体，人们可以及时获取到各种信息，包括新闻、文化活动、技术趋势等。
-   - 论据：在线社交为人们提供了广泛的信息来源，有助于更好地了解世界，促使个人和职业发展
+	- 论据：通过社交媒体，人们可以及时获取到各种信息，包括新闻、文化活动、技术趋势等。
+	- 论据：在线社交为人们提供了广泛的信息来源，有助于更好地了解世界，促使个人和职业发展
 3. **知识分享和学习机会增加**
-   - 论据：社交媒体上存在大量的专业群组和论坛，人们可以分享知识、经验，从中获取新的学习机会，促进个人和专业发展。
-   - 论据：在线社交平台提供了丰富的教育资源，包括在线课程、学术讨论等，有助于提升个人技能和知识水平。
+	- 论据：社交媒体上存在大量的专业群组和论坛，人们可以分享知识、经验，从中获取新的学习机会，促进个人和专业发展。
+	- 论据：在线社交平台提供了丰富的教育资源，包括在线课程、学术讨论等，有助于提升个人技能和知识水平。
 4. **创业和职业发展机会**
-   - 论据：社交媒体是一个展示个人技能和建立职业关系的有效平台，有助于找到工作机会、创业合作伙伴等。
-   - 论据：通过在线社交，人们能够更容易接触到潜在的雇主、合作伙伴或客户，提升个人职业发展的机会。
+	- 论据：社交媒体是一个展示个人技能和建立职业关系的有效平台，有助于找到工作机会、创业合作伙伴等。
+	- 论据：通过在线社交，人们能够更容易接触到潜在的雇主、合作伙伴或客户，提升个人职业发展的机会。
 5. **灵活性和时间节省**
-   - 论据：在线社交允许人们随时随地进行交流，提高了社交的灵活性，不受地理位置的限制。
-   - 论据：相比于本地社区的实体活动，在线社交可以节省大量的时间，避免了长时间的交通和组织安排。
+	- 论据：在线社交允许人们随时随地People can send it anywhere at any time.进行交流，提高了社交的灵活性，不受地理位置的限制。
+	- 论据：相比于本地社区的实体活动，在线社交可以节省大量的时间，避免了长时间的交通和组织安排。
 
 
 
 #### Disadvantages
 
 1. **心理健康问题和孤独感**
-   - 论据：过度依赖在线社交可能导致孤独感和心理健康问题，因为真实的社交体验无法被完全替代。
-   - 论据：社交媒体上的虚拟关系通常无法提供与面对面交往相同的情感支持，可能引发心理健康问题。
+	- 论据：过度依赖在线社交可能导致孤独感和心理健康问题，因为真实的社交体验无法被完全替代。
+	- 论据：社交媒体上的虚拟关系通常无法提供与面对面交往相同的情感支持，可能引发心理健康问题。
 2. **沟通技能和解决问题的挑战**
-   - 论据：在本地社区，人们获得面对面交往的机会，有助于发展沟通技能，这对于个人职业和社会生活至关重要。
-   - 论据：在线社交相对于本地社区，解决问题的能力相对较弱，因为缺乏真实的面对面交流，可能导致冲突的加剧。
+	- 论据：在本地社区，人们获得面对面交往的机会，有助于发展沟通技能，这对于个人职业和社会生活至关重要。
+	- 论据：在线社交相对于本地社区，解决问题的能力相对较弱，因为缺乏真实的面对面交流，可能导致冲突的加剧。
 
 3. **信息可信度和隐私问题**
-   - 论据：社交媒体上存在大量的虚假信息和谣言，人们容易受到虚假新闻的影响，影响对事实的判断。
-   - 论据：在线社交平台对个人信息的收集和使用引发了隐私问题，有可能导致个人信息泄露和滥用。
+	- 论据：社交媒体上存在大量的虚假信息和谣言，人们容易受到虚假新闻的影响，影响对事实的判断。
+	- 论据：在线社交平台对个人信息的收集和使用引发了隐私问题，有可能导致个人信息泄露和滥用。
 
 4. **社交依赖和沉迷问题**
-   - 论据：过度使用社交媒体可能导致社交依赖，使人对线上社交产生过分依赖，忽视现实中的人际关系。
-   - 论据：社交媒体的设计往往追求用户黏性，容易引发沉迷，影响个人的工作、学习和生活平衡。
+	- 论据：过度使用社交媒体可能导致社交依赖，使人对线上社交产生过分依赖，忽视现实中的人际关系。
+	- 论据：社交媒体的设计往往追求用户黏性，容易引发沉迷，影响个人的工作、学习和生活平衡。
 
 5. **信息过载和注意力分散**
-   - 论据：社交媒体上的信息过于庞大，人们可能面临信息过载，难以筛选和处理有效信息。
-   - 论据：频繁使用社交媒体可能导致注意力分散，影响个人专注力和工作效率。
+	- 论据：社交媒体上的信息过于庞大，人们可能面临信息过载，难以筛选和处理有效信息。
+	- 论据：频繁使用社交媒体可能导致注意力分散，影响个人专注力和工作效率。
 
 6. **社交冲突和网络暴力**
-   - 论据：在线社交平台容易成为言论冲突和争端的场所，因言论不慎可能引发社交冲突。
-   - 论据：社交媒体上存在网络暴力和仇恨言论，可能对个体和社会造成负面影响，导致社会分裂。
+	- 论据：在线社交平台容易成为言论冲突和争端的场所，因言论不慎可能引发社交冲突。
+	- 论据：社交媒体上存在网络暴力cyber violence和仇恨言论hate speech，可能对个体和社会造成负面影响，导致社会分裂social divisions。
 
 ### A Law to Limit Working Hours for Employees
 
