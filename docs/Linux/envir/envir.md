@@ -17,6 +17,7 @@ int main(int argc,char* argv[])
     return 0;
 }
 ```
+
 其中 $argc$ 是参数的个数（以空格为分割），$argv$ 就是具体命令行参数。我们用上面的程序输出一下看看，顺便加几个参数
 ```
 ./test.out -a -l --help

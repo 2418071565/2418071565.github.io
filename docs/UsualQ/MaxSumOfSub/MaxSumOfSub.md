@@ -37,7 +37,7 @@ public:
 
 ### **分治**
 
-我们将每个区间划分为左右两段，以 $m =\left \lfloor \frac{l+r}{2} \right \rfloor $ 为界，分为 $[l,m],[m + 1,r]$ 两段。
+我们将每个区间划分为左右两段，以 $m =\left \lfloor \frac{l+r}{2} \right \rfloor$ 为界，分为 $[l,m],[m + 1,r]$ 两段。
 
 那么我当前这个大区间的最大子段和可能值就是：
 
