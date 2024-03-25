@@ -20,6 +20,8 @@ nav:
   - 关于: index.md
   - ACM: 
     - 算法: 
+      - 动态规划:
+        - 背包问题: Algorithm/DP/Knapsack/Knapsack.md
       - 倍增: Algorithm/BinaryLifting/BinaryLifting.md
       - 排序: 
         - 冒泡排序: Algorithm/Sort/BubbleSort/Bubble.md
@@ -58,8 +60,9 @@ nav:
     - 常见问题:
       - 整数拆分: UsualQ/IntPartition/IntPartition.md
       - 区间最大子段和: UsualQ/MaxSumOfSub/MaxSumOfSub.md
+
   - Linux:
-    # - 指令:
+    - 指令: Linux/Cmd/Cmd.md
     - 内核:
       - 体系结构及操作系统概念: Linux/SysConcept/SysConcept.md
       - 进程:
@@ -85,6 +88,8 @@ nav:
     - 继承多态:
       - 继承: C++/继承多态/继承.md
       - 多态: C++/继承多态/多态.md
+    - C++20:
+      - format: C++/c++20/format/format.md
   # - Qt: 
   #   - 简介: Qt/start.md
   #   - 初识Qt: Qt/QtBasis/QtBasis.md
