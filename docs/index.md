@@ -1,12 +1,11 @@
 
 # **简介**
 
-## 联系方式
+如由修改意见，请通过以下联系方式告知我：
 
-[GITHUB](https://github.com/2418071565)
+[GitHub](https://github.com/2418071565)
 
-[EMAIL](mailto:2418071565@qq.com)
+[邮箱 EMAIL](mailto:2418071565@qq.com)
 
-[GIRLFRIEND](http://github.com/hstxmgzY)
-
+[GirlFriend GitHub](http://github.com/hstxmgzY)
 

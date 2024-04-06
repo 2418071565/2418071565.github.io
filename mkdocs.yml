@@ -1,7 +1,6 @@
 repo_url: https://github.com/2418071565/2418071565.github.io.git
 site_name: Made For YWX
 
-
 theme:
   name: material
   palette: 
@@ -15,6 +14,7 @@ theme:
     - navigation.path
     - navigation.instant.progress
     - navigation.footer
+    - content.tabs.link
 
 nav:
   - 关于: index.md
@@ -24,6 +24,7 @@ nav:
         - 背包问题: Algorithm/DP/Knapsack/Knapsack.md
       - 倍增: Algorithm/BinaryLifting/BinaryLifting.md
       - 排序: 
+        - 简介: Algorithm/Sort/Sort.md
         - 冒泡排序: Algorithm/Sort/BubbleSort/Bubble.md
     - 字符串:
       - KMP: String/KMP/KMP.md
@@ -60,7 +61,6 @@ nav:
     - 常见问题:
       - 整数拆分: UsualQ/IntPartition/IntPartition.md
       - 区间最大子段和: UsualQ/MaxSumOfSub/MaxSumOfSub.md
-
   - Linux:
     - 指令: Linux/Cmd/Cmd.md
     - 内核:
@@ -120,6 +120,9 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true 
     
 extra_javascript:
   - javascripts/mathjax.js
