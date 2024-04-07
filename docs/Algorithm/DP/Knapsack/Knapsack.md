@@ -25,9 +25,12 @@ $$
 我们可以发现再递推时，我们只用到了 $i-1$ 的状态，所以我们可以用一维数组只记录 $i-1$ 时的状态，即可。但是遍历背包的顺序要改变。因为我们要保证 $dp[i][j]$ 是从 $dp[i-1][j-c_i]$ 推来，用一维数组表示 $dp[i-1][j-c_i]$ 就是 $dp[j-c_i]$ ，我们要保证在推 $dp[j]$ 时， $dp[j-c_i]$ 是还未更新的值，所以要从后往前遍历。
 
 ```cpp
-for (int i = 0; i < N; ++i)
-    for (int j = V ; j >= c[i]; --j)
+for (int i = 0; i < N; ++i) {
+    for (int j = V ; j >= c[i]; --j) {
         dp[j] = max(dp[j], dp[j - c[i]] + w[i]);
+    }
+}
+
 ```
 
 ## **2.完全背包**
@@ -49,9 +52,12 @@ $$
 在滚动数组优化 $01$ 背包时，我们要倒着遍历背包大小，这样做的目的是在推 $dp[j]$ 时 $dp[j-c_i]$ 的值还未更新，而我们思考一下，更新其实代表着选取该物品，那如果我们正着遍历背包容量，这代表着每当能装下一个该物品我们就选取，就达到了我们要多次选取的目的。那么递推公式就和 $01$ 背包相同，只需要改一下遍历顺序即可。
 
 ```cpp
-for (int i = 0; i < N; ++i)
-    for (int j = c[i]; j <= V; ++j)
+for (int i = 0; i < N; ++i) {
+    for (int j = c[i]; j <= V; ++j) {
         dp[j] = max(dp[j], dp[j - c[i]] + w[i]);
+    }
+}
+
 ```
 
 ## **3.多重背包**
@@ -67,44 +73,49 @@ for (int i = 0; i < N; ++i)
 
 
 ```cpp
-    for (int i = 0; i < N; ++i) 
-        for (int j = V; j >= 0; --j) 
-            for (int k = 0; k <= n[i]; ++k) {
-                if (j >= k * c[i])
-                    dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - k * c[i]] + k * w[i]);
-                else dp[i][j] = dp[i - 1][j];
-            }
+for (int i = 0; i < N; ++i) {
+    for (int j = V; j >= 0; --j) {
+        for (int k = 0; k <= n[i]; ++k) {
+            if (j >= k * c[i])
+                dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - k * c[i]] + k * w[i]);
+            else dp[i][j] = dp[i - 1][j];
+        }
+    }
+}
 ```
 
 这里也可用一维数组对其空间复杂度进行优化
 
 ```cpp
-    for (int i = 0; i < N; ++i)
-        for (int j = V ; j > 0; --j)
-            for (int k = 0; k <= n[i]; ++k)
-                if (k * c[i] <= j)
-                    dp[j] = max(dp[j], dp[j - k * c[i]] + k * w[i]);
+for (int i = 0; i < N; ++i) {
+    for (int j = V ; j > 0; --j) {
+        for (int k = 0; k <= n[i]; ++k) {
+            if (k * c[i] <= j)
+                dp[j] = max(dp[j], dp[j - k * c[i]] + k * w[i]);
+        }
+    }
+}
 ```
 
-时间复杂是 $O(V\sum n_i)$ ，这样的复杂度不是很让人满意。
+时间复杂是 $O(V\cdot \sum n_i)$ ，这样的复杂度不是很让人满意。
 
 ### **二进制拆分优化**
 
 这里可以用二进制拆解的方法进行优化。我们要将 $n_i$ 拆成若干个数，并且这些数可也组成 $[0,n_i]$ 之间的所有数。可以将 $n_i$ 拆为 $1,2,4,\dots,2^{k-1},n_i-2^k+1$ ，且 $k$ 是满足 $n_i-2^k+1>0$ 的最大整数。拆成这样的序列，我们一定可以表示 $[1,2^k]$ 的所有数组，剩下 $(2^k,n_i]$ 的数字，可以通过加上 $n_i-2^k+1$ 来表示。
 
 ```cpp
-    for (int i = 0; i < N; ++i) {
-        int nn = n[i], no;
-        for (int k = 0; nn; ++k) {
-            no = min(nn, (1 << k));
-            nn = max(0, nn - (1 << k));
-            for (int j = V; j >= no*c[i]; --j)
-                    dp[j] = max(dp[j], dp[j - no * c[i]] + no * w[i]);
-        }
+for (int i = 0; i < N; ++i) {
+    int nn = n[i], no;
+    for (int k = 0; nn; ++k) {
+        no = min(nn, (1 << k));
+        nn = max(0, nn - (1 << k));
+        for (int j = V; j >= no*c[i]; --j)
+                dp[j] = max(dp[j], dp[j - no * c[i]] + no * w[i]);
     }
+}
 ```
 
-这样时间复杂度就优化到 $O(V\sum (\log n_i))$ 。
+这样时间复杂度就优化到 $O(V\cdot \sum (\log n_i))$ 。
 
 ### **单调队列优化**
 
@@ -130,21 +141,21 @@ $$
 实现过程中，如果要用一维数组优化空间，我们就要使用滚动数组，而不能像 $01$ 背包那样倒着遍历，因为我们要使用单调队列，倒着遍历的话单调队列不好实现。
 
 ```cpp
-    for (int i = 0; i < N; ++i) {
-        cin >> w >> c >> n;
-        //滚动数组拷贝
-        memcpy(dp2, dp1, sizeof dp2);
-        for (int k = 0; k < c; ++k) {
-            //维护一个单调队列
-            int hh = 0, tt = -1;
-            for (int j = k; j <= V; j += c) {
-                if (hh <= tt && j - q[hh] > n * c)++hh;
-                if (hh <= tt)dp1[j] = max(dp2[j], dp2[q[hh]] + (j - q[hh]) * w / c);
-                while (hh <= tt && dp2[j] - j  * w / c > dp2[q[tt]] - q[tt] * w / c)--tt;
-                q[++tt] = j;
-            }
+for (int i = 0; i < N; ++i) {
+    cin >> w >> c >> n;
+    //滚动数组拷贝
+    memcpy(dp2, dp1, sizeof dp2);
+    for (int k = 0; k < c; ++k) {
+        //维护一个单调队列
+        int hh = 0, tt = -1;
+        for (int j = k; j <= V; j += c) {
+            if (hh <= tt && j - q[hh] > n * c)++hh;
+            if (hh <= tt)dp1[j] = max(dp2[j], dp2[q[hh]] + (j - q[hh]) * w / c);
+            while (hh <= tt && dp2[j] - j  * w / c > dp2[q[tt]] - q[tt] * w / c)--tt;
+            q[++tt] = j;
         }
     }
+}
 ```
 
 这样优化后时间复杂度为 $O(NV)$ 。
@@ -174,24 +185,24 @@ $$
 [模板题](https://www.luogu.com.cn/problem/T129162)
 费用加了一个，那么我们就直接将递推的式子也加一维 $dp[i][j][k]$ ， $i$ 是物品下标， $j、k$ 是两个费用，很容易写出类似 $01$ 背包的递推式：
 
-```math
+$$
 dp[i][j][k]=max\{dp[i-1][j][k],dp[i-1][j-c_{1i}][k-c_{2i}]+w_i\}
-```
+$$
 
 ```cpp
-    for (int i = 0; i < N; ++i) 
-        for (int j = c1[i]; j <= V1; ++j) 
-            for (int k = c2[i]; k <= V2; ++k) 
-                dp[i][j][k] = max(dp[i - 1][j][k], dp[i - 1][j - c1[i]][k - c2[i]] + w[i]);
+for (int i = 0; i < N; ++i) 
+    for (int j = c1[i]; j <= V1; ++j) 
+        for (int k = c2[i]; k <= V2; ++k) 
+            dp[i][j][k] = max(dp[i - 1][j][k], dp[i - 1][j - c1[i]][k - c2[i]] + w[i]);
 ```
 
 可以只维护最近的状态，进而将数组降一维
 
 ```cpp
-    for (int i = 0; i < N; ++i) 
-        for (int j = V1; j >= c1[i]; --j)
-            for (int k = V2; k >= c2[i]; --k)
-                dp[j][k] = max(dp[j][k], dp[j - c1[i]][k - c2[i]] + w[i]);
+for (int i = 0; i < N; ++i)
+    for (int j = V1; j >= c1[i]; --j) 
+        for (int k = V2; k >= c2[i]; --k) 
+            dp[j][k] = max(dp[j][k], dp[j - c1[i]][k - c2[i]] + w[i]);
 ```
 
 #### **完全背包**
@@ -200,10 +211,10 @@ dp[i][j][k]=max\{dp[i-1][j][k],dp[i-1][j-c_{1i}][k-c_{2i}]+w_i\}
 
 
 ```cpp
-    for (int i = 0; i < N; ++i) 
-        for (int j = c1[i]; j <= V1; ++j) 
-            for (int k = c2[i]; k <= V2; ++k) 
-                dp[j][k] = max(dp[j][k], dp[j - c1[i]][k - c2[i]] + w[i]);
+for (int i = 0; i < N; ++i) 
+    for (int j = c1[i]; j <= V1; ++j) 
+        for (int k = c2[i]; k <= V2; ++k) 
+            dp[j][k] = max(dp[j][k], dp[j - c1[i]][k - c2[i]] + w[i]);
 ```
 
 #### **多重背包**
@@ -211,26 +222,28 @@ dp[i][j][k]=max\{dp[i-1][j][k],dp[i-1][j-c_{1i}][k-c_{2i}]+w_i\}
 和一维的类似，暴力的做法就是转化为 $01$ 背包
 
 ```cpp
-    for (int i = 0; i < N; ++i)
-        for (int f = 1; f <= n[i]; ++f)
-            for (int j = V1; j >= c1[i]; --j)
-                for (int k = V2; k >= c2[i]; --k)
-                    dp[j][k] = max(dp[j][k], dp[j - c1[i]][k - c2[i]] + w[i]);
+for (int i = 0; i < N; ++i) 
+    for (int f = 1; f <= n[i]; ++f) 
+        for (int j = V1; j >= c1[i]; --j) 
+            for (int k = V2; k >= c2[i]; --k) 
+                dp[j][k] = max(dp[j][k], dp[j - c1[i]][k - c2[i]] + w[i]);
 ```
 
 也可以将其进行二进制拆解
 
 ```cpp
-    for (int i = 0; i < N; ++i) {
-        int nn = n[i], no;
-        for (int f = 0; nn; ++f) {
-            no = min((1 << f), nn);
-            nn = max(0, nn - (1 << f));
-            for (int j = V1; j >= no * c1[i]; --j)
-                for (int k = V2; k >= no * c2[i]; --k)
-                    dp[j][k] = max(dp[j][k], dp[j - no * c1[i]][k - no * c2[i]] + no * w[i]);
-        }
+for (int i = 0; i < N; ++i) {
+    int nn = n[i], no;
+    for (int f = 0; nn; ++f) {
+        no = min((1 << f), nn);
+        nn = max(0, nn - (1 << f));
+
+        for (int j = V1; j >= no * c1[i]; --j)
+            for (int k = V2; k >= no * c2[i]; --k) 
+                dp[j][k] = max(dp[j][k], 
+                        dp[j - no * c1[i]][k - no * c2[i]] + no * w[i]);
     }
+}
 ```
 
 ## **6.分组的背包问题**
@@ -245,22 +258,25 @@ dp[i][j][k]=max\{dp[i-1][j][k],dp[i-1][j-c_{1i}][k-c_{2i}]+w_i\}
 
 这个问题变成了每组物品有若干种策略：是选择本组的某一件，还是一件都不选。由此我们可以写出递推式：
 
-```math
+$$
 dp[k][j]=max\{dp[k-1][j],dp[k-1][j-c[i]]+w[i]\},物品i属于第k组
-```
+$$
 
 由递推式可知，我们要保证递推时第 $k$ 组的值是由 $k-1$ 组推来的。所以要先枚举背包，再枚举第 $k$ 组的物品
 
 
 ```cpp
 typedef vector<int> vi;
-int dp[MAX],N,V,w[MAX],p,c[MAX];
-vi kk[101];//存储每一组的物品
-for(int k=0;k<=100;++k)
-    for(int j=V;j>0;--j)
-        for(int i=0;i<int(kk[k].size());++i)
-            if(j>=c[kk[k][i]])
-                dp[j]=max(dp[j],dp[j-c[kk[k][i]]]+w[kk[k][i]]);
+int dp[MAX], N, V, w[MAX], p, c[MAX];
+vi kk[101]; // 存储每一组的物品
+for (int k = 0; k <= 100; ++k) {
+	for (int j = V; j > 0; --j) {
+		for (int i = 0; i < int(kk[k].size()); ++i) {
+			if (j >= c[kk[k][i]])
+				dp[j] = max(dp[j], dp[j - c[kk[k][i]]] + w[kk[k][i]]);
+		}
+	}
+}
 ```
 
 ## **7.有依赖的背包**
@@ -279,24 +295,25 @@ for(int k=0;k<=100;++k)
 
 考虑一种更普遍的情况，每个主件有 $n$ 个附件，那么附件的组合种类就有 $2^n+1$ 种，如果把所有的附件组合都看成一个物品的话时间复杂度和空间复杂度都会超。
 
-首先一个很明显的结论：对于两个费用相同的物品，我们的选择一定是价值更高的那一个。所以我们对于相同费用的物品组合，我们只保留那个价值最高的一个，这样也不会影响最后的结果。所以我们可以对主件 $i$ 的附件集合进行一次 $01$ 背包，得到费用依次为 $[0,V-c_i]$ 这些值相对应的最大价值 $f'[v],v\in[0,V-c_i]$ 。我们将主件 $i$ 和 $V-c_i+1$ 个附件组合看作一个物品组，应用分组背包算法即可。
-核心代码如下：
+首先一个很明显的结论：对于两个费用相同的物品，我们的选择一定是价值更高的那一个。所以我们对于相同费用的物品组合，我们只保留那个价值最高的一个，这样也不会影响最后的结果。所以我们可以对主件 $i$ 的附件集合进行一次 $01$ 背包，得到费用依次为 $[0,V-c_i]$ 这些值相对应的最大价值 $f'[v],v\in[0,V-c_i]$ 。我们将主件 $i$ 和 $V-c_i+1$ 个附件组合看作一个物品组，应用分组背包算法即可。核心代码如下：
 
 ```cpp
-    //kk是物品分组
-    //tmp是用来进行01背包的临时数组
-    for (int i = 1; i <= tot; ++i) {
-        //固定每个物品组合都要选主件
-        for (int jj = 0; jj <= n - kk[i][0].first; ++jj)
-            tmp[jj] = dp[jj] + kk[i][0].second;
-        //应用01背包
-        for (int ii = 1; ii < (int)kk[i].size(); ++ii)
-            for (int jj = n - kk[i][0].first; jj >= kk[i][ii].first; --jj)
-                tmp[jj] = max(tmp[jj], tmp[jj - kk[i][ii].first] + kk[i][ii].second);
-        //考虑是否选择该物品组中的物品
-        for (int j = kk[i][0].first; j <= n; ++j)
-            dp[j] = max(dp[j], tmp[j - kk[i][0].first]);
-    }
+// kk 是物品分组
+// tmp 是用来进行 01 背包的临时数组
+for (int i = 1; i <= tot; ++i) {
+    // 固定每个物品组合都要选主件
+    for (int jj = 0; jj <= n - kk[i][0].first; ++jj)
+        tmp[jj] = dp[jj] + kk[i][0].second;
+
+    // 应用01背包
+    for (int ii = 1; ii < (int)kk[i].size(); ++ii)
+        for (int jj = n - kk[i][0].first; jj >= kk[i][ii].first; --jj)
+            tmp[jj] = max(tmp[jj], tmp[jj - kk[i][ii].first] + kk[i][ii].second);
+            
+    // 考虑是否选择该物品组中的物品
+    for (int j = kk[i][0].first; j <= n; ++j)
+        dp[j] = max(dp[j], tmp[j - kk[i][0].first]);
+}
 ```
 
 #### **更一般的问题**

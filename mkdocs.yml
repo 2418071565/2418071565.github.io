@@ -18,7 +18,8 @@ theme:
 
 nav:
   - 关于: index.md
-  - ACM: 
+  - 数据结构与算法: 
+    - 简介: DS_Algo.md
     - 算法: 
       - 动态规划:
         - 背包问题: Algorithm/DP/Knapsack/Knapsack.md
@@ -27,10 +28,10 @@ nav:
         - 简介: Algorithm/Sort/Sort.md
         - 冒泡排序: Algorithm/Sort/BubbleSort/Bubble.md
     - 字符串:
+      - 字典树: String/Trie/Trie.md
+      - 字符串哈希: String/StringHash/StringHash.md
       - KMP: String/KMP/KMP.md
       - 马拉车: String/Manacher/Manacher.md
-      - 字符串哈希: String/StringHash/StringHash.md
-      - 字典树: String/Trie/Trie.md
     - 数据结构:
       - 堆: 
         - 二叉堆: DS/Heap/BinHp.md
@@ -82,12 +83,15 @@ nav:
       - SheBang: Linux/sheBang/sheBang.md
   - C++:
     - 简介: C++/intro.md
-    - 杂项: C++/c++初阶杂项.md
-    - 内存管理: C++/内存管理/new&delete.md
+    - 基础: C++/c++初阶杂项.md
     - 模板: C++/模板.md
     - 继承多态:
       - 继承: C++/继承多态/继承.md
       - 多态: C++/继承多态/多态.md
+    # - 内存管理: C++/内存管理/new&delete.md
+    - C++11:
+      - 列表初始化: C++/c++11/列表初始化.md
+      - 原始字符串: C++/c++11/原始字符串.md
     - C++20:
       - format: C++/c++20/format/format.md
   # - Qt: 
