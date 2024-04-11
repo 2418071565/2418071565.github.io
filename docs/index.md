@@ -3,7 +3,7 @@
 
 CYB 的个人博客网站。
 
-如由修改意见，请通过以下联系方式告知我：
+如有修改意见，请通过以下联系方式告知我：
 
 QQ : 2418071565
 
@@ -15,3 +15,4 @@ Wx : upset_man
 
 [GirlFriend GitHub](http://github.com/hstxmgzY)
 
+![1](index.assets/1.PNG)
