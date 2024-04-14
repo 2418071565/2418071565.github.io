@@ -60,6 +60,7 @@ nav:
       - 数值计算:
         - 牛顿迭代法: Math/Numerical/NtsMethod/Nt.md
     - 常见问题:
+      # - 树上最小支配集:
       - 整数拆分: UsualQ/IntPartition/IntPartition.md
       - 区间最大子段和: UsualQ/MaxSumOfSub/MaxSumOfSub.md
   - Linux:

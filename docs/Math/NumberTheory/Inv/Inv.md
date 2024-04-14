@@ -15,7 +15,7 @@ $$
 a / b(mod\space p)\rightarrow a\times inv(b) (mod\space p)
 $$
 
-即在模$p$的情况下$a$除$b$要替换成$a$乘$b$的逆元
+即在模 $p$ 的情况下 $a$ 除 $b$ 要替换成$a$乘$b$的逆元
 
 
 ## **扩展欧几里德**
