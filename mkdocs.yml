@@ -36,7 +36,9 @@ nav:
       - 堆: 
         - 二叉堆: DS/Heap/BinHp.md
       - 并查集: DS/UnionFind/UF.md
-      - 平衡二叉树: DS/AVLTree/AVL.md
+      - 平衡搜索树: 
+        - B 树: DS/BTree/BTree.md
+        - AVL: DS/AVLTree/AVL.md
       - 哈希表: DS/HTable/HTable.md
       - 树状数组: DS/BIT/BIT.md
       - 分块: DS/Block/Block.md
@@ -70,8 +72,8 @@ nav:
       - 进程:
         - 进程概念: Linux/ProCon/ProCon.md
         - 进程状态: Linux/ProStatus/ProStatus.md
-        - 进程调度策略: Linux/PSStrategy/PSStrategy.md
-        - 进程地址空间: Linux/ProAddrSpace/ProAddrSpace.md
+        # - 进程调度策略: Linux/PSStrategy/PSStrategy.md
+        # - 进程地址空间: Linux/ProAddrSpace/ProAddrSpace.md
         - 进程控制: Linux/ProCtrl/ProCtrl.md
         - 进程间通信: Linux/IPC/IPC.md
       - 文件系统:
