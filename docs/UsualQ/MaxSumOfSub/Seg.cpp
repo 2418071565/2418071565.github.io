@@ -16,7 +16,7 @@ int main()
 	return 0;
 }
 
-struct	S
+struct S
 {
 	int l, r;       // 区间左右端点
     ll sum;         // 区间和

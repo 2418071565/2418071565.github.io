@@ -5,7 +5,11 @@
 
 给定一个数组 $a=[a_1,a_2,\dots,a_n]$ ，选出其中的一段连续的非空子数组，使其和最大。
 
-题目连接：[洛谷](https://www.luogu.com.cn/problem/P1115)   [LeetCode](https://leetcode.cn/problems/maximum-subarray/description/)
+题目连接：
+
+[洛谷](https://www.luogu.com.cn/problem/P1115){target="_blank"} 
+
+[LeetCode](https://leetcode.cn/problems/maximum-subarray/description/){target="_blank"}
 
 ## **思路**
 
@@ -110,7 +114,7 @@ public:
 
 ## **问题变形**
 
-题目连接：[GSS1](https://www.luogu.com.cn/problem/SP1043)
+题目连接：[GSS1](https://www.luogu.com.cn/problem/SP1043){target="_blank"}
 
 
 给定长度为 $n$ 的序列 $a_1, a_2,\cdots,a_n$。现在有 $m$ 次询问操作，每次给定 $l_i,r_i$，查询 $[l_i,r_i]$ 区间内的最大子段和。
@@ -120,38 +124,111 @@ public:
 
 上面分治的思路其实就是线段树建树的过程，因为上面问题没有修改，也不会查询数组子区间的最大子段和，所以建完树直接返回根节点(整个区间)记录的答案即可。
 
-这里查询子数组最大子段和是一个区间合并的过程，就是将线段树上所有在查询区间的节点合并到最终答案中。对节点重载 $+$ 运算，来实现区间和并，会方便很多。区间和并时对数据维护的方法同上文的分治法。
-
-
+这里查询子数组最大子段和其实也是一个区间合并的过程，就是将线段树上所有在查询区间的节点合并到最终答案中。对节点重载 $+$ 运算，来实现区间和并，会方便很多。区间合并时对数据维护的方法同上文的分治法。完整代码如下：
 
 ```cpp
-struct	S
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+constexpr int MAX = 2e6 + 100;
+void solve();
+int main()
 {
-	int l, r;   // 区间左右端点
-        // 含义同上文介绍
-	ll sum;     
-	ll ls,rs,ms;
+	ios::sync_with_stdio(false);
+	cin.tie(0), cout.tie(0);
+	solve();
+	return 0;
+}
+
+struct S
+{
+	int l, r;       // 区间左右端点
+    ll sum;         // 区间和
+	ll ls;          // 包含左端点的最大子段和
+    ll rs;          // 包含右端点的最大子段和
+    ll ms;          // 区间最大子段和
 } f[MAX << 2];
+// 重载+ 实现区间合并
+// a 表示左区间，b表示右区间，后面使用时也要保证这个顺序
 S operator+(const S& a,const S& b)
 {
-    // 区间和并，与分治法合并区间相同
     S res;
     res.sum = a.sum + b.sum;
     res.ls = max(a.ls,a.sum + b.ls);
     res.rs = max(b.rs,b.sum + a.rs);
     res.ms = max(a.rs + b.ls,max(a.ms,b.ms));
+    // 维护区间左右端点
     res.l = a.l;
     res.r = b.r;
     return res;
 }
+
+// 求左右子节点的函数和区间折半的函数
+inline int ls(int k) { return k << 1; }
+inline int rs(int k) { return k << 1 | 1; }
+inline int md(int l, int r) { return (l + r) >> 1; }
+int n, m;
+
+// 合并区间
+void push_up(int k)
+{
+	f[k] = f[ls(k)] + f[rs(k)];
+}
+
+// 建树
+void build(int k, int l, int r)
+{
+	f[k].l = l, f[k].r = r; 
+	if (l == r)
+	{
+		// 输入数据
+		cin >> f[k].sum;
+		f[k].ls = f[k].rs = f[k].ms = f[k].sum;
+		return;
+	}
+	int m = md(l, r); 
+	build(ls(k), l, m);
+	build(rs(k), m + 1, r);
+	push_up(k);
+}
+
+// 查询
+S ask(int k, int l, int r)
+{
+	if (l <= f[k].l && r >= f[k].r)
+		return f[k];
+	int m = md(f[k].l, f[k].r);
+	S res;
+	if (r <= m)res = ask(ls(k), l, r);
+	else if (l > m)res = ask(rs(k), l, r);
+	else res = ask(ls(k), l, m) + ask(rs(k), m + 1, r);
+	return res;
+}
+
+void solve()
+{
+	cin >> n;
+	build(1,1,n);
+	cin >> m;
+	while(m--)
+	{
+		int l,r;
+		cin >> l >> r;
+		cout << ask(1,l,r).ms << '\n';
+	}
+}
 ```
 
-因为重载了 $+$ 操作，之后的建树和查询就和维护区间和很类似了。
+## **习题**
 
+|题目|难度|知识|
+|:-:|:-:|:-:|
+|[CF 1906 F](https://codeforces.com/contest/1906/problem/F){target="_blank"}|2100|带修改的最大区间子段和|
+|[GSS1](https://www.luogu.com.cn/problem/SP1043){target="_blank"}|提高+/省选−|区间最大子段和模板|
 
 ----------
 
 参考文章：<br>
 
-[线段树与区间最大子段和问题](https://blog.csdn.net/m0_51156601/article/details/124014996)
+[线段树与区间最大子段和问题](https://blog.csdn.net/m0_51156601/article/details/124014996){target="_blank"}
 
