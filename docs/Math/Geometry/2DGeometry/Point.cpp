@@ -120,9 +120,3 @@ struct line
         return line_intersection(b);
     }
 };
-
-// int main()
-// {
-//     cout << fixed << setprecision()
-//     return 0;
-// }
