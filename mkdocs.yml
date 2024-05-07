@@ -37,6 +37,7 @@ nav:
         - 二叉堆: DS/Heap/BinHp.md
       - 并查集: DS/UnionFind/UF.md
       - 平衡搜索树: 
+        - Splay: DS/Splay/Splay.md
         - B 树: DS/BTree/BTree.md
         - AVL: DS/AVLTree/AVL.md
       - 哈希表: DS/HTable/HTable.md
