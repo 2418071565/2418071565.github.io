@@ -27,7 +27,7 @@
 
 图中黑色节点都是被删除的节点，这样空间复杂度就优化为$O(n)$了，我们可以直接将节点值存到一个数组中。但是问题来了，我们该怎么在数组中正确快速的求前缀和呢？这就要用到大名鼎鼎的$lowbit$函数了
 
-## **$lowbit$ 函数**
+## **lowbit 函数**
 
 我们将每个节点下标对应的二进制形式写出来，就能看出一些规律：
 
@@ -42,6 +42,7 @@
 - 每个节点的父节点的下标就是在其二进制的最低位 $1$ 加上 $1$ 。
 
 那么实现树状数组的就归结到一个关键问题：如何快速找到一个数二进制表示下最低位$1$及其后面的$0$构成的数值。这也就是$lowbit$函数的功能。
+
 <br>
 <br>
 
@@ -64,7 +65,7 @@ inline int lowbit(int x)
 
 ### **单点修改，区间查询**
 
-[【模板】树状数组 1](https://www.luogu.com.cn/problem/P3374)
+[【模板】树状数组 1](https://www.luogu.com.cn/problem/P3374){target="_blank"}
 
 最简单的树状数组可以在$O(\log n)$的复杂度实现这两种操作
 
@@ -98,7 +99,7 @@ inline int ask(int x)
 
 ### **区间修改，单点查询**
 
-[【模板】树状数组 2](https://www.luogu.com.cn/problem/P3368)
+[【模板】树状数组 2](https://www.luogu.com.cn/problem/P3368){target="_blank"}
 
 #### **区间修改**
 
@@ -133,7 +134,7 @@ int ask(int x)
 
 ### **区间修改，区间查询**
 
-[【模板】线段树 1](https://www.luogu.com.cn/problem/P3372)
+[【模板】线段树 1](https://www.luogu.com.cn/problem/P3372){target="_blank"}
 
 #### **区间查询**
 
@@ -200,154 +201,128 @@ void change(int l, int r, int d)
 }
 ```
 
+??? code "BIT"
+    ```cpp
+    #include <bits/stdc++.h>
+    using namespace std;
+    const int MAX = 1e6 + 100;
 
-<div style="display:none">
+    inline int lowbit(int x)
+    {
+        return x & -x;
+    }
 
-## **树状数组扩展**
+    // n代表维护的数组长度
+    // f[]数组代表维护的数组
+    int n;
+    int f[MAX];
 
-### **二维树状数组**
+    // =====================================================================
+    // 基础树状数组
+    // 支持单点修改，区间查询
 
-二维树状数组，也被称作**树状数组套树状数组**，用来维护二维数组上的单点修改和前缀信息问题。其实就是一维树状数组上的每个节点变成了一个一维树状数组：
+    // 单点修改
+    inline void update(int x, int d)
+    {
+        for (; x <= n; x += lowbit(x))
+            f[x] += d;
+    }
 
-<figure markdown="span">
-  ![Image title](img/04.png){ width="750" }
-</figure>
+    // 查询前缀[1,x]的和
+    inline int ask(int x)
+    {
+        int sum = 0;
+        for (; x > 0; x -= lowbit(x))
+            sum += f[x];
+        return sum;
+    }
+
+    // 求区间[l,r]的和
+    inline int ask(int l, int r)
+    {
+        return ask(r) - ask(l - 1);
+    }
+
+    // =====================================================================
+    // 差分+树状数组
+    // 支持区间修改，单点查询
+
+    // 对差分数组单点修改
+    inline void update(int x, int d)
+    {
+        for (; x <= n; x += lowbit(x))
+            f[x] += d;
+    }
+
+    // 区间修改，即修改差分数组的两个端点
+    // 在区间[l,r]上加上k
+    inline void change(int l, int r, int k)
+    {
+        update(l, k);
+        update(r + 1, -k);
+    }
+
+    // 单点查询，即求差分数组前缀和
+    inline int ask(int x)
+    {
+        int sum = 0;
+        for (int i = x; i > 0; i -= lowbit(i))
+            sum += f[i];
+        return sum;
+    }
+
+    // =====================================================================
+    // 2*差分数组+数组数组
+    // 支持区间修改，区间查询
+
+    // 维护两个差分数组
+    int f1[MAX], f2[MAX];
+
+    // 区间查询
+    //  对两个差分数组求前缀和
+    inline int ask1(int x)
+    {
+        int sum = 0;
+        for (; x > 0; x -= lowbit(x))
+            sum += f1[x];
+        return sum;
+    }
+    inline int ask2(int x)
+    {
+        int sum = 0;
+        for (; x > 0; x -= lowbit(x))
+            sum += f2[x];
+        return sum;
+    }
+
+    // 区间查询
+    //ask(l,r) = sum(r) - sum(l-1)
+    inline int ask(int l, int r)
+    {
+        return r * ask1(r) - ask2(r) - ((l - 1) * ask1(l - 1) - ask2(l - 1));
+    }
+
+    // 区间修改
+    // 对两个差分数组做修改
+    void update1(int x, int d)
+    {
+        for (; x <= n; x += lowbit(x))
+            f1[x] += d;
+    }
+    void update2(int x, int d)
+    {
+        for (; x <= n; x += lowbit(x))
+            f2[x] += d;
+    }
+    //修改区间[l,r]
+    void change(int l, int r, int d)
+    {
+        update1(l, d), update1(r + 1, -d);
+        update2(l, (l - 1) * d), update2(r + 1, -r * d);
+    }
 
 
- <!-- <div align=center><img src="img/04.png" width="750"></div> -->
-
-基本的二维树状数组可以实现单点修改，子矩阵查询
-
-#### **单点修改**
-
-修改一个矩阵的值后，我们要将其父节点都修改，例如我们要修改上图的$f[2][2]$元素，那么我们同时也要修改$f[2][5]、f[5][2]、f[5][5]$，这些节点，实现如下：
-
-```cpp
-void update(int x,int y,int d)
-{
-    for(int i=x;i<=n;i+=lowbit(i))
-        for(int j=y;j<=m;j+=lowbit(j))
-            f[i][j]+=d;
-}
-```
-
-时间复杂度为$O(\log n\log m)$
-
-#### **子矩阵查询**
-
-现在我们可以求$\sum_{i=1}^{n}\sum_{j=1}^{m}a[i][j]$的值，要我们计算下图中黑色矩阵的值
-
-<figure markdown="span">
-  ![Image title](img/05.png){ width="750" }
-</figure>
-
-
- <!-- <div align=center><img src="img/05.png" width="750"></div> -->
-
-很明显，计算黑色矩阵的面积有下面的公式：
-
-$$
-\sum_{i=x_2}^{x_1}\sum_{j=y_2}^{y_1}a[i][j]=\sum_{i=1}^{x_1}\sum_{j=1}^{y_1}a[i][j]-\sum_{i=1}^{x_2-1}\sum_{j=1}^{y_1}a[i][j]-\sum_{i=1}^{x_1}\sum_{j=1}^{y_2-1}a[i][j]+\sum_{i=1}^{x_2}\sum_{j=1}^{y_2}a[i][j]
-$$
-
-有了公式代码也就很容易写了：
-
-```cpp
-int ask(int x,int y)
-{
-    int sum=0;
-    for(int i=x;i>0;i-=lowbit(i))
-        for(int j=y;j>0;j-=lowbit(j))
-            sum+=f[i][j];
-    return sum;
-}
-int ask(int x1,int y1,int x2,int y2)
-{
-    return ask(x1,y1)-ask(x1,y2-1)-ask(x2-1,y1)+ask(x2,y2);
-}
-```
-
-时间复杂度为$O(\log n\log m)$
-
-#### **二维树状数组进阶**
-
-[上帝造题的七分钟](https://www.luogu.com.cn/problem/P4514)
-该题要我们实现二维树状数组的子矩阵修改和子矩阵查询
-
-#### **子矩阵修改**
-
-和一维类似的，这里也要用到差分的思想，使用二维差分，我们定义一个二维差分数组$d[i][j]$，它与原矩阵元素$a[i][j]$的关系如下：
-
-$$
-d[i][j]=a[i][j]-a[i][j-1]-a[i-1][j]+a[i-1][j-1]\\
-~\\
-a[x][y]=\sum_{i=1}^{x}\sum_{j=1}^{y}d[i][j]
-$$
-
-现在，假设我们要在顶点为$(a,b)、(c,d)$的矩阵内的每个元素加上$k$，如下图
-
-<figure markdown="span">
-  ![Image title](img/06.png){ width="750" }
-</figure>
-
-
- <!-- <div align=center><img src="img/06.png" width="750"></div> -->
-
-因为我们维护的是差分数组，所以我分别修改四个顶点即可完成对区间的修改，实现如下：
-
-```cpp
-void update(int x,int y,int d)
-{
-    for(int i=x;i<=n;i+=lowbit(i))
-        for(int j=y;j<=m;j+=lowbit(j))
-            f[i][j]+=d;
-}
-void update(int x1,int y1,int x2,int y2,int k)
-{
-    update(x1,y1,k),update(x1,y2+1,-k),
-    update(x2+1,y1,-k),update(x2+1,y2+1,k);
-}
-```
-
-#### **子矩阵查询**
-
-与一维数组类似的，我们求一个子矩阵的和有下面的式子：
-
-$$
-\sum_{i=x_2}^{x_1}\sum_{j=y_2}^{y_1}a[i][j]=\sum_{i=1}^{x_1}\sum_{j=1}^{y_1}a[i][j]-\sum_{i=1}^{x_2-1}\sum_{j=1}^{y_1}a[i][j]-\sum_{i=1}^{x_1}\sum_{j=1}^{y_2-1}a[i][j]+\sum_{i=1}^{x_2}\sum_{j=1}^{y_2}a[i][j]
-$$
-
-问题就转换为计算$\sum_{i=1}^{n}\sum_{j=1}^{m}a[i][j]$，与推一维数组区间查询类似，我们利用原数组的与差分数组之间的关系进行变换，下面是推导过程：
-
-$$
-\begin{align*}
- &\sum_{i=1}^{n}\sum_{j=1}^{m}a[i][j]\\
-= &\sum_{i=1}^{n}\sum_{j=1}^{m}\sum_{k=1}^{i}\sum_{l=1}^{j}d[k][l]\\
- =&\sum_{i=1}^{n}\sum_{j=1}^{m}d[i][j]\times (n-i+1)\times (m-j+1)\\
-=&(n+1)(m+1)\sum_{i=1}^{n}\sum_{j=1}^{m}d[i][j]-(m+1)\sum_{i=1}^{n}\sum_{j=1}^{m}d[i][j]\times i\\
-&(n+1)\sum_{i=1}^{n}\sum_{j=1}^{m}d[i][j]\times j+\sum_{i=1}^{n}\sum_{j=1}^{m}d[i][j]\times i\times j
-\end{align*}
-$$
-
-我们可以用四个二维树状数组来分别维护上面四个二维前缀和，下面是实现：
-
-```cpp
-int ask(int x,int y)
-{
-    int sum=0;
-    for(int i=x;i>0;i-=lowbit(i))
-        for(int j=y;j>0;j-=lowbit(j))
-            sum+=(x+1)*(y+1)*f[0][i][j]-(y+1)*f[1][i][j]-(x+1)*f[2][i][j]+f[3][i][j];
-    return sum;
-}
-
-int ask(int x1,int y1,int x2,int y2)
-{
-    return ask(x2,y2)-ask(x1-1,y2)-ask(x2,y1-1)+ask(x1-1,y1-1);
-}
-```
-
-</div>
+    ```
 
 ## **树状数组维护区间最值**
 
@@ -355,6 +330,87 @@ int ask(int x1,int y1,int x2,int y2)
 在修改区间最值时，要更新树状数组上所有被其影响的节点，即所有与其直接相连的节点，其父节点和子节点。
 
 在查询时分两种情况，如果当前节点覆盖的范围，超过了我们的查询范围，就用原数组对应下标的值去更新答案，并且向前递推；如果没有超过我们的查询范围，就直接用当前节点的值去更新答案。
+
+??? code "RMQ"
+    ```cpp
+    /*
+    以题目I Hate It为例给出树状数组如理RMQ问题的模板
+    https://acm.hdu.edu.cn/showproblem.php?pid=1754
+    */
+
+    #include <bits/stdc++.h>
+    using namespace std;
+    #define MAX int(2e5+7)
+    typedef long long ll;
+
+    int f[MAX],a[MAX], n, m;
+    inline int lowbit(int x) {return x & -x;}
+
+    // 单点修改
+    void update(int x, int d) { 
+        while (x <= n) {
+            f[x] = max(d,a[x]);
+            // 用当前节点的子节点更新当前节点
+            for (int i = 1; i < lowbit(x); i <<= 1)
+                f[x] = max(f[x], f[x - i]);
+            x += lowbit(x);
+        }
+    }
+
+    // 查询区间最值
+    int ask(int l,int r) {
+        int res = 0;
+        while (l <= r) {
+            // 如果当前节点维护的区间超过查询区间，就用原数组该位置的值修改答案
+            if (lowbit(r) > r - l + 1)
+                res = max(res, a[r]),--r;
+            // 没超过就直接用当前节点的区间修改答案
+            else 
+                res = max(res, f[r]),r -= lowbit(r);
+        }
+        return res;
+    }
+
+
+    void solve() {
+        while (cin >> n >> m) {
+            for (int i = 1; i <= n; ++i) {
+                cin >> a[i];
+                update(i, a[i]);
+            }
+            for (int i = 0; i < m; ++i) {
+                char op;
+                int x, y;
+                cin >> op >> x >> y;
+                if (op == 'Q')cout << ask(x, y) << '\n';
+                else a[x] = y, update(x, y);
+            }
+        }
+    }
+
+    int main() {
+        ios::sync_with_stdio(false); //int T;
+        //for (cin >> T; T--;) 
+        solve();
+        return 0;
+    }
+    ```
+
+
+## **习题**
+
+|题目 | 难度|知识|
+|:-:|:-:|:-:|
+|[P1908](https://www.luogu.com.cn/problem/P1908){target="_blank"}|普及/提高-|逆序对模板|
+|[P1774](https://www.luogu.com.cn/problem/P1774){target="_blank"}| 普及/提高-|逆序对|
+|[P4479](https://www.luogu.com.cn/problem/P4479){target="_blank"}|省选/NOI- |离散化+树状数组|
+|[No Pain No Game](https://acm.hdu.edu.cn/showproblem.php?pid=4630){target="_blank"}||离线+树状数组|
+|[I Hate It](https://acm.hdu.edu.cn/showproblem.php?pid=1754){target="_blank"}||树状数组维护RMQ|
+|[P1966](https://www.luogu.com.cn/problem/P1966){target="_blank"}|提高+/省选-|排序+树状数组|
+|[P3605](https://www.luogu.com.cn/problem/P3605){target="_blank"}|提高+/省选-|DFS+树状数组|
+|[LC.100112](https://leetcode.cn/problems/maximum-balanced-subsequence-sum/description/){target="_blank"}|困难|树状数组优化DP|
+|[LC.2736](https://leetcode.cn/problems/maximum-sum-queries/description/){target="_blank"}|困难|二维偏序问题|
+
 
 -------
 参考文章：<br>

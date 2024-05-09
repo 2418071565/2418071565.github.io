@@ -1,13 +1,12 @@
 
-**[原文github连接](https://github.com/tianyicui/pack)**
+本文的创作参考了[《背包九讲》](https://github.com/tianyicui/pack){target="_blank"}([原文pdf](./%E8%83%8C%E5%8C%85%E4%B9%9D%E8%AE%B2.pdf))，使用 C/C++ 实现了文中的伪代码，并对文章中的思路给出自己的理解。
 
-**[知乎版链接](https://zhuanlan.zhihu.com/p/139368825)**
 
 ## **1.01背包**
 
 ### **问题**
 
-[01背包模板](https://www.luogu.com.cn/problem/P2871)
+[01背包模板](https://www.luogu.com.cn/problem/P2871){target="_blank"}
 有 $N$ 个物品，第 $i$ 个物品的费用为 $c_i$ ，价值为 $w_i$，有一个容量为 $V$ 的背包，求怎样选择能获得价值最大的物品。
 
 ### **思路**
@@ -64,7 +63,7 @@ for (int i = 0; i < N; ++i) {
 
 ### **问题**
 
-[多重背包模板](https://www.luogu.com.cn/problem/P1776)
+[多重背包模板](https://www.luogu.com.cn/problem/P1776){target="_blank"}
 题意还是和 $01$ 背包相同，只是每个物品只有 $n_i$ 件可用。
 
 ### **思路**
@@ -182,7 +181,7 @@ for (int i = 0; i < N; ++i) {
 
 #### **01背包**
 
-[模板题](https://www.luogu.com.cn/problem/T129162)
+[模板题](https://www.luogu.com.cn/problem/T129162){target="_blank"}
 费用加了一个，那么我们就直接将递推的式子也加一维 $dp[i][j][k]$ ， $i$ 是物品下标， $j、k$ 是两个费用，很容易写出类似 $01$ 背包的递推式：
 
 $$
@@ -248,7 +247,7 @@ for (int i = 0; i < N; ++i) {
 
 ## **6.分组的背包问题**
 
-[分组背包模板](https://www.luogu.com.cn/problem/P1757)
+[分组背包模板](https://www.luogu.com.cn/problem/P1757){target="_blank"}
 
 ### **问题**
 
@@ -281,7 +280,7 @@ for (int k = 0; k <= 100; ++k) {
 
 ## **7.有依赖的背包**
 
-[金明的预算方案](https://www.luogu.com.cn/problem/P1064)
+[金明的预算方案](https://www.luogu.com.cn/problem/P1064){target="_blank"}
 
 ### **问题**
 

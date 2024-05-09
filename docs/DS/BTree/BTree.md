@@ -225,213 +225,209 @@ void _m_insert_key(const Tp& __k)
 }
 ```
 
-
-
 ### **删除**
 
 删除的思路是要尽量借元素，当节点中元素的个数少于 $\left \lfloor \frac{m}{2}  \right \rfloor$ 时，要向父节点借数据，父节点数据不够就要向兄弟节点借数据，直到整棵树都借不到时，才开始删除节点，这里删除节点类似创建节点的逆过程，就是将根节点和根的左右子节点合并。
 
-
-## **完整代码**
-
-```cpp
-template<class Tp,int Ord>
-struct _b_tree_node
-{
-    using node = _b_tree_node<Tp,Ord>;
-    // 多开一个空间，方便插入后进行分裂
-    Tp _keys[Ord];
-    node* _son[Ord + 1] = { 0 };
-    node* _fa = nullptr;
-    int _sz = 0;    // key 的个数
-
-
-    // 返回插入后是否满了
-    bool _is_full() const noexcept
-    { return _sz == Ord;}
-    
-    // 向节点中插入
-    void _m_insert(const Tp& __k,node* __s)
+??? code "B-Tree"
+    ```cpp
+    template<class Tp,int Ord>
+    struct _b_tree_node
     {
-        int i;
-        for(i = _sz - 1;i >= 0;--i)
-        {
-            if(__k < _keys[i])
-            {
-                std::swap(_keys[i],_keys[i + 1]);
-                std::swap(_son[i + 1],_son[i + 2]);
-            }
-            else break;
-        }
-        _keys[i + 1] = __k;
-        _son[i + 2] = __s;
-        if(__s) __s->_fa = this;
-        _sz++;
-    }
-
-    // 分裂节点
-    Tp _m_split(node*& _bro_node) 
-    {
-        int _mid = _sz >> 1;
-        _bro_node->_son[0] = _son[_mid + 1];
-        if(_son[_mid + 1])
-            _son[_mid + 1]->_fa = _bro_node;
-        _son[_mid + 1] = nullptr;
-        for(int i = _mid + 1;i < _sz;++i)
-        {
-            _bro_node->_m_insert(_keys[i],_son[i + 1]);
-            _son[i + 1] = nullptr;
-        }
-        _sz >>= 1; 
-        return std::move(_keys[_sz]);
-    }
-};
-
-const int MAX = 200000;
-
-/**
- * @brief B-树
- * @tparam Tp 元素类型
- * @tparam Ord B-树的阶，阶至少为 3。
- */
-template<class Tp,int Ord>
-class B_Tree
-{
-private:
-    static_assert(Ord > 2," B-Tree's Order must greater than 2. ");
-
-    using node = _b_tree_node<Tp,Ord>;
-    using self = B_Tree<Tp,Ord>;
-
-    node* _m_root = nullptr;
-    // 简单实现一个内存池，提高效率。
-    node* mem_pool;
-    int cnt = 0;
-
-    // 找到 key 对应的节点和对应位置
-    std::pair<node*,int> _m_find(const Tp& __k) noexcept
-    {
-        node* fa = nullptr;
-        node* cur = _m_root;
-        while(cur)
-        {
-            int __p;
-            __p = std::lower_bound(cur->_keys,cur->_keys + cur->_sz,__k) - cur->_keys;
-            if(cur->_keys[__p] == __k)return std::make_pair(cur,__p);
-            // for(__p =  0;__p < cur->_sz ;++__p)
-            // {
-            //     if(__k < cur->_keys[__p])break;
-            //     if(__k == cur->_keys[__p])return std::make_pair(cur,__p);
-            // }
-            fa = cur;
-            cur = cur->_son[__p];
-        }
-        // 到叶子节点返回 叶子 和 -1
-        return std::make_pair(fa,-1);
-    }
+        using node = _b_tree_node<Tp,Ord>;
+        // 多开一个空间，方便插入后进行分裂
+        Tp _keys[Ord];
+        node* _son[Ord + 1] = { 0 };
+        node* _fa = nullptr;
+        int _sz = 0;    // key 的个数
 
 
-    void _m_insert_key(const Tp& __k)
-    {
-        // 空树创建根节点
-        if(_m_root == nullptr)
-        {
-            _m_root = &mem_pool[cnt++];
-            _m_root->_keys[0] = __k;
-            _m_root->_sz = 1;
-            return;
-        }
+        // 返回插入后是否满了
+        bool _is_full() const noexcept
+        { return _sz == Ord;}
         
-        std::pair<node*,int> ret = _m_find(__k);
-        if(ret.second >= 0) // 已经有就不再插入
+        // 向节点中插入
+        void _m_insert(const Tp& __k,node* __s)
         {
-            std::cerr << "B tree already has this keyword!" << std::endl;
-            return;
+            int i;
+            for(i = _sz - 1;i >= 0;--i)
+            {
+                if(__k < _keys[i])
+                {
+                    std::swap(_keys[i],_keys[i + 1]);
+                    std::swap(_son[i + 1],_son[i + 2]);
+                }
+                else break;
+            }
+            _keys[i + 1] = __k;
+            _son[i + 2] = __s;
+            if(__s) __s->_fa = this;
+            _sz++;
         }
 
-        // 插入
-        node* cur = ret.first;
-        node* bro = nullptr;
-        Tp n_val = __k;
-        while(true)
+        // 分裂节点
+        Tp _m_split(node*& _bro_node) 
         {
-            cur->_m_insert(n_val,bro);
+            int _mid = _sz >> 1;
+            _bro_node->_son[0] = _son[_mid + 1];
+            if(_son[_mid + 1])
+                _son[_mid + 1]->_fa = _bro_node;
+            _son[_mid + 1] = nullptr;
+            for(int i = _mid + 1;i < _sz;++i)
+            {
+                _bro_node->_m_insert(_keys[i],_son[i + 1]);
+                _son[i + 1] = nullptr;
+            }
+            _sz >>= 1; 
+            return std::move(_keys[_sz]);
+        }
+    };
 
-            // 节点没有满，直接结束
-            if(!cur->_is_full())return;
+    const int MAX = 200000;
 
-            // 分裂兄弟节点
-            bro = &mem_pool[cnt++];
-            n_val = cur->_m_split(bro);
-            if(!cur->_fa)   // 根节点满了，创建新根
+    /**
+     * @brief B-树
+     * @tparam Tp 元素类型
+     * @tparam Ord B-树的阶，阶至少为 3。
+     */
+    template<class Tp,int Ord>
+    class B_Tree
+    {
+    private:
+        static_assert(Ord > 2," B-Tree's Order must greater than 2. ");
+
+        using node = _b_tree_node<Tp,Ord>;
+        using self = B_Tree<Tp,Ord>;
+
+        node* _m_root = nullptr;
+        // 简单实现一个内存池，提高效率。
+        node* mem_pool;
+        int cnt = 0;
+
+        // 找到 key 对应的节点和对应位置
+        std::pair<node*,int> _m_find(const Tp& __k) noexcept
+        {
+            node* fa = nullptr;
+            node* cur = _m_root;
+            while(cur)
+            {
+                int __p;
+                __p = std::lower_bound(cur->_keys,cur->_keys + cur->_sz,__k) - cur->_keys;
+                if(cur->_keys[__p] == __k)return std::make_pair(cur,__p);
+                // for(__p =  0;__p < cur->_sz ;++__p)
+                // {
+                //     if(__k < cur->_keys[__p])break;
+                //     if(__k == cur->_keys[__p])return std::make_pair(cur,__p);
+                // }
+                fa = cur;
+                cur = cur->_son[__p];
+            }
+            // 到叶子节点返回 叶子 和 -1
+            return std::make_pair(fa,-1);
+        }
+
+
+        void _m_insert_key(const Tp& __k)
+        {
+            // 空树创建根节点
+            if(_m_root == nullptr)
             {
                 _m_root = &mem_pool[cnt++];
-                cur->_fa = _m_root;
-                bro->_fa = _m_root;
-                _m_root->_keys[0] = std::move(n_val);
-                _m_root->_son[0] = cur;
-                _m_root->_son[1] = bro;
+                _m_root->_keys[0] = __k;
                 _m_root->_sz = 1;
                 return;
             }
-            // 跳到上一层，将中位数插入到父节点中
-            cur = cur->_fa;
-        }
-    }
+            
+            std::pair<node*,int> ret = _m_find(__k);
+            if(ret.second >= 0) // 已经有就不再插入
+            {
+                std::cerr << "B tree already has this keyword!" << std::endl;
+                return;
+            }
 
-    // 中序的方式遍历整个数组
-    template<class _Fun>
-    void _m_dfs_(node* _it,_Fun _op) const
-    {
-        if(!_it) return;
-        for(int i = 0;i <= _it->_sz;++i)
+            // 插入
+            node* cur = ret.first;
+            node* bro = nullptr;
+            Tp n_val = __k;
+            while(true)
+            {
+                cur->_m_insert(n_val,bro);
+
+                // 节点没有满，直接结束
+                if(!cur->_is_full())return;
+
+                // 分裂兄弟节点
+                bro = &mem_pool[cnt++];
+                n_val = cur->_m_split(bro);
+                if(!cur->_fa)   // 根节点满了，创建新根
+                {
+                    _m_root = &mem_pool[cnt++];
+                    cur->_fa = _m_root;
+                    bro->_fa = _m_root;
+                    _m_root->_keys[0] = std::move(n_val);
+                    _m_root->_son[0] = cur;
+                    _m_root->_son[1] = bro;
+                    _m_root->_sz = 1;
+                    return;
+                }
+                // 跳到上一层，将中位数插入到父节点中
+                cur = cur->_fa;
+            }
+        }
+
+        // 中序的方式遍历整个数组
+        template<class _Fun>
+        void _m_dfs_(node* _it,_Fun _op) const
         {
-            _m_dfs_(_it->_son[i],_op);
-            if(i < _it->_sz) _op(_it->_keys[i]);
+            if(!_it) return;
+            for(int i = 0;i <= _it->_sz;++i)
+            {
+                _m_dfs_(_it->_son[i],_op);
+                if(i < _it->_sz) _op(_it->_keys[i]);
+            }
         }
-    }
-    
+        
 
-public:
-    B_Tree()
-        :mem_pool(new node[MAX])
-    { }
+    public:
+        B_Tree()
+            :mem_pool(new node[MAX])
+        { }
 
-    B_Tree(const self& _ot)
-        :mem_pool(new node[MAX])
-    {
-        _ot.for_each([this](const Tp& _ot_e) mutable {
-            this->insert(_ot_e);
-        });
-    }
+        B_Tree(const self& _ot)
+            :mem_pool(new node[MAX])
+        {
+            _ot.for_each([this](const Tp& _ot_e) mutable {
+                this->insert(_ot_e);
+            });
+        }
 
-    B_Tree(self&& _ot)
-    {
-        this->_m_root = _ot._m_root;
-        this->mem_pool = _ot.mem_pool;
-        this->cnt = _ot.cnt;
-        _ot._m_root = nullptr;
-        _ot.mem_pool = nullptr;
-        _ot.cnt = 0;
-    }
+        B_Tree(self&& _ot)
+        {
+            this->_m_root = _ot._m_root;
+            this->mem_pool = _ot.mem_pool;
+            this->cnt = _ot.cnt;
+            _ot._m_root = nullptr;
+            _ot.mem_pool = nullptr;
+            _ot.cnt = 0;
+        }
 
-    // 查找 key
-    Tp* find(const Tp& key) noexcept
-    {
-        std::pair<node*,int> _ret = _m_find(key);
-        return (_ret.second >= 0)?(_ret.first->_keys + _ret.second):nullptr; 
-    }
+        // 查找 key
+        Tp* find(const Tp& key) noexcept
+        {
+            std::pair<node*,int> _ret = _m_find(key);
+            return (_ret.second >= 0)?(_ret.first->_keys + _ret.second):nullptr; 
+        }
 
-    void insert(const Tp& key)
-    { _m_insert_key(key); }
+        void insert(const Tp& key)
+        { _m_insert_key(key); }
 
 
-    template<class _Fun>
-    void for_each(_Fun _op) const
-    { _m_dfs_(_m_root,_op); }
+        template<class _Fun>
+        void for_each(_Fun _op) const
+        { _m_dfs_(_m_root,_op); }
 
-     ~B_Tree()
-    { delete[] mem_pool;}
+        ~B_Tree()
+        { delete[] mem_pool;}
 
-};
-```
+    };
+    ```

@@ -1,5 +1,5 @@
 repo_url: https://github.com/2418071565/2418071565.github.io.git
-site_name: Made For YWX
+site_name: Made By CYB
 
 theme:
   name: material
@@ -15,16 +15,19 @@ theme:
     - navigation.instant.progress
     - navigation.footer
     - content.tabs.link
+  icon:
+    admonition:
+      code: material/note-alert
 
 nav:
   - 关于: index.md
   - 数据结构与算法: 
     - 简介: DS_Algo.md
     - 算法: 
-      - 动态规划:
+      - 动态规划（未完工）:
         - 背包问题: Algorithm/DP/Knapsack/Knapsack.md
       - 倍增: Algorithm/BinaryLifting/BinaryLifting.md
-      - 排序: 
+      - 排序（未完工）: 
         - 简介: Algorithm/Sort/Sort.md
         - 冒泡排序: Algorithm/Sort/BubbleSort/Bubble.md
     - 字符串:
@@ -35,21 +38,23 @@ nav:
     - 数据结构:
       - 堆: 
         - 二叉堆: DS/Heap/BinHp.md
+      - 哈希表: DS/HTable/HTable.md
       - 并查集: DS/UnionFind/UF.md
+      - 分块: DS/Block/Block.md
+      - 树状数组: 
+        - 树状数组: DS/BIT/BIT.md
+        - 二维树状数组: DS/BIT/2_BIT.md
       - 平衡搜索树: 
         - Splay: DS/Splay/Splay.md
         - B 树: DS/BTree/BTree.md
-        - AVL: DS/AVLTree/AVL.md
-      - 哈希表: DS/HTable/HTable.md
-      - 树状数组: DS/BIT/BIT.md
-      - 分块: DS/Block/Block.md
+        - AVL（待修改）: DS/AVLTree/AVL.md
       - 线段树: 
-        - 基础线段树: DS/SegTr/SegTr.md
+        - 基础线段树（待修改）: DS/SegTr/SegTr.md
         - 吉如一线段树: DS/SegTr/JRYSegTr.md
     - 图论: 
       - 图的存储: Graph/StorageOfGraphs/Storage.md
       - 拓朴排序: Graph/TopoSort/Topo.md
-      - 树: 
+      - 树（未完工）: 
         - 树基础: Graph/Tree/Basic/Basic.md
         - 最小生成树: Graph/Tree/MST/MST.md
     - 数学:
@@ -62,12 +67,13 @@ nav:
         - 乘法逆元: Math/NumberTheory/Inv/Inv.md
       - 数值计算:
         - 牛顿迭代法: Math/Numerical/NtsMethod/Nt.md
-    - 常见问题:
+        - 快速平方根倒数算法: Math/Numerical/QSqrt/QSqrt.md
+    - 问题总结:
       # - 树上最小支配集:
       - 整数拆分: UsualQ/IntPartition/IntPartition.md
       - 区间最大子段和: UsualQ/MaxSumOfSub/MaxSumOfSub.md
   - Linux:
-    - 指令: Linux/Cmd/Cmd.md
+    - 指令（未完工）: Linux/Cmd/Cmd.md
     - 内核:
       - 体系结构及操作系统概念: Linux/SysConcept/SysConcept.md
       - 进程:
@@ -93,7 +99,7 @@ nav:
       - 继承: C++/继承多态/继承.md
       - 多态: C++/继承多态/多态.md
     # - 内存管理: C++/内存管理/new&delete.md
-    - 异常处理: C++/异常处理/异常.md
+    - 异常处理（未完工）: C++/异常处理/异常.md
     - C++11:
       - 列表初始化: C++/c++11/列表初始化.md
       - 类的新功能: C++/c++11/类的新功能.md
@@ -102,28 +108,20 @@ nav:
       - 右值引用和移动语义: C++/c++11/右值引用和移动语义.md
       - 可变参数模板: C++/c++11/可变参数模板.md
       - 智能指针: C++/c++11/智能指针.md
-      - STL 的改动: C++/c++11/STL.md
+      - STL 的改动（未完工）: C++/c++11/STL.md
     - C++20:
       - format: C++/c++20/format/format.md
+  # Qt 废弃
   # - Qt: 
   #   - 简介: Qt/start.md
   #   - 初识Qt: Qt/QtBasis/QtBasis.md
   #   - 信号与槽: Qt/SigAndSlot/SigAndSlot.md
-  - 有趣的知识:
-    - 快速平方根倒数算法: InterestingAlgo/QSqrt/QSqrt.md
-  # - IELTS:
-  #   - Writing:
-  #     - Develop Your Idea: "ielts/writing/develop_your_idea.md"
-  #     - 比较利弊: "ielts/writing/Advantages_and_Disadvantage.md"
-  #     - Discuss Both Views: "ielts/writing/Discuss_both_views.md"
-  #     - 同不同意: "ielts/writing/同不同意.md"
-  #     - Report型: "ielts/writing/Causes_and_solution.md"
-  #     - 小作文语料: "ielts/writing/小作文语料.md"
-  #     - 小作文数据图: "ielts/writing/数据图.md"
-  #     - 小作文地图&流程图: "ielts/writing/流程图&地图.md"
 
 
 markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
   - attr_list
   - md_in_html
   - pymdownx.arithmatex:

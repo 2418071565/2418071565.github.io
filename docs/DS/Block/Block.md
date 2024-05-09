@@ -21,7 +21,7 @@
 
 
 
-我们以最典型的区间操作区间和为例：[P3372](https://www.luogu.com.cn/problem/P3372)
+我们以最典型的区间操作区间和为例：[P3372](https://www.luogu.com.cn/problem/P3372){target="_blank"}
 
 
 我们将整个数组分为$t$块，每块长度为$block$，$st[i]$表示第$i$块的开始位置，$ed[i]$表示第$i$块的结束位置，$add[i]$表示对第$i$个块整个加的数，$pos[i]$表示第$i$个元素所在的块，$sun[i]$表示第$i$块的区间和。
@@ -83,6 +83,128 @@ void update(int l, int r, ll d)
 
 线段树一次操作的复杂度是树的高度，而分块一次操作的复杂度取决于块的大小，我们可以写出一次操作进行的运算次数为 $n/block+\Theta(block)$ ，当 $block$ 取 $\sqrt n$ 是达到最小值。
 
+??? code "Block"
+    ```cpp
+    // 以维护区间和为例，给出分块的基本代码
+    #include <bits/stdc++.h>
+    using namespace std;
+    const int MAX = 5e5 + 100;
+    typedef long long ll;
+
+    ll a[MAX], b[MAX];
+    int n, m;
+    // st[i]代表第i个块开始的位置，ed[i]表示第i个块结束的位置
+    int st[MAX], ed[MAX], pos[MAX];
+    // add整块的增量，sum维护区间和
+    ll add[MAX], sum[MAX];
+    // block 块大小，t块个数
+    int block, t;
+    // 初始化分块
+    void init()
+    {
+        //块大小
+        block = sqrt(n);                      
+        //块的个数 
+        t = (n + block - 1) / block;            
+        for (int i = 1; i <= n; ++i)
+        {
+            //第i个元素所在块
+            pos[i] = (i + block - 1) / block;   
+            //sum维护区间和
+            sum[pos[i]] += a[i];                
+        }
+        for (int i = 1; i <= t; ++i)
+        {
+            ed[i] = i * block;
+            st[i] = (i - 1) * block + 1;
+            add[i] = 0;
+        }
+        //最后一个块可能不是整块
+        ed[t] = n;                              
+    }
+
+    // 区间修改
+    void update(int l, int r, ll d)
+    {
+        int p = pos[l], q = pos[r];
+        // 修改区间在同一个块内
+        if (p == q)
+        {
+            sum[p] += (r - l + 1) * d;
+            for (int i = l; i <= r; ++i)
+                a[i] += d;
+        }
+        else
+        {
+            // 修改整块
+            for (int i = p + 1; i <= q - 1; ++i)
+                add[i] += d;
+            // 修改左边多余部分
+            for (int i = l; i <= ed[p]; ++i)
+                a[i] += d, sum[p] += d;
+            // 修改右边多余部分
+            for (int i = st[q]; i <= r; ++i)
+                a[i] += d, sum[q] += d;
+        }
+    }
+
+    // 区间查询
+    ll ask(int l, int r)
+    {
+        int p = pos[l], q = pos[r];
+        ll ans = 0;
+        // 查询区间在同一个块内
+        if (p == q)
+        {
+            for (int i = l; i <= r; ++i)
+                ans += a[i] + add[p];
+        }
+        else
+        {
+            // 查询整块
+            for (int i = p + 1; i <= q - 1; ++i)
+                ans += sum[i] + add[i] * (ed[i] - st[i] + 1);
+
+            // 查询两边多余部分
+            for (int i = l; i <= ed[p]; ++i)
+                ans += a[i] + add[p];
+
+            for (int i = st[q]; i <= r; ++i)
+                ans += a[i] + add[q];
+        }
+        return ans;
+    }
+
+    void solve()
+    {
+        cin >> n >> m;
+        memset(add, 0, sizeof add);
+        memset(sum, 0, sizeof sum);
+        for (int i = 1; i <= n; ++i)
+            cin >> a[i];
+
+        init();
+
+        for (int i = 0; i < m; ++i)
+        {
+            int op;
+            int l, r, x;
+            cin >> op >> l >> r;
+            if (op == 1)
+                cin >> x, update(l, r, x);
+            else
+                cout << ask(l, r) << '\n';
+        }
+    }
+
+    int main()
+    {
+        ios::sync_with_stdio(false);
+        cin.tie(0), cout.tie(0);
+        solve();
+        return 0;
+    }
+    ```
 
 ## **基础莫队**
 
@@ -92,7 +214,7 @@ void update(int l, int r, ll d)
 
 基础的莫队算法是一种离线算法，他常用于不修改只查询的区间问题。复杂度为 $O(n\sqrt{n})$ ，效率没有线段树，树状数组高，但是易于理解编码简单。
 
-我们以一道区间不同值个数的题目为例：[P1972HH的项链](https://www.luogu.com.cn/problem/P1972)
+我们以一道区间不同值个数的题目为例：[P1972HH的项链](https://www.luogu.com.cn/problem/P1972){target="_blank"}
 
 ## **暴力法**
 
@@ -235,12 +357,102 @@ $$
 
 这个函数形式很熟悉，对勾函数（形如：$f(x)=ax+\frac{b}{x}$ 的函数，当 $x=\sqrt{\frac{b}{a}}$ 时取极值），所以当 $t=\frac{n}{\sqrt{m}}$ 时时间复杂度是最优的，是 $O(n\sqrt{m})$ 。
 
+??? code "莫队"
+    ```cpp
+    /*
+    根据题目[P2709 小B的询问]给出莫队算法的模板
+    https://www.luogu.com.cn/problem/P2709
+    */
+
+    #include <bits/stdc++.h>
+    using namespace std;
+    const int MAX = 5e4 + 100;
+    typedef long long ll;
+    const ll mod = 1e9 + 7;
+
+    void solve();
+    int main()
+    {
+      ios::sync_with_stdio(false);
+      cin.tie(0), cout.tie(0);
+      // clock_t c1 = clock();
+    #ifdef LOCAL
+      freopen("in.in", "r", stdin);
+      freopen("out.out", "w", stdout);
+    #endif
+      solve();
+      // cerr << "Time Used: " << clock() - c1 << " ms\n";
+      return 0;
+    }
+
+    ll a[MAX];  
+    int n, m, k;    
+    ll ans[MAX];        // 记录对应编号的最终答案
+    ll cnt[MAX];        // 记录对应数字出现个数
+    ll res = 0;         // 当前区间的答案
+    struct S            // 记录询问
+    {
+      int l, r, id;   // l询问左端点，r询问右端点，id询问编号
+    } s[MAX];
+    int pos[MAX];       // 记录下标为x所在的块
+
+    // 将x位置对答案的影响加到当前区间内
+    inline void add(int x){res += 2 * cnt[a[x]] + 1, cnt[a[x]]++;}
+
+    // 将x位置对答案的影响从当前区间减去
+    inline void sub(int x){res += 1 - 2 * cnt[a[x]], cnt[a[x]]--;}
+    void solve()
+    {
+      cin >> n >> m >> k;
+        // 对下标分块
+      int block = sqrt(n);
+      for (int i = 1; i <= n; ++i)
+      {
+        cin >> a[i];
+        pos[i] = (i + block - 1) / block;
+      }
+        // 记录查询
+      for (int i = 1; i <= m; ++i)
+      {
+        cin >> s[i].l >> s[i].r;
+        s[i].id = i;
+      }
+
+        // 这是莫队算法与暴力法唯一不同的地方
+        // 对查询按莫队算法排序
+      sort(s + 1, s + 1 + m, [](S &a, S &b)
+        { return pos[a.l] == pos[b.l] ? a.r < b.r : pos[a.l] < pos[b.l]; });
+
+
+      int l = 1, r = 0;   // l,r维护当前所在区间
+      for (int i = 1; i <= m; ++i)
+      {
+            // 移动区间完成查询
+        while (s[i].l < l)add(--l);
+        while (s[i].l > l)sub(l++);
+        while (s[i].r > r)add(++r);
+        while (s[i].r < r)sub(r--);
+        ans[s[i].id] = res; //记录答案
+      }
+      for (int i = 1; i <= m; ++i)
+        cout << ans[i] << '\n';
+    }
+    ```
+
+## **习题**
+
+|题目|难度|知识|
+|:-:|:-:|:-:|
+|[P2801](https://www.luogu.com.cn/problem/P2801){target="_blank"}|提高+/省选−|区间k大值|
+|[P3203](https://www.luogu.com.cn/problem/P3203){target="_blank"}|省选/NOI−|分块单点修改，单点查询|
+|[区间与绝对值](https://ac.nowcoder.com/acm/problem/260786){target="_blank"}||莫队+树状数组|
+
 
 -----------------------
 参考文章：
 
-[Oi-Wiki 普通莫队算法](https://oi-wiki.org/misc/mo-algo/#%E6%99%AE%E9%80%9A%E8%8E%AB%E9%98%9F%E7%9A%84%E4%BC%98%E5%8C%96)
+[Oi-Wiki 普通莫队算法](https://oi-wiki.org/misc/mo-algo/#%E6%99%AE%E9%80%9A%E8%8E%AB%E9%98%9F%E7%9A%84%E4%BC%98%E5%8C%96){target="_blank"}
 
-[百度百科-对勾函数](https://baike.baidu.com/item/%E5%AF%B9%E5%8B%BE%E5%87%BD%E6%95%B0/92025)
+[百度百科-对勾函数](https://baike.baidu.com/item/%E5%AF%B9%E5%8B%BE%E5%87%BD%E6%95%B0/92025){target="_blank"}
 
 《算法竞赛》上册 - 罗永军
