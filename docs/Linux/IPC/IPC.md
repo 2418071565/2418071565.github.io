@@ -7,8 +7,9 @@
 因为每个进程之间是相互独立的，所以他们想要进行通信，就要借助到操作系统。操作系统提供了多种进程间通信的方式：
 
 - 管道
-- System V IPC
-- POSIX IPC
+- 共享内存
+- 消息队列
+- 信号量
 
 
 ## **管道**
@@ -107,4 +108,204 @@ int mkfifo(const char *pathname, mode_t mode);
 
 ## **System V 共享内存**
 
-共享内存，顾名思义就是允许两个不相关的进程访问同一个物理内存，共享内存是两个正在运行的进程之间共享和传递数据的一种非常有效的方式。不同的进程将同一块物理内存通过页表映射到逻辑内存
+共享内存，顾名思义就是允许两个不相关的进程访问同一个物理内存，共享内存是两个正在运行的进程之间共享和传递数据的一种非常有效的方式。不同的进程将同一块物理内存通过页表映射到逻辑内存，并且该内存空间由操作系统分配与管理。
+
+Linux 下的 `shm_ds` 结构体来维护共享内存。
+
+```cpp
+struct shmid_ds {
+    struct ipc_perm shm_perm;    /* Ownership and permissions */
+    size_t          shm_segsz;   /* Size of segment (bytes) */
+    time_t          shm_atime;   /* Last attach time */
+    time_t          shm_dtime;   /* Last detach time */
+    time_t          shm_ctime;   /* Creation time/time of last
+                                    modification via shmctl() */
+    pid_t           shm_cpid;    /* PID of creator */
+    pid_t           shm_lpid;    /* PID of last shmat(2)/shmdt(2) */
+    shmatt_t        shm_nattch;  /* No. of current attaches */
+    ...
+};
+struct ipc_perm {
+    key_t          __key;    /* Key supplied to shmget(2) */
+    ....
+    unsigned short mode;     /* Permissions + SHM_DEST and
+                                SHM_LOCKED flags */
+    ....
+};
+```
+
+共享内存的速度比管道要快，但是共享内存不支持阻塞等待，读端和写端可以同时访问共享内存，即 **全双工**。
+
+
+### **共享内存的使用**
+
+#### **创建**
+
+我们使用 `shmget` 来获取一块共享内存。
+
+```cpp
+#include <sys/ipc.h>
+#include <sys/shm.h>
+int shmget(key_t key, size_t size, int shmflg);
+```
+
+`shmget` 会根据 key 值创建一个大小为 size 的共享内存，并返回其共享内存的 id，即 shmid，shmid 是共享内存在内核中的唯一标识，因此当创建多个共享内存时，每一个 key 值要独一无二。
+
+**参数解释：**
+
+- key：
+
+获得 key 值可以使用库函数 `ftok` 专门获取一个独一无二的 `key_t` 类型值。
+
+```cpp
+#include <sys/types.h>
+#include <sys/ipc.h>
+key_t ftok(const char *pathname, int proj_id);
+```
+
+参数 pathname 为路径，必须是真实存在且可以访问的路径。
+
+参数 `proj_id`是 `int` 类型数字，且必须传入非零值。
+
+ftok函数内部会根据路径和 `proj_id` 通过算法生成一个独一无二的 `key_t` 返回值。
+
+多进程通信时，需要通信双方使用同一个 key 值，因此双方使用的 `ftok` 参数应该一致。
+
+- size：
+
+共享内存的大小，尽量是内存块的整数倍，因为即便我们需要的空间大小不是块大小的整数倍，操作系统实际上也还是分配块的倍数个。但在使用时，那些超过 size 大小的多余分配空间不能访问。  
+
+- shmfg：
+
+该参数用于确定共享内存属性。
+
+使用上为：标志位 | 内存权限
+
+标志位参数有两种：IPC_CREAT、IPC_EXCL。
+
+|方式|含义|
+|:-:|:-:|
+|shmget(..., IPC_CREAT \| 权限)|创建失败不报错返回已有shmid|
+|shmget(..., IPC_CREAT \| IPC_EXCL \| 权限)|创建失败报错返回-1|
+
+注意：IPC_EXCL 不能单独使用。
+
+#### **挂接**
+
+
+我们使用 `shmat` 来将共享内存挂接到进程地址空间的共享区。
+
+```cpp
+#include <sys/types.h>
+#include <sys/shm.h>
+void *shmat(int shmid, const void *shmaddr, int shmflg);
+```
+
+将 shmid 所对应的共享内存挂接到 shmaddr 地址处，一般填 nullptr 让内核自己确定挂接位置，shmflg 用于确定挂接方式，一般填 0。
+
+挂接成功会返回共享内存的起始地址，否则返回 -1。
+
+#### **分离**
+
+我们使用 `shmdt` 来分离共享内存。
+
+```cpp
+#include <sys/types.h>
+#include <sys/shm.h>
+int shmdt(const void *shmaddr);
+```
+
+将 `shmaddr` 位置的共享内存分离。
+
+分离成功返回0，失败返回-1。 
+
+#### **销毁**
+
+我们使用 `shmctl` 来销毁共享内存。
+
+```cpp
+#include <sys/ipc.h>
+#include <sys/shm.h>
+int shmctl(int shmid, int cmd, struct shmid_ds *buf);
+```
+
+该接口本身用于控制共享内存，可用于销毁。 
+
+cmd 传入 IPC_RMID ，buf 传 nullptr。 
+
+我们还可以将 cmd 传入 IPC_STAT，来获取共享内存的信息，传入 IPC_SET ，设置共享内存的信息。
+
+#### **使用**
+
+在调用 shmat 后会返回一个地址，读端直接读地址内容即可，写端直接向该地址写入即可。
+
+#### **常用指令**
+
+- ipcs：
+
+该指令为系统指令。使用时可以查看当前全部共享内存。
+
+```shell
+ipcs -m
+```
+
+- ipcrm:
+
+删除指定共享内存
+
+```shell
+ipcrm -m [shmid]
+```
+
+## **System V 消息队列**
+
+消息队列允许进程间以块为单位进行数据交换。消息队列的接口使用和共享内存十分类似。
+
+```cpp
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+
+int msgget(key_t key, int msgflg);  // 创建消息队列
+int msgsnd(int msqid, const void *msgp, size_t msgsz, int msgflg); // 向消息队列发送消息
+ssize_t msgrcv(int msqid, void *msgp, size_t msgsz, long msgtyp,  
+              int msgflg);    // 从消息队列接受消息。
+/*
+The msgp argument is a pointer to a caller-defined structure of the following general form:
+
+struct msgbuf {
+    long mtype;        message type, must be > 0
+    char mtext[1];     message data 
+};
+
+msgbuf 结构体要自己定义 
+long mtype ：用于区分不同进程间的消息。 
+char mtext[1]：队列中的数据块。
+*/
+int msgctl(int msqid, int cmd, struct msqid_ds *buf);   // 控制消息队列
+```
+
+使用 `ipcs -q` 来查看系统中当前的消息队列。
+
+## **System V 信号量**
+
+### **基础概念**
+
+互斥：确保同一时间只有一个进程可以访问共享资源。
+
+同步：控制进程执行的顺序，确保特定的执行顺序或条件。
+
+临界资源：一次只能由一个进程使用的资源。
+
+临界区：一个进程中访问临界资源的代码段。
+
+原子性：只有两态，要么不做，要么做完。
+
+信号量是一个变量或抽象数据类型，用于控制对共享资源的访问。简单地说，它是一个用于保护共享资源的“守门员”。当多个进程或线程需要访问同一资源时，信号量确保任何时刻只有特定数量的进程可以访问该资源。
+
+信号量的主要操作有两个：等待（Wait）和信号（Signal）。在 POSIX 中，这些操作通常称为 P（Proberen，荷兰语“测试”的意思）和 V（Verhogen，荷兰语“增加”的意思）。
+
+- 等待（Wait）: 如果信号量的值大于零，则将其减一，进程继续执行。如果信号量的值为零，则进程休眠，直到信号量值增加。
+- 信号（Signal）: 增加信号量的值。如果有任何进程因等待这个信号量而被阻塞，唤醒其中一个。
+
+在编程中，这两个操作通常被实现为原子操作，确保在多线程环境中的安全性。
