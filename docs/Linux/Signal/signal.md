@@ -7,11 +7,15 @@
 
 我们可以使用 `kiil -l` 指令来查看所有信号及其编号。
 
+<figure markdown="span">
+  ![Image title](01.png){ width="550" }
+</figure>
+
 ## **产生信号**
 
 ### **按键**
 
-比如上面的ctrl + c 就给进程发送了2号信号SIGINT。而ctrl + \可以给进程发送3号信号SIGQUIT。
+比如上面的ctrl + c 就给前台进程发送了 2 号信号 SIGINT。而 ctrl + \ 可以给进程发送3号信号 SIGQUIT。
 
 ### **系统调用**
 
@@ -32,7 +36,7 @@ int kill(pid_t pid, int sig);
 int raise(int sig);
 ```
 
-使用 `abort` 函数，向当前进程或线程发送 6 号信号。
+使用 `abort` 函数，向当前进程发送 6 号信号，使其异常终止。
 
 ```cpp
 #include <stdlib.h>
@@ -40,12 +44,14 @@ int raise(int sig);
 void abort(void);
 ```
 
-`abort` 函数一定会终止程序，不管有没有重新绑定 6 号信号的处理函数。
+`abort` 函数一定会终止程序，不管有没有重新捕捉 6 号信号的处理函数，重新捕捉后，依然会退出进程。
 
 
 ### **软件条件**
 
-在匿名管道中，当读进程关闭时，写进程会收到系统发来的 13 号信号，终止写进程。系统发给写进程的 13 号信号就是软件条件生成的信号。
+在匿名管道中，当读进程关闭时，写进程会收到系统发来的 13 号信号 SIGPIPE，终止写进程。系统发给写进程的 13 号信号就是软件条件生成的信号。
+
+当子进程退出时会向父进程发出 SIGCHLD(14) 号信号，当父进程忽略该信号时，子进程退出会自动被操作系统回收，不会出现僵尸进程。                                                                                                   
 
 同时我们可以使用 `alarm` 函数，定时的给当前进程发送 SIGALRM 信号。
 
@@ -54,6 +60,8 @@ void abort(void);
 
 unsigned int alarm(unsigned int seconds);
 ```
+
+在 `seconds` 秒后向当前进程发送 14 号信号，如果在次之前调用 `alarm(0)` ，会取消尚未完成的闹钟，并返回当上一个闹钟剩余的时间。
 
 ### **硬件异常**
 
@@ -79,15 +87,168 @@ unsigned int alarm(unsigned int seconds);
 
 处理信号有三种方式：1.使用默认方法；2.忽略此信号；3.自定义捕捉。
 
-对于系统定义的普通函数，进程有默认的处理函数，在接收到信号以后会自动调用该处理函数。当然我们也可以自己重新定义这些信号的处理函数，通过 `signal` 函数来重定义处理函数，这被称作自定义捕捉。
+对于系统定义的普通函数，进程有默认的处理函数，在接收到信号以后会自动调用该处理函数。当然我们也可以自己重新定义这些信号的处理函数，通过 `signal` 函数来重定义处理函数，这被称作注册自定义处理函数。
 
 ```cpp
 #include <signal.h>
-
 typedef void (*sighandler_t)(int);
 sighandler_t signal(int signum, sighandler_t handler);
 ```
 
-将 `signum` 信号的处理函数绑定为 `handler` 函数。
+将 `signum` 信号的处理函数绑定为 `handler` 函数。但是一些信号的处理函数是无法被自定义的，如：`SIGKILL(9)`。
 
-要注意的是处理函数并不是在接受到信号就立即执行的，而是在一个合适的时间将接收到的信号统一执行。
+操作系统还提供了 `sigaction` 函数，用于设置信号处理器。
+
+```cpp
+#include <signal.h>
+
+// 成功返回 0,失败返回 -1，signum 要设置的信号，act 新的信号处理器，oldact 输出型参数，返回旧的信号处理器
+int sigaction(int signum, const struct sigaction *act,struct sigaction *oldact);
+struct sigaction {
+    void     (*sa_handler)(int);  // 信号处理函数
+    void     (*sa_sigaction)(int, siginfo_t *, void *); // 与实时信号有关
+    // 之前有说到过当在处理一个信号的自定义函数时，这个信号会被系统阻塞，
+    // 直到处理完。如果还想阻塞其它的信号，可以设置sa_mask。
+    sigset_t   sa_mask;    
+     
+    int        sa_flags;
+    void     (*sa_restorer)(void);
+};
+```
+
+要注意的是处理函数并不是在接受到信号就立即执行的，而是在一个合适的时间将接收到的信号统一执行。所以会在进程 PCB 中要存储接受到的信号，用到两个位图：未决位图（pending bitmap）和阻塞位图（block bitmap），用于记录还未处理的信号和进程主动阻塞的信号，还有一个中断向量表，用于记录进程处理对应信号和函数指针，默认的处理函数是 `SIG_DEF`，忽略信号的函数是 `SIG_IGN`。
+
+信号被称为**软中断**，事实上，还是没有真正的硬件中断那样能随时改变 cpu 的执行流，硬件中断之所以能一发生就得到处理是因为处理器在每个指令周期的结尾都会去检查中断，这种粒度是很细的，但是信号的实现只是在进程的 `task_struct` 里面有一个成员用于标识当前收到了哪些信号？而这个成员的检查显然只能在特定时间点：**从内核模式返回到用户模式的时候**，可以想象，当进程从一个硬件中断中返回、从系统调用中返回或者正在休眠或者刚刚得到了调度，都是从内核态返回用户态的时机。
+
+每当进程从内核态转换到用户态时，才会进行一次统一的信号处理，要注意的是如果处理函数是用户自定的， OS 会在执行处理函数时转换为用户态，处理结束后再转为内核态，再跳回用户中断位置，并再次转为用户态。在这个过程中处理信号的阻塞位图会被改为 1 ，所以每个信号一次处理只会处理一次。
+
+当进程从一个硬件中断中返回、从系统调用中返回或者正在休眠或者刚刚得到了调度，都是从内核态返回用户态的时机
+
+
+### **core dump**
+
+dump core （核心转储），对于一些异常终止的进程，系统会将其终止信息存储到磁盘上。 会将终止时的内存 image 存到磁盘上，可以通过 debugger 工具来查看终止原因。如：
+
+```cpp
+gdb [异常终止的可执行程序] [core dump file]
+```
+
+这些信息会被存在 core dump file 中，该文件的大小是有限制的，我们可以使用 `ulimit -a` 指令来查看，使用 `ulimit -c [大小]`，可以修改该文件的大小。
+
+## **信号集操作**
+
+### **信号集（sigset_t）**
+
+`sigset_t` 是操作系统提供的一个位图结构体，用来实现信号的未决和阻塞位图，也可以说 `sigset_t` 就是信号集。操作系统提供了一系列接口来操作信号集：
+
+```cpp
+#include <signal.h>
+
+int sigemptyset(sigset_t *set); // 全置 0
+
+int sigfillset(sigset_t *set);  // 全置 1
+
+int sigaddset(sigset_t *set, int signum);   // 将信号 signum 对应位置 1
+
+int sigdelset(sigset_t *set, int signum);   // 将信号 signum 对应位置 0
+
+int sigismember(const sigset_t *set, int signum);   // 判断信号是否存在。
+```
+
+上面4个的返回值都是成功返回 1 ，失败返回 0 。
+ 
+
+### **修改进程阻塞位图**
+
+使用函数 `sigprocmask` 修改进程的阻塞位图。
+
+```cpp
+#include <signal.h>
+int sigprocmask(int how, const sigset_t *set, sigset_t *oldset);
+```
+
+how 有三种取值：
+
+- SIG_BLOCK:将 set 中阻塞的信号加入到进程阻塞位图中。
+- SIG_UNBLOCK:将 set 中阻塞的信号从进程阻塞位图中去除。
+- SIG_SETMASK: 将进程阻塞位图设置为 set。
+
+set：配合修改进程阻塞位图。
+
+old：旧的进程阻塞位图。
+
+返回值：成功返回 0，失败返回 -1。
+
+
+### **获得进程未决位图**
+
+```cpp
+#include <signal.h>
+
+int sigpending(sigset_t *set);
+```
+
+set 是输出型参数，输出当前进程的未决位图。
+
+??? code "实验"
+    ```cpp
+    // 实验内容：
+    // 先对信号 2 进行阻塞，在给当前进程发送 2 号信号，再解除对 2 号信号的阻塞，观察未决位图的变化。
+    // 观察信号 2 的捕捉和处理过程。
+    #include <iostream>
+    #include <unistd.h>
+    #include <sys/signal.h>
+    #include <signal.h>
+    #include <sys/types.h>
+    using namespace std;
+
+    void print(sigset_t* set)
+    {
+        for(int i = 1;i <= 31;++i)
+        {
+            if(sigismember(set,i)) cout << "1";
+            else cout << "0";
+        }
+        cout << endl;
+    }
+
+    void handle_SIGALRM(int signum)
+    {
+        sigset_t set,oldset;
+        sigemptyset(&set);
+        sigaddset(&set,SIGINT);
+        cout << "解除对 SIGINT 的阻塞" << endl;
+        sigprocmask(SIG_UNBLOCK,&set,&oldset);
+    }
+
+
+    int main()
+    {
+        sigset_t set,oldset;
+        signal(SIGALRM,handle_SIGALRM);
+        // 忽略 2 号信号，防止进程退出
+        signal(SIGINT,SIG_IGN);
+        sigemptyset(&set);
+
+        // 定时解除对信号 2 的阻塞
+        alarm(10);
+
+        // 阻塞 2 号信号
+        sigaddset(&set,SIGINT);
+        sigprocmask(SIG_BLOCK,&set,&oldset);
+        cout << "对 SIGINT 的进行阻塞" << endl;
+        sigset_t pending_set;
+
+        cout << getpid() << endl;
+        while(1)
+        {
+            // 打印未决位图
+            sigpending(&pending_set);
+            print(&pending_set);
+            sleep(1);
+        }
+        return 0;
+    }
+    ```
+
+
