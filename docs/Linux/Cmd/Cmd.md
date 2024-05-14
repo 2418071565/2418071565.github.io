@@ -5,8 +5,9 @@
 借助 `ssh` 实现的文件传输工具。
 
 ```shell
-scp [可选项] source target
+scp [可选项] src dst
 ```
+
 
 
 
