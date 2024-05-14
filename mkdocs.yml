@@ -83,6 +83,8 @@ nav:
         # - 进程地址空间: Linux/ProAddrSpace/ProAddrSpace.md
         - 进程控制: Linux/ProCtrl/ProCtrl.md
         - 进程间通信: Linux/IPC/IPC.md
+        - 信号: Linux/Signal/signal.md
+        - 线程: Linux/Thread/Thread.md
       - 文件系统:
         - 文件 IO: Linux/FileSys/FileIO/FileIO.md
         - 磁盘文件系统: Linux/FileSys/FileSys/FileSys.md
