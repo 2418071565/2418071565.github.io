@@ -73,7 +73,12 @@ nav:
       - 整数拆分: UsualQ/IntPartition/IntPartition.md
       - 区间最大子段和: UsualQ/MaxSumOfSub/MaxSumOfSub.md
   - Linux:
-    - 指令（未完工）: Linux/Cmd/Cmd.md
+    - 工具:
+      - 指令（未完工）: Linux/Tools/Cmd/Cmd.md
+      - GNU 工具链:
+        - gcc: Linux/Tools/gcc.md
+        - gdb: Linux/Tools/gdb.md
+        - make: Linux/Tools/make.md
     - 内核:
       - 体系结构及操作系统概念: Linux/SysConcept/SysConcept.md
       - 进程:
@@ -84,7 +89,7 @@ nav:
         - 进程控制: Linux/ProCtrl/ProCtrl.md
         - 进程间通信: Linux/IPC/IPC.md
         - 信号: Linux/Signal/signal.md
-        - 线程: Linux/Thread/Thread.md
+        - 多线程: Linux/Thread/Thread.md
       - 文件系统:
         - 文件 IO: Linux/FileSys/FileIO/FileIO.md
         - 磁盘文件系统: Linux/FileSys/FileSys/FileSys.md
@@ -111,6 +116,7 @@ nav:
       - 可变参数模板: C++/c++11/可变参数模板.md
       - 智能指针: C++/c++11/智能指针.md
       - STL 的改动（未完工）: C++/c++11/STL.md
+      - 多线程: C++/c++11/多线程.md
     - C++20:
       - format: C++/c++20/format/format.md
   # Qt 废弃
