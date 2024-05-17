@@ -18,8 +18,6 @@
 
 在 Linux 下，多线程的实现复用了进程的代码，采用了一种轻量级进程（Light Wetght Process,LWP）的方式实现。对于轻量级进程，创建它只需要创建 `task_struct` ，多个轻量级进程间会共享进程的一些资源，这与线程是类似的。
 
-Linux 原生线程库通常使用 POSIX 兼容的 pthread 库。
-
 
 ## **线程控制**
 
@@ -35,6 +33,8 @@ int pthread_create(pthread_t *thread, const pthread_attr_t *attr,
 ```
 
 pthread_create 函数的参数列表中， thread 是输出型参数，返回线程 id。 attr 是线程属性，一般设置为nullptr。函数指针用来回调式的执行目标函数。 arg 是传递给回调函数的参数。线程创建成功返回 0 ，失败返回 -1 ，并且对全局变量 errno 赋值以指示错误。
+
+这里我们创建线程得到的线程 id 就是线程属性集的地址，方便我们快速通过线程 id 来定位线程。
 
 我们也可以通过调用以下函数获取当前线程的线程 id。
 
@@ -190,6 +190,104 @@ thread 是要分离的线程 id。可以是线程组内其他线程对目标线�
 
 当一个线程被设为分离状态时，其他线程是不能对其进行 join 的。
 
+### **局部存储**
+
+不同线程间会共享进程的很多资源，但是线程还有独立的数据来执行不同的任务，如：栈，硬件上下文...。
+
+对于不同的线程全局变量是共享的，各个线程都可以看到，但是我们可以用过编译器的一些标志为将全局变量声明为线程的局部存储。典型的就是errno全局变量，它总是会保存当前线程最后一个调用的错误码，不会存在线程冲突。
+
+??? code "__thread"
+    ```cpp
+    /*
+    结果：只有 g_val 在两个线程中都会改变，thread_g_val 只在修改的线程中改变
+    */
+    #include <iostream>
+    #include <pthread.h>
+    #include <fstream>
+    #include <unistd.h>
+    #include <string>
+    using namespace std;
+
+    // 线程 id 转 16 进制
+    string to_hex(long tid)
+    {
+        char buff[512];
+        snprintf(buff,sizeof buff,"0x%lX",tid);
+        return buff;
+    }
+
+    int g_val = 0;                  // 常规全局变量
+    __thread int thread_g_val = 0;  // 声明线程局部存储
+    // __thread string thread_name; 只能作用于内置类型
+
+    void* headle(void* arg)
+    {
+        for(;;)
+        {
+            cout << "Other Thread:" << to_hex(pthread_self()) << " "
+                << "g_val:" << g_val << "; " << "thread_g_val:" << thread_g_val << endl;
+            
+            // 在其他线程中修改全局变量
+            g_val++;
+            thread_g_val++;
+            sleep(1); 
+        }
+    }
+
+    int main(int argc,char* argv[],char* env[])
+    {
+        pthread_t tid;
+        pthread_create(&tid,nullptr,headle,nullptr);
+
+        for(;;)
+        {
+            cout << "Main Thread:" << to_hex(pthread_self()) << " "
+                << "g_val: " << g_val << ";  " << "thread_g_val:" << thread_g_val << endl;
+            sleep(1);
+        }
+
+        return 0;
+    }
+    ```
+
 ## **线程库**
+
+### **Linux 原生线程库**
+
+Linux 原生线程库通常使用 POSIX 兼容的 pthread 库。pthread 库是对系统调用的封装，来对创建出的 LWP 做类似线程的管理。
+
+在 `pthread_create` 函数就是对系统调用 `clone` 的封装，同时他也是 `fork` 函数的低层。
+
+```cpp
+// clone, __clone2, clone3 - create a child process
+
+#define _GNU_SOURCE
+#include <sched.h>
+
+int clone(int (*fn)(void *), void *stack, int flags, void *arg, ...
+            /* pid_t *parent_tid, void *tls, pid_t *child_tid */ );
+```
+
+在调用 pthread_create 函数时，会把回调函数的指针传递给系统调用 clone ，并且在库中创建新线程的结构体，并把线程栈地址传给clone的参数 child_stack 。在调用不同的线程时，通过更新寄存器 esp、ebp 的值就可以实现栈的切换，因此就算多个线程共同调用同一个函数，因为线程栈不同，所创建的临时变量的地址也不同。
+
+### **C++线程库**
+
+在C++11之前，涉及到多线程问题，都是和平台相关的，比如 windows 和 linux 下各有自己的接口，这使得代码的可移植性比较差。C++ 11 标准以后对线程进行了支持，使得C++在并行编程时不需要依赖第三方库，而且在原子操作中还引入了原子类的概念。
+
+在头文件 `<thread>` 中，提供了 [`thread`](https://legacy.cplusplus.com/reference/thread/thread/){target="_blank"} 类。
+
+
+## **线程互斥**
+
+当一个线程要对临界资源进行一些非原子性操作时，就要对该临界资源加锁，来实现在任意时刻临界区内只有一个线程在执行，这样行为被称作**线程互斥(Thread Mutex)**。
+
+??? info "如何理解原子性"
+    对于原子性操作，我们可以粗略的理解为不会被执行流的替换所打断的操作。
+    
+    CPU 对于硬件中断的检测是在每次指令执行结束后，而时间片结束的检测是在每次收到时钟中断后，也就是说在一条指令结束后，系统才要判断是否要进行执行流的替换，所以我们可以说一条汇编指令是原子性的。
+
+
+
+
 
 
