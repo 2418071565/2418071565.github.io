@@ -88,8 +88,11 @@ nav:
         # - 进程地址空间: Linux/ProAddrSpace/ProAddrSpace.md
         - 进程控制: Linux/ProCtrl/ProCtrl.md
         - 进程间通信: Linux/IPC/IPC.md
-        - 信号: Linux/Signal/signal.md
-        - 多线程: Linux/Thread/Thread.md
+      - 信号: Linux/Signal/signal.md
+      - 线程: 
+        - 线程基础: Linux/Thread/Thread.md
+        - 线程互斥与同步: Linux/Thread/Sync.md
+        - 生产者消费模型: Linux/Thread/PCP.md
       - 文件系统:
         - 文件 IO: Linux/FileSys/FileIO/FileIO.md
         - 磁盘文件系统: Linux/FileSys/FileSys/FileSys.md
@@ -117,6 +120,8 @@ nav:
       - 智能指针: C++/c++11/智能指针.md
       - STL 的改动（未完工）: C++/c++11/STL.md
       - 多线程: C++/c++11/多线程.md
+    - C++17:
+      - 文件库: C++/c++17/filesystem.md
     - C++20:
       - format: C++/c++20/format/format.md
   - MySQL:
