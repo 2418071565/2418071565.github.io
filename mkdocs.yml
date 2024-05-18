@@ -119,8 +119,11 @@ nav:
       - 多线程: C++/c++11/多线程.md
     - C++20:
       - format: C++/c++20/format/format.md
+  - MySQL:
+    - 简介: MySql/index.md
   # - 工具:
   #   - Git:
+  # - 工具:
   # Qt 废弃
   # - Qt: 
   #   - 简介: Qt/start.md
