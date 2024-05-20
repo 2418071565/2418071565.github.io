@@ -10,6 +10,8 @@
 
 ### **互斥锁的使用**
 
+#### **初始化**
+
 被加锁的临界资源是不允许其他执行流进行访问的。原生线程库为我们提供了互斥锁
 
 ```cpp
@@ -29,6 +31,7 @@ pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 使用 `PTHREAD_ MUTEX_ INITIALIZER` 初始化的互斥量不需要销毁。
 
+#### **加锁与解锁**
 
 初始化锁后，就要使用锁：
 
@@ -194,4 +197,150 @@ int pthread_mutex_unlock(pthread_mutex_t *mutex);
 
 ### **条件变量**
 
-条件变量是利用线程间共享的变量进行同步的一种机制，在多线程程序中的表现为：当共享资源满足某种条件时，部分线程队列才会被从等待中唤醒，去申请锁。
+条件变量是利用线程间共享的变量进行同步的一种机制，在多线程程序中的表现为：当共享资源（条件变量）满足某种条件时，部分线程队列才会被从等待中唤醒，去申请锁。
+
+也就是说锁是控制线程申请资源的，条件变量是控制线程申请锁的。每次只允许一个线程访问资源是线程互斥，限制线程申请锁的顺序是线程同步。
+
+#### **初始化**
+
+原生线程库为我们实现了条件变量：
+
+```cpp
+#include <pthread.h>
+
+int pthread_cond_destroy(pthread_cond_t *cond);
+// cond 要销毁的锁
+
+int pthread_cond_init(pthread_cond_t *restrict cond,
+        const pthread_condattr_t *restrict attr);
+// cond 要初始化的锁，attr 初始化选项，填 nullptr
+
+pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+```
+
+对于创建的局部条件变量要使用 `pthread_cond_destroy` 和 `pthread_cond_init` 来销毁和初始化，定义全局的条件变量要使用 `PTHREAD_COND_INITIALIZER` 来初始化，不需要手动销毁。
+
+
+#### **线程等待**
+
+当多个线程要进行锁的竞争时，我们要想实现线程同步，就要将要同步的线程放到同一个等待队列下，这时就要用到下面这个函数：
+
+```cpp
+#include <pthread.h>
+int pthread_cond_wait(pthread_cond_t *restrict cond,
+    pthread_mutex_t *restrict mutex);
+```
+
+这里线程在被加入到等待队列后，会将传入的锁释放，直到条件变量满足条件时，线程会被唤醒，重新去竞争传入的锁，这样做的是为了防止死锁和优先级反转。
+
+#### **唤醒线程**
+
+```cpp
+#include <pthread.h>
+
+// 唤醒在条件队列中等待的所有线程，他们一同去竞争锁
+int pthread_cond_broadcast(pthread_cond_t *cond);
+
+// 唤醒等待队列队首线程
+int pthread_cond_signal(pthread_cond_t *cond);
+```
+
+唤醒的队列会重新加入到锁的竞争中。
+
+
+??? code "线程同步"
+    ```cpp
+    /*
+    4 个线程以一定的顺序依次拿票
+    */
+    #include <pthread.h>
+    #include <iostream>
+    #include <unistd.h>
+    #include <string>
+    using namespace std;
+
+
+    int ticket = 10;
+    pthread_mutex_t ticket_mutex = PTHREAD_MUTEX_INITIALIZER;
+    pthread_cond_t ticket_cond = PTHREAD_COND_INITIALIZER;
+
+    void* get_ticket(void* args)
+    {
+        string thread_name = (char*)args;
+        for(;;)
+        {
+            pthread_mutex_lock(&ticket_mutex);
+            // 内部会将锁释放，当返回时会重新持有锁
+            // 当条件变量满足时，才会继续运行
+            pthread_cond_wait(&ticket_cond,&ticket_mutex); 
+            if(ticket > 0)
+            {
+                ticket--;
+                (*cnt)++;
+                cout << thread_name << " get ticket ,tickets left: " << ticket << '\n';
+                pthread_mutex_unlock(&ticket_mutex);
+            }
+            else
+            {
+                cout << thread_name << " no ticket." << endl;
+                pthread_mutex_unlock(&ticket_mutex);
+                break;
+            }
+        }
+        return nullptr;
+    }
+
+
+    int main()
+    {
+        // 创建 4 个线程，去抢票
+        pthread_t tids[4];
+        for(int i = 0;i < 4;++i)
+        {
+            string* tid_name = new string("thread-" + to_string(i));
+            pthread_create(&tids[i],nullptr,get_ticket,(void*)tid_name->c_str());
+        }
+
+        for(;;)
+        {
+            sleep(1);
+            pthread_cond_signal(&ticket_cond);
+        }
+
+        return 0;
+    }
+    ```
+
+## **生产者消费者模型**
+
+生产者消费者模型（Producer-Consumer Problem）是一个常见的并发编程问题，它描述了两个或多个执行流共享一个公共缓冲区的合作问题。
+
+
+在该模型中，有两类执行流，生产者和消费者，生产者负责产生数据，消费者负责消费数据，生产者和消费者之间的中介就叫做缓冲区。生产者之间是互斥关系，消费者之间也是互斥关系，生产者和消费者之间是同步关系。
+
+**优点：**
+
+1. 可以将生产者和消费者解耦，降低生产者和消费者之间的依赖关系。
+
+2. 并且支持并发（concurrency），即生产者和消费者可以是两个独立的并发主体，互不干扰的运行。
+
+3. 支持忙闲不均，如果制造数据的速度时快时慢，缓冲区可以对其进行适当缓冲。当数据制造快的时候，
+消费者来不及处理，未处理的数据可以暂时存在缓冲区中。等生产者的制造速度慢下来，消费者再慢慢处理掉。
+
+
+### **阻塞队列实现**
+
+基于阻塞队列实现一个生产者消费者模型，阻塞队列是一块有大小的队列，作为生产者和消费者之间的缓冲区，模型要满足以下条件：
+
+- 内存缓冲区为空的时候消费者必须等待，
+
+- 而内存缓冲区满的时候，生产者必须等待。
+
+- 其他时候可以是个动态平衡。
+
+
+??? code "Block Queue"
+    ```cpp
+
+    ```
+

@@ -72,9 +72,10 @@ nav:
       # - 树上最小支配集:
       - 整数拆分: UsualQ/IntPartition/IntPartition.md
       - 区间最大子段和: UsualQ/MaxSumOfSub/MaxSumOfSub.md
-  - Linux:
+  - 操作系统:
     - 工具:
       - 指令（未完工）: Linux/Tools/Cmd/Cmd.md
+      - 系统调用: Linux/Tools/Syscall/Syscall.md
       - GNU 工具链:
         - gcc: Linux/Tools/GNU/gcc/gcc.md
         - gdb: Linux/Tools/GNU/gdb/gdb.md
@@ -92,7 +93,6 @@ nav:
       - 线程: 
         - 线程基础: Linux/Thread/Thread.md
         - 线程互斥与同步: Linux/Thread/Sync.md
-        - 生产者消费模型: Linux/Thread/PCP.md
       - 文件系统:
         - 文件 IO: Linux/FileSys/FileIO/FileIO.md
         - 磁盘文件系统: Linux/FileSys/FileSys/FileSys.md
@@ -101,6 +101,8 @@ nav:
       - 环境变量: Linux/envir/envir.md
       - 动态库和静态库: Linux/Lib/Lib.md
       - SheBang: Linux/sheBang/sheBang.md
+  - 计算机网络: 
+    - 基础: Network/index.md
   - C++:
     - 简介: C++/intro.md
     - 基础: C++/c++初阶杂项.md
@@ -126,8 +128,11 @@ nav:
       - format: C++/c++20/format/format.md
   - MySQL:
     - 简介: MySql/index.md
-  # - 工具:
-  #   - Git:
+  - Others:
+    - Git: 
+      - 简介: Others/Git/index.md
+    - JSON:
+      - 简介: Others/JSON/index.md
   # - 工具:
   # Qt 废弃
   # - Qt: 
