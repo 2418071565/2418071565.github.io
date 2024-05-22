@@ -316,7 +316,7 @@ int pthread_cond_signal(pthread_cond_t *cond);
 
 ### **信号量**
 
-信号量的概念在 [进程间通信](/Linux/IPC/IPC/#_15) 的篇章介绍过了，这里不再赘述。
+信号量的概念在 [进程间通信](../IPC/IPC.md#_15) 的篇章介绍过了，这里不再赘述。
 
 以下是POSIX信号量的主要接口及其功能：
 
@@ -545,7 +545,7 @@ int sem_post(sem_t *sem);
 
 无锁编程的实现要依赖 CAS 操作（Compare And Swap），**现在几乎所有的CPU指令都支持CAS的原子操作，X86下对应的是 CMPXCHG 汇编指令。（by：陈皓）**。
 
-关于无锁可以参考文章：[无锁队列的实现 - 陈皓](https://coolshell.cn/articles/8239.html){target="_blank"}
+关于无锁编程可以参考文章：[无锁队列的实现 - 陈皓](https://coolshell.cn/articles/8239.html){target="_blank"}
 
 CAS 简单来说，就是当我们要修改临界资源时，要先**比较（Compare）**内存中的该数据是否被其他执行流修改过，如果未被修改，那么就将这次修改**同步（Swap）**到内存，否则就撤回这次修改，将内存中的数据重新加载到寄存器，并重新执行操作。
 
