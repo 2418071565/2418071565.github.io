@@ -135,6 +135,9 @@ int pthread_mutex_unlock(pthread_mutex_t *mutex);
 
 加锁代码的 movb 指令本质上是调用线程，向自己的上下文写入 0 。 xchgb 指令本质上是将共享数据交换到自己的私有上下文中，即加锁操作，因为这里是一条汇编指令，就保证了加锁操作的原子性。假设共享资源 mutex 中存放的是 1 ，那么交换操作并没有新增任何的 1 ， 1 只会进行流转，保证了锁的唯一性。
 
+### **自旋锁**
+
+自旋锁是互斥锁的一种。
 
 ### **常见概念**
 
@@ -311,6 +314,61 @@ int pthread_cond_signal(pthread_cond_t *cond);
     }
     ```
 
+### **信号量**
+
+信号量的概念在 [进程间通信](/Linux/IPC/IPC/#_15) 的篇章介绍过了，这里不再赘述。
+
+以下是POSIX信号量的主要接口及其功能：
+
+`sem_t`：这是POSIX信号量的数据类型，用于声明一个信号量变量。
+
+#### **初始化**
+
+```cpp
+#include <semaphore.h>
+int sem_init(sem_t *sem, int pshared, unsigned int value);
+```
+
+`sem`：指向要初始化的信号量的指针。
+
+`pshared`：指定信号量的作用域。如果`pshared`为0，则信号量用于线程间同步；如果为非0值，则信号量可用于进程间同步。
+
+`value`：信号量的初始值。
+
+#### **销毁**
+
+```cpp
+#include <semaphore.h>
+int sem_destroy(sem_t *sem);
+```
+
+- 销毁指定的信号量。如果信号量正在被使用，此操作将失败。
+
+#### **等待（P操作）**
+
+```cpp
+#include <semaphore.h>
+
+int sem_wait(sem_t *sem);
+
+int sem_trywait(sem_t *sem);
+```
+
+- 如果信号量的值大于0，则将其减1并立即返回。
+- 如果信号量的值为0，则调用线程将被阻塞，直到信号量的值变为非零。
+
+`sem_trywait` 是非阻塞版本的`sem_wait`。如果信号量的值大于0，则将其减1并立即返回；如果信号量的值为0，则不阻塞当前线程，而是立即返回错误。
+
+#### **发布（V操作）**
+
+```cpp
+#include <semaphore.h>
+
+int sem_post(sem_t *sem);
+```
+
+将信号量的值加1。如果有线程在等待该信号量（即信号量的值为0且有线程被阻塞），则唤醒其中一个线程。
+
 ## **生产者消费者模型**
 
 生产者消费者模型（Producer-Consumer Problem）是一个常见的并发编程问题，它描述了两个或多个执行流共享一个公共缓冲区的合作问题。
@@ -328,19 +386,167 @@ int pthread_cond_signal(pthread_cond_t *cond);
 消费者来不及处理，未处理的数据可以暂时存在缓冲区中。等生产者的制造速度慢下来，消费者再慢慢处理掉。
 
 
-### **阻塞队列实现**
+### **阻塞队列**
 
-基于阻塞队列实现一个生产者消费者模型，阻塞队列是一块有大小的队列，作为生产者和消费者之间的缓冲区，模型要满足以下条件：
-
-- 内存缓冲区为空的时候消费者必须等待，
-
-- 而内存缓冲区满的时候，生产者必须等待。
-
-- 其他时候可以是个动态平衡。
+基于阻塞队列实现一个生产者消费者模型，阻塞队列是一块有大小的队列，作为生产者和消费者之间的缓冲区。
 
 
 ??? code "Block Queue"
     ```cpp
+    /*
+    生产者消费者模型，一个消费者一个生产者，和一个阻塞队列实现数据交换缓存区。
+    生产者一直生产数据，消费者每秒消费一个数据
+    实验现象：
+    生产者先将队列输出满，然后消费者每消费一个数据，生产者就补充一个任务。
+    */
+    #include <pthread.h>
+    #include <iostream>
+    #include <unistd.h>
+    #include <string>
+    #include <queue>
+    #include <random>
+
+    // 随即数
+    std::random_device rdd;
+    std::mt19937 rd(rdd());
+
+    /**
+    * @brief   阻塞队列实现的生产者消费模型，
+    *          生产者之间互斥，消费者之间互斥，生产者与消费者之间同步
+    * @tparam Tp 交换的数据类型
+    */
+    template<class Tp>
+    class block_queue
+    {
+        std::queue<Tp> _q;
+        int _cap;
+        int _sz;
+        pthread_mutex_t _mut;
+        pthread_cond_t _c_cd;   
+        pthread_cond_t _p_cd;   
+    public:
+
+        block_queue(int capcity)
+            :_cap(capcity)
+            ,_sz(0)
+        {
+            pthread_mutex_init(&_mut,nullptr);
+            pthread_cond_init(&_c_cd,nullptr);
+            pthread_cond_init(&_p_cd,nullptr);
+        }
+
+        void put(const Tp& in)
+        {
+            pthread_mutex_lock(&_mut);
+            while(_sz == _cap)
+            {
+                // 队列满了生产者阻塞
+                pthread_cond_wait(&_p_cd,&_mut);
+
+            }
+            _q.push(in);
+            _sz++;
+            pthread_mutex_unlock(&_mut);
+            pthread_cond_signal(&_c_cd);
+        }
+
+        Tp get()
+        {
+            pthread_mutex_lock(&_mut);
+            while(_sz == 0)
+            {
+                // 队列空了消费者阻塞
+                pthread_cond_wait(&_c_cd,&_mut);
+                /**
+                *  这里使用 while 是为了防止 pthread_cond_wait() 出现伪唤醒
+                *  伪唤醒：对应的条件并不满足，但是线程却被唤醒了。
+                *  当 pthread_cond_wait() 调用失败可能会出现这种情况。
+                *  或者当使用 pthread_cond_broadcast 将线程都唤醒，所有线程都离开阻塞队列，开始竞争锁。
+                *  但是只有一个数据时，第一个消费者将数据消费掉，后面的线程在消费数据就会出现错误。
+                */
+            }
+
+            Tp _ret = _q.front();
+            _q.pop();
+            _sz--;
+
+            pthread_mutex_unlock(&_mut);
+            pthread_cond_signal(&_p_cd);
+            return _ret;
+        }
+
+        ~block_queue()
+        {
+            pthread_mutex_destroy(&_mut);
+            pthread_cond_destroy(&_c_cd);
+            pthread_cond_destroy(&_p_cd);
+        }
+    };
+
+    void* producer(void* args)
+    {
+        block_queue<int>* q = static_cast<block_queue<int>*>(args);
+        for(;;)
+        {
+            // 生产数据
+            int data = (rd() % 1000 + 1000) % 1000;
+            q->put(data);   
+            std::cout << "Put data: " << data << std::endl;
+        }
+    }
+
+    void* consumer(void* args)
+    {
+        block_queue<int>* q = static_cast<block_queue<int>*>(args);
+        for(;;)
+        {
+            // 消费数据
+            int data = q->get();
+            std::cout << "Get data: " << data << "--" << std::endl;
+            sleep(1);
+        }
+    }
+
+    int main()
+    {
+        // 十个数据的阻塞队列
+        block_queue<int> q(10);
+
+        // 一个消费者，一个生产者
+        pthread_t p;
+        pthread_t c;
+        pthread_create(&p,nullptr,producer,(void*)&q);
+        pthread_create(&c,nullptr,consumer,(void*)&q);
+
+        for(;;);
+
+        pthread_join(p,nullptr);
+        pthread_join(c,nullptr);
+        return 0;
+    }
+    ```
+
+基于阻塞队列实现的 PC 模型，消费者和生产者是互斥且同步的，因为他们把队列当作一个整体使用，生产和消费是串行的，但事实上，存数据和取数据是可以并发执行的，因为访问的是队列不同的位置，所以只要保证生产者和消费者是同步的即可，只有在队列满或空的时候保证线程互斥即可。要维护这样的关系就需要用到信号量。
+
+### **环形队列**
+
+基于环形队列实现 PC 模型，消费者和生产者之间满足同步关系。
+
+??? code "Ring Queue"
+    ```cpp
 
     ```
+
+
+
+## **无锁编程（Lock-Free）**
+
+要实现线程安全，除了使用锁以外，还可以实现对临界资源的原子操作，这样的做法被称作无锁编成。
+
+无锁编程的实现要依赖 CAS 操作（Compare And Swap），**现在几乎所有的CPU指令都支持CAS的原子操作，X86下对应的是 CMPXCHG 汇编指令。（by：陈皓）**。
+
+关于无锁可以参考文章：[无锁队列的实现 - 陈皓](https://coolshell.cn/articles/8239.html){target="_blank"}
+
+CAS 简单来说，就是当我们要修改临界资源时，要先**比较（Compare）**内存中的该数据是否被其他执行流修改过，如果未被修改，那么就将这次修改**同步（Swap）**到内存，否则就撤回这次修改，将内存中的数据重新加载到寄存器，并重新执行操作。
+
 

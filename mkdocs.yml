@@ -20,7 +20,7 @@ theme:
       code: material/note-alert
 
 nav:
-  - 关于: index.md
+  - 主页: index.md
   - 数据结构与算法: 
     - 简介: DS_Algo.md
     - 算法: 
@@ -73,6 +73,7 @@ nav:
       - 整数拆分: UsualQ/IntPartition/IntPartition.md
       - 区间最大子段和: UsualQ/MaxSumOfSub/MaxSumOfSub.md
   - 操作系统:
+    - 简介: OSindex.md
     - 工具:
       - 指令（未完工）: Linux/Tools/Cmd/Cmd.md
       - 系统调用: Linux/Tools/Syscall/Syscall.md
@@ -93,6 +94,7 @@ nav:
       - 线程: 
         - 线程基础: Linux/Thread/Thread.md
         - 线程互斥与同步: Linux/Thread/Sync.md
+        - 线程池: Linux/Thread/Tpool.md
       - 文件系统:
         - 文件 IO: Linux/FileSys/FileIO/FileIO.md
         - 磁盘文件系统: Linux/FileSys/FileSys/FileSys.md
