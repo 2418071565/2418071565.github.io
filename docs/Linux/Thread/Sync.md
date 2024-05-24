@@ -534,7 +534,127 @@ int sem_post(sem_t *sem);
 
 ??? code "Ring Queue"
     ```cpp
+    #include <iostream>
+    #include <unistd.h>
+    #include <string>
+    #include <thread>
+    #include <vector>
+    #include <mutex>
+    #include <semaphore.h>
+    #include <random>
+    #include <chrono>
+    std::random_device rdd;
+    std::mt19937 rd(rdd());
 
+    /**
+    *  循环队列，使用信号量实现生产者和消费者之间的同步关系。
+    *  可以边放数据边取数据
+    */
+    template<class Tp>
+    class ring_queue
+    {
+        std::vector<Tp> _rq;  // 数组实现循环队列
+        int _p_pos;     // 生产者当前可以放数据的位置
+        int _c_pos;     // 消费者当前可以取的数据位置
+        int _capcity;   // 队列容量 
+        sem_t _p_sem;   // 剩余空间
+        sem_t _c_sem;   // 队列中的数据量
+        std::mutex _p_mt;   // 实现生产者间的互斥
+        std::mutex _c_mt;   // 实现消费者间的互斥
+
+        int P(sem_t* _sem) 
+        { return sem_wait(_sem); }
+
+        int V(sem_t* _sem)
+        { return sem_post(_sem); }
+        
+    public:
+        ring_queue(int n)
+            :_rq(n)
+            ,_p_pos(0)
+            ,_c_pos(0)
+        {
+            sem_init(&_p_sem,0,n);
+            sem_init(&_c_sem,0,0);
+            _capcity = n;
+        }
+
+        void put(const Tp& in)
+        {
+            P(&_p_sem); // 先申请空间
+            _p_mt.lock();   // 放数据时加锁
+            _rq[_p_pos] = in;
+            (_p_pos += 1) %= _capcity;
+            std::cout << "Put data @" << in << std::endl;
+            _p_mt.unlock();
+            V(&_c_sem);
+        }
+
+        Tp get() 
+        {
+            P(&_c_sem); // 先申请数据
+            _c_mt.lock();   // 取数据时加锁
+            Tp ret = std::move(_rq[_c_pos]);
+            (_c_pos += 1) %= _capcity;
+            std::cout << "Get Data #" << ret << std::endl;
+            _c_mt.unlock(); 
+            V(&_p_sem);
+            return ret;
+        }
+
+        ~ring_queue()
+        {
+            sem_destroy(&_c_sem);
+            sem_destroy(&_p_sem);
+        }
+    };
+
+    std::vector<std::thread> consumer_ths;
+    std::vector<std::thread> producer_ths;
+
+
+    void producer(ring_queue<int>& rq)
+    {
+        for(;;)
+        {
+            // 生产数据
+            int data = (rd() % 1000 + 1000) % 1000;
+            rq.put(data);
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        }
+    }
+
+    void consmer(ring_queue<int>& rq)
+    {
+        for(;;)
+        {
+            // 消费数据
+            int ret = rq.get();
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+    }
+
+
+    int main()
+    {
+        ::ring_queue<int> rq(10);
+        
+        // 5 个消费者
+        for(int i = 0;i < 5;++i)
+            consumer_ths.push_back(std::thread(consmer,std::ref(rq)));
+
+        // 2 个生产者
+        for(int i = 0;i < 2;++i)
+            producer_ths.push_back(std::thread(producer,std::ref(rq)));
+
+        for(auto&th:consumer_ths)
+            th.join();
+        
+        for(auto&th:producer_ths)
+            th.join();
+
+        return 0;
+    }
     ```
 
 
