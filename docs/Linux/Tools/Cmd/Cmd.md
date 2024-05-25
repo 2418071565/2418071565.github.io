@@ -1,3 +1,16 @@
+## **netstat**
+
+打印网络连接、路由表、接口统计信息、伪装连接和多播成员身份。
+
+常见选项：
+
+```shell
+netstat [address_family_options] [--tcp|-t]  [--udp|-u] [--numeric|-n]
+netstat {--interfaces|-i} [--all|-a] [--program|-p] 
+```
+
+eg:`netstat -aup` 显示当前系统中所有 udp 协议的进程。
+
 ## **jobs/fg/bg**
 
 查看当前用户启动的后台进程及其编号和状态。
@@ -64,9 +77,6 @@ ipcrm 删除 System V IPC 的各种设施。
 ```shell
 scp [可选项] src dst
 ```
-
-
-
 
 ## **zip/unzip**
 

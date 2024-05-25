@@ -1,23 +1,8 @@
 repo_url: https://github.com/2418071565/2418071565.github.io.git
 site_name: Made By CYB
 
-theme:
-  name: material
-  palette: 
-    primary: white
-  language: zh
-  features: 
-    - content.code.select
-    - content.code.copy
-    - navigation.instant
-    - navigation.tabs
-    - navigation.path
-    - navigation.instant.progress
-    - navigation.footer
-    - content.tabs.link
-  icon:
-    admonition:
-      code: material/note-alert
+copyright: "CopyRight &copy CYB"
+edit_uri: edit/master/docs
 
 nav:
   - 主页: index.md
@@ -72,6 +57,7 @@ nav:
       # - 树上最小支配集:
       - 整数拆分: UsualQ/IntPartition/IntPartition.md
       - 区间最大子段和: UsualQ/MaxSumOfSub/MaxSumOfSub.md
+      - 暑期集训: UsualQ/SummerTraining/SumTraining.md
   - 操作系统:
     - 简介: OSindex.md
     - 工具:
@@ -104,7 +90,9 @@ nav:
       - 动态库和静态库: Linux/Lib/Lib.md
       - SheBang: Linux/sheBang/sheBang.md
   - 计算机网络: 
-    - 基础: Network/index.md
+    - 简介: Network/index.md
+    - 基础: Network/basic/basic.md
+    - Socket: Network/socket/socket.md
   - C++:
     - 简介: C++/intro.md
     - 基础: C++/c++初阶杂项.md
@@ -124,6 +112,8 @@ nav:
       - 智能指针: C++/c++11/智能指针.md
       - STL 的改动（未完工）: C++/c++11/STL.md
       - 多线程: C++/c++11/多线程.md
+    - C++14:
+      - decltype(auto): C++/c++14/decltype(auto).md
     - C++17:
       - 文件库: C++/c++17/filesystem.md
     - C++20:
@@ -143,6 +133,30 @@ nav:
   #   - 信号与槽: Qt/SigAndSlot/SigAndSlot.md
 
 
+theme:
+  name: material
+  palette: 
+    primary: white
+  language: zh
+  custom_dir: overrides/
+  favicon: Web_icon.svg
+  features: 
+    - content.code.select
+    - content.code.copy
+    - navigation.instant
+    - navigation.tabs
+    - navigation.path
+    - navigation.instant.progress
+    - navigation.footer
+    - content.tabs.link
+    - search.highlight
+  icon:
+    admonition:
+      code: material/note-alert
+    logo: Web_icon
+    repo: repo_icon
+
+
 markdown_extensions:
   - admonition
   - pymdownx.details
@@ -157,10 +171,14 @@ markdown_extensions:
       pygments_lang_class: true
   - pymdownx.inlinehilite
   - pymdownx.snippets
-  - pymdownx.superfences
-  - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true 
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      options:
+        custom_icons:
+          - overrides/.icons
     
 extra_javascript:
   - javascripts/mathjax.js
@@ -174,6 +192,7 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/2418071565
-
+    - icon: fontawesome/solid/paper-plane
+      link: mailto:idlecyb@163.com
 
 
