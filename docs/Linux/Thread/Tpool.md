@@ -7,6 +7,8 @@
 
 ## **实现**
 
+实现一个简单的懒汉单例模式的线程池。
+
 这里线程池内部是一个线程数组 `std::vector<std::thread>` 用做管理线程和一个自己实现的循环队列 `::ring_queue<::thread_task>` 做任务队列。
 
 简单封装了一个 `thread_task` 用来维护线程执行的任务，其内部维护一个可调用对象及其参数。
@@ -38,7 +40,7 @@
         class make_indices<L,L,_Ind...> : public tuple_indices<_Ind...> {};
 
 
-        // 编译期求参数大小
+        // 编译期求元组大小
         template<class Tp>
         struct tuple_size{ };
 
@@ -63,7 +65,6 @@
             using self = thread_task;
             using _invoker_ptr = std::unique_ptr<_m_invoke_impl_base>;
 
-            _invoker_ptr _m_impl;   // 指向具体的任务对象（基类指针指向子类对象实现多态）
 
             template<class _Tuple>
             struct _m_invoke_impl : public _m_invoke_impl_base
@@ -92,6 +93,9 @@
                 }
             };
 
+            _invoker_ptr _m_impl;   // 指向具体的任务对象（基类指针指向子类对象实现多态）
+
+
         public:
             thread_task() = default;
 
@@ -113,33 +117,53 @@
             { _m_impl->run(); }
         };
 
-        template<class ...T>
-        void f();
 
         /**
-        * @brief 线程池和任务队列
+        * @brief 懒汉单例模式的线程池
         */
         class thread_pool
         {
         private:
             std::vector<std::thread> _pool; // 线程池
             ::ring_queue<thread_task> _task_que; // 任务队列
+
+            // 实现线程安全的单例模式
+            static std::mutex _single_mt;
+            static thread_pool* _single;
+
             void _run()
             {
                 for(;;)
-                { this->_task_que.get().run(); /* 从线程队列区取任务 */ }
+                { _task_que.get().run(); /* 从线程队列区取任务 */ }
             }
 
-        public:
             thread_pool(size_t thread_pool_size,size_t task_que_size)
                 :_pool(thread_pool_size)
                 ,_task_que(task_que_size)
             { }
 
+        public:
+
+            // 单例模式
+            thread_pool(const thread_pool&) = delete;
+            thread_pool& operator=(const thread_pool&) = delete;
+
+            // 创建单例线程池，要保证线程安全
+            static thread_pool* 
+                get_pool(size_t thread_pool_size,size_t task_que_size) noexcept
+            {
+                // 如果以及创建成功，反复申请锁效率低下，这里直接返回
+                if(_single != nullptr) return _single;
+                std::unique_lock<std::mutex> lg(_single_mt);
+                // 保证第一次创建线程池时，只有一个线程成功申请
+                if(_single != nullptr) return _single;
+                return _single = new thread_pool(thread_pool_size,task_que_size);
+            }
+
             /**
             * @brief 启动线程池
             */
-            void start()
+            void start() noexcept
             {
                 for(auto&td:_pool)
                     td = std::thread(std::bind(&thread_pool::_run,this));
@@ -154,7 +178,6 @@
                 _task_que.put(std::move(new_task));
             }
 
-
             /**
             * @brief 通过可调用对象及其参数构造新的线程任务
             * @param _func 可调用对象
@@ -165,8 +188,12 @@
             {
                 _task_que.put(::thread_task(_func,_args...));
             }
-
         };
+
+
+        thread_pool* thread_pool::_single = nullptr;
+        std::mutex thread_pool::_single_mt;
+
         ```
 
     === "ring_queue.hpp"
