@@ -30,5 +30,15 @@ uint16_t ntohs(uint16_t netshort);
 #include <arpa/inet.h>
 in_addr_t inet_addr(const char *cp);    // 点分十进制转 4 字节网络字节序的 ip
 char *inet_ntoa(struct in_addr in);     // 4 字节网络字节序的 ip 转点分十进制字符串
+
+
+#include <arpa/inet.h>
+// 点分十进制的 IPv4 或 IPv6 的地址 -> 4 字节网络字节序的 ip
+int inet_pton(int af, const char *src, void *dst);  
+
+//  4 字节网络字节序的 ip -> 点分十进制的 IPv4 或 IPv6 的地址
+const char *inet_ntop(int af, const void *src,
+                        char *dst, socklen_t size);
+
 ```
 

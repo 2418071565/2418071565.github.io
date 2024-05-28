@@ -32,7 +32,7 @@ int socket(int domain, int type, int protocol);
 
 - `type`：指定套接字的类型，可以是` SOCK_STREAM`（流式套接字，用于TCP协议）、`SOCK_DGRAM`（数据报套接字，用于UDP协议）等。
 
-- `protocol`：指定协议类型，可以是 `IPPROTO_TCP`（TCP协议）、`IPPROTO_UDP`（UDP协议）等。通常设置为0，让系统自动选择合适的协议
+- `protocol`：指定协议类型，可以是 `IPPROTO_TCP`（TCP协议）、`IPPROTO_UDP`（UDP协议）等。通常设置为0，让系统自动选择合适的协议。
 
 返回值为 socket 的文件描述符。
 
@@ -69,7 +69,7 @@ On success, zero is returned.  On error, -1 is returned, and errno is set approp
 ### **UDP 接口**
 
 
-`UDP` 套接字是无连接协议，必须使用 `recvfrom` 函数接收数据，`sendto` 函数发送数据。
+`UDP`（User Data Protocol，用户数据报协议） 套接字是无连接协议，必须使用 `recvfrom` 函数接收数据，`sendto` 函数发送数据。
 
 - **收数据**
 
@@ -271,6 +271,60 @@ ssize_t sendto(int sockfd, const void *buf, size_t len, int flags,
             @rm -rf server client
         ```
 
+### **TCP 接口**
 
+TCP（Transport Control Protocol，传输控制协议） 是一种有连接的可靠传输协议，在做数据交换前要先进行连接。
 
+- **监听**
 
+让执行流监听指定 socket 文件描述符，以接收客户端发起的连接请求。
+
+```cpp
+#include <sys/types.h>          /* See NOTES */
+#include <sys/socket.h>
+
+int listen(int sockfd, int backlog);
+```
+
+- sockfd：需要设置为监听模式的套接字描述符
+
+- backlog：指定等待连接队列的最大长度，即同时能够处理的客户端连接请求的最大数量，超过这个数量的连接请求将被拒绝
+
+- **创建连接**
+
+accept函数用于从处于监听状态的套接字队列中取出一个已经完成了三次握手的连接请求，并创建一个新的套接字用于与客户端进行通信。
+
+```cpp
+#include <sys/types.h>          /* See NOTES */
+#include <sys/socket.h>
+
+int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
+```
+
+- `sockfd`：处于监听状态的套接字描述符
+
+- `addr`：输出型参数，指向一个 sockaddr 结构体的指针，用于存储客户端的地址信息
+
+- `addrlen`：输出型参数，客户端的 addr 结构体的长度，需要在调用前初始化为sizeof(struct sockaddr)
+
+调用成功返回值：返回一个新的套接字描述符，用于与客户端进行通信，这个新的套接字描述符是唯一的，只能用于与这个客户端进行通信。调用失败返回值：失败返回-1，并设置errno变量以指示错误类型。
+
+- **建立连接**
+
+connect函数用于客户端与服务器建立连接，自动帮客户端的套接字与其ip、port进行绑定。
+
+```cpp
+#include <sys/types.h>          /* See NOTES */
+#include <sys/socket.h>
+
+int connect(int sockfd, const struct sockaddr *addr,
+            socklen_t addrlen);
+```
+
+- sockfd：需要连接的套接字描述符。
+
+- addr：指向目标地址的指针，包括目标计算机的IP地址和端口号。
+
+- addrlen：addr结构体的长度，需要在调用前初始化为sizeof(struct sockaddr)
+
+调用成功返回值：返回0。调用失败返回值：失败返回-1，并设置errno变量以指示错误类型。
