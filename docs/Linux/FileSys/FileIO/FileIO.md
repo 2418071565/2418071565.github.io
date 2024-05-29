@@ -78,9 +78,112 @@ struct files_struct {
   ![Image title](./01.png){ width="550" }
 </figure>
 
-### **文件描述符的分配规则**
+- **文件描述符的分配规则：**当我们新打开文件时，系统会遍历 `fd_array` ，找到最小的没有被使用的文件描述符分配给我们。
 
-当我们新打开文件时，系统会遍历 `fd_array` ，找到最小的没有被使用的文件描述符分配给我们。
+## **缓冲区**
+
+### **内核缓冲区**
+
+当我们加载磁盘数据时到内存中时，其数据会被加载到内核缓冲区中，当我们对文件做修改时，真正修改的内容其实是内核缓冲区中的数据，操作系统会在特定时刻将内核缓冲区中修改后的数据刷新到磁盘上，实现修改的保存。
+
+<figure markdown="span">
+  ![Image title](./03.png){ width="650" }
+</figure>
+
+有了内核缓冲区，在访问磁盘数据时， OS 不用频繁的读取磁盘，而是直接访问内存上的内核缓冲区，在 OS 的级别上提高了 IO 效率，优化的磁盘读写操作。
+
+
+### **用户缓冲区**
+
+用户进程在通过系统调用访问系统资源时，会从用户态转换到内核态，提高 CPU 执行权限，这个转换过程需要建立环境，会有很长的耗时，所以每个进程都有对应用户缓冲区，来减少系统调用次数，而降低操作系统在用户态与核心态切换所耗费的时间。
+
+<figure markdown="span">
+  ![Image title](./04.png){ width="650" }
+</figure>
+
+我们在 C 语言中调用各种输出函数就不会立刻将数据写入到内核缓冲区中，而是先写入到输出缓冲区中，再根据不同的缓冲策略将数据写入到内核缓冲区。
+
+对应用户缓冲区有以下几种缓冲策略：
+
+- 无缓冲：立即刷新
+- 行缓冲：遇到换行刷新
+- 全缓冲：缓冲区满了刷新
+
+当然在一些情况下，也会强制刷新用户缓冲区：
+
+- 调用 `exit()` 结束进程
+- 进程结束
+- 调用 `fflush()` 刷新对应流缓冲区的数据
+- 调用 `fclose()` 关闭流，并刷新对应流缓冲区的数据
+
+我们写一个例子，帮助理解：
+
+```cpp
+# include <stdio.h>    
+# include <string.h>    
+# include <unistd.h>    
+# include <sys/types.h>    
+# include <sys/stat.h>    
+# include <fcntl.h>    
+    
+int main()    
+{    
+    fprintf(stdout,"C call:fprintf\n");    
+    printf("C call:printf\n");    
+    fputs("C call:fputs\n",stdout); 
+    const char* buffer = "sys call :Made by cyb\n";
+    write(1,buffer,strlen(buffer));
+    return 0;    
+}    
+```
+
+输出如下：
+
+<figure markdown="span">
+  ![Image title](./05.png){ width="450" }
+</figure>
+
+这都在意料之中，但我们将它重定向到文件中呢？
+
+
+<figure markdown="span">
+  ![Image title](./06.png){ width="450" }
+</figure>
+
+为什么系统调用的输出会在 C 语言之上？
+
+因为再向显示器写入时默认是采用行缓冲，而其他文件中默认采用全缓冲，所以再向显示器写入时 C 语言函数在调用时就将数据刷新到了内核缓冲区中，所以会在系统调用之上；而在向文件中写入时 C 语言函数只写入到用户缓冲区中，在程序结束时才将数据写入内核缓冲区，所以会在系统调用之后。
+
+我们再将程序改成下面这样：
+
+```cpp
+# include <stdio.h>    
+# include <string.h>    
+# include <unistd.h>    
+# include <sys/types.h>    
+# include <sys/stat.h>    
+# include <fcntl.h>    
+int main()    
+{    
+    fprintf(stdout,"C call:fprintf\n");    
+    printf("C call:printf\n");    
+    fputs("C call:fputs\n",stdout);    
+    const char* buffer = "sys call :Made by cyb\n";
+    write(1,buffer,strlen(buffer));    
+    
+    fork(); // 注意 fork 位置    
+    return 0; 
+}    
+```
+
+<figure markdown="span">
+  ![Image title](./07.png){ width="450" }
+</figure>
+
+我们观察到在向显示器写时正常输出，而在向文件中写时 C 函数都写了两遍。
+
+这是应为在向文件中写时采用全缓冲，在子进程和父进程的用户缓冲区中都有一份输出数据，在程序结束时两个进程都将数据刷新到了内核缓冲区中，所以有两份。
+
 
 ## **系统 IO 接口**
 
@@ -187,6 +290,35 @@ fd: 要关闭文件的文件描述符
 
 返回值：当关闭成功时返回 0 ，失败时返回 -1。
 
+### **数据同步**
+
+数据同步有用户缓冲区向内核缓冲区的同步，也有内核缓冲区向磁盘的同步。
+
+通常用户缓冲区向内核缓冲区的同步使用 C 语言的库函数 `fflush`，或时 C++ 的 `cout.flush()` 。
+
+```cpp
+#include <stdio.h>
+
+int fflush(FILE *stream);
+```
+
+内核缓冲区向磁盘的同步要使用系统调用 `sync` 、`fsync` 或 `fdatasync` 这三个函数。
+
+```cpp
+#include <unistd.h>
+
+void sync(void);
+int fsync(int fd);
+int fdatasync(int fd);
+```
+
+- sync 函数：将所有修改过的块缓冲区排入写队列。执行后立即返回，并不等待实际写磁盘操作结束。通常由系统守护进程周期性调用，以确保内核的块缓冲区被定期冲洗。命令 sync 也调用 sync 函数。
+
+- fsync 函数：是系统提供的系统调用。只对由文件描述符指定的单一文件起作用。等待写磁盘操作结束后才返回。适用于需要确保修改过的块立即写到磁盘上的应用程序，如数据库。
+
+- fdatasync 函数：类似 fsync，但它只影响文件的数据部分。不更新文件的属性，因此性能有所提升。一些日志文件会使用次同步方式。
+
+
 ### **获取文件信息**
 
 ```cpp
@@ -287,110 +419,7 @@ int dup2(int oldfd, int newfd);
 该函数的内部的实现其实就是将 oldfd 下标存储的地址，直接拷贝到 newfd 下标的位置。并且如果需要的话会将 newfd 位置指向的文件关闭。
 
 
-## **缓冲区**
 
-
-### **内核缓冲区**
-
-当我们加载磁盘数据时到内存中时，其数据会被加载到内核缓冲区中，当我们对文件做修改时，真正修改的内容其实是内核缓冲区中的数据，操作系统会在特定时刻将内核缓冲区中修改后的数据刷新到磁盘上，实现修改的保存。
-
-<figure markdown="span">
-  ![Image title](./03.png){ width="650" }
-</figure>
-
-有了内核缓冲区，在访问磁盘数据时， OS 不用频繁的读取磁盘，而是直接访问内存上的内核缓冲区，在 OS 的级别上提高了 IO 效率，优化的磁盘读写操作。
-
-
-### **用户缓冲区**
-
-用户进程在通过系统调用访问系统资源时，会从用户态转换到内核态，提高 CPU 执行权限，这个转换过程需要建立环境，会有很长的耗时，所以每个进程都有对应用户缓冲区，来减少系统调用次数，而降低操作系统在用户态与核心态切换所耗费的时间。
-
-<figure markdown="span">
-  ![Image title](./04.png){ width="650" }
-</figure>
-
-我们在 C 语言中调用各种输出函数就不会立刻将数据写入到内核缓冲区中，而是先写入到输出缓冲区中，再根据不同的缓冲策略将数据写入到内核缓冲区。
-
-对应用户缓冲区有以下几种缓冲策略：
-
-- 无缓冲：立即刷新
-- 行缓冲：遇到换行刷新
-- 全缓冲：缓冲区满了刷新
-
-当然在一些情况下，也会强制刷新用户缓冲区：
-
-- 调用 `exit()` 结束进程
-- 进程结束
-- 调用 `fflush()` 刷新对应流缓冲区的数据
-- 调用 `fclose()` 关闭流，并刷新对应流缓冲区的数据
-
-我们写一个例子，帮助理解：
-
-```cpp
-# include <stdio.h>    
-# include <string.h>    
-# include <unistd.h>    
-# include <sys/types.h>    
-# include <sys/stat.h>    
-# include <fcntl.h>    
-    
-int main()    
-{    
-    fprintf(stdout,"C call:fprintf\n");    
-    printf("C call:printf\n");    
-    fputs("C call:fputs\n",stdout); 
-    const char* buffer = "sys call :Made by cyb\n";
-    write(1,buffer,strlen(buffer));
-    return 0;    
-}    
-```
-
-输出如下：
-
-<figure markdown="span">
-  ![Image title](./05.png){ width="450" }
-</figure>
-
-这都在意料之中，但我们将它重定向到文件中呢？
-
-
-<figure markdown="span">
-  ![Image title](./06.png){ width="450" }
-</figure>
-
-为什么系统调用的输出会在 C 语言之上？
-
-因为再向显示器写入时默认是采用行缓冲，而其他文件中默认采用全缓冲，所以再向显示器写入时 C 语言函数在调用时就将数据刷新到了内核缓冲区中，所以会在系统调用之上；而在向文件中写入时 C 语言函数只写入到用户缓冲区中，在程序结束时才将数据写入内核缓冲区，所以会在系统调用之后。
-
-我们再将程序改成下面这样：
-
-```cpp
-# include <stdio.h>    
-# include <string.h>    
-# include <unistd.h>    
-# include <sys/types.h>    
-# include <sys/stat.h>    
-# include <fcntl.h>    
-int main()    
-{    
-    fprintf(stdout,"C call:fprintf\n");    
-    printf("C call:printf\n");    
-    fputs("C call:fputs\n",stdout);    
-    const char* buffer = "sys call :Made by cyb\n";
-    write(1,buffer,strlen(buffer));    
-    
-    fork(); // 注意 fork 位置    
-    return 0; 
-}    
-```
-
-<figure markdown="span">
-  ![Image title](./07.png){ width="450" }
-</figure>
-
-我们观察到在向显示器写时正常输出，而在向文件中写时 C 函数都写了两遍。
-
-这是应为在向文件中写时采用全缓冲，在子进程和父进程的用户缓冲区中都有一份输出数据，在程序结束时两个进程都将数据刷新到了内核缓冲区中，所以有两份。
 
 ### **总结**
 

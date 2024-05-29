@@ -76,6 +76,7 @@ nav:
         # - 进程地址空间: Linux/ProAddrSpace/ProAddrSpace.md
         - 进程控制: Linux/ProCtrl/ProCtrl.md
         - 进程间通信: Linux/IPC/IPC.md
+        - 守护进程: Linux/DaePro/DaePro.md
       - 信号: Linux/Signal/signal.md
       - 线程: 
         - 线程基础: Linux/Thread/Thread.md
@@ -91,8 +92,13 @@ nav:
       - SheBang: Linux/sheBang/sheBang.md
   - 计算机网络: 
     - 简介: Network/index.md
-    - 基础: Network/basic/basic.md
-    - Socket: Network/socket/socket.md
+    - 应用层:
+      - 概述: Network/Application/index.md
+      - HTTP: Network/Application/http.md
+    - 网络编程:
+      - 基础: Network/basic/basic.md
+      - 自定义协议: Network/socket/Custom.md
+      - Socket: Network/socket/socket.md
   - C++:
     - 简介: C++/intro.md
     - 基础: C++/c++初阶杂项.md

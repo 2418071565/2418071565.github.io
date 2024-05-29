@@ -328,3 +328,19 @@ int connect(int sockfd, const struct sockaddr *addr,
 - addrlen：addr结构体的长度，需要在调用前初始化为sizeof(struct sockaddr)
 
 调用成功返回值：返回0。调用失败返回值：失败返回-1，并设置errno变量以指示错误类型。
+
+- **收发数据**
+
+可以直接使用 read 和 write 来收发数据。也有专门的接口：
+
+```cpp
+#include <sys/types.h>
+#include <sys/socket.h>
+
+ssize_t send(int sockfd, const void *buf, size_t len, int flags);
+ssize_t recv(int sockfd, void *buf, size_t len, int flags);
+```
+
+**send：**在建立连接后，向建立连接的 socket 文件中发送 buf 缓冲区者中长度为 len 的数据。flags 填 0 即可。
+
+**recv：**在建立连接后，从建立连接的 socket 文件中向 buf 缓冲区者中读入长度为 len 的数据。flags 填 0 即可。
