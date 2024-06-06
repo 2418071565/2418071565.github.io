@@ -1,3 +1,53 @@
+
+
+## **xargs**
+
+xargs 可以将管道或标准输入（stdin）数据转换成命令行参数，也能够从文件的输出中读取数据。
+参数间是以空格分隔的，xargs 默认会将所有参数都直接给需要执行的命令。
+
+```shell
+[command] | xargs [选项] [command]
+```
+
+常用的属性如下：
+
+- -a file 从文件中读入作为 stdin。
+  
+- -n num 后面加次数，表示命令在执行的时候一次用的argument的个数，默认是用所有的。
+  
+- -d delim 分隔符，默认的 xargs 是以空格和换行为分隔符，这里会修改为空格和指定的分隔符。
+
+- -i 或者是-I，这得看linux支持了，将xargs的每项名称，一般是一行一行赋值给 {}，可以用 {} 代替。
+
+- -t 表示先打印命令，然后再执行。
+
+下面是一些例子：
+
+```shell
+# t 文件下有如下内容：
+a b c
+d e f
+# 例子
+$ cat t | xargs
+a b c d e f
+$ cat t | xargs -n 2
+a b
+c d
+e f
+$ cat t | xargs -I {} echo -p {} -l
+-p a b c -l
+-p d e f -l
+$ cat t | xargs -t -I {} echo -p {} -l
+echo -p 'a b c' -l
+-p a b c -l
+echo -p 'd e f' -l
+-p d e f -l
+$ cat t | xargs -d b
+a   c
+d e f
+```
+
+
 ## **netstat**
 
 打印网络连接、路由表、接口统计信息、伪装连接和多播成员身份。
@@ -98,7 +148,7 @@ ldd [可执行程序]
 
 `ulimit` 为 shell 内建指令，可用来控制 shell 执行程序的资源。
 
-#### 选项
+常用选项：
 
 `-a`：显示所有资源限制。
 
