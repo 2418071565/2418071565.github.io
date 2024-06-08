@@ -68,8 +68,13 @@ nav:
         - gdb: Linux/Tools/GNU/gdb/gdb.md
         - make: Linux/Tools/GNU/make/make.md
         - flex: Linux/Tools/GNU/lex\yacc/flex.md
+<<<<<<< HEAD
     - 基础知识:
       - 概念: Linux/SysConcept/SysConcept.md
+=======
+    - 内核:
+      - 体系结构及操作系统概念: Linux/SysConcept/SysConcept.md
+>>>>>>> master
       - 进程:
         - 进程概念: Linux/ProCon/ProCon.md
         - 进程状态: Linux/ProStatus/ProStatus.md
