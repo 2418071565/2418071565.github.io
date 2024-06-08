@@ -127,7 +127,12 @@ nav:
       - format: C++/c++20/format/format.md
   - MySQL:
     - 简介: MySql/index.md
-    - SQL: MySql/SQL/SQL.md
+    - SQL: 
+      - 库操作: MySql/SQL/BaseOp.md
+      - 表操作: MySql/SQL/Op.md
+      - 数据类型: MySql/SQL/DataType.md
+      - 表的约束: MySql/SQL/table/constraints.md
+      - 表的增删查改: MySql/SQL/table/idsu.md
   - Others:
     - Git: 
       - 简介: Others/Git/index.md

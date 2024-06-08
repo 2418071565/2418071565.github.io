@@ -322,38 +322,3 @@ drop [TEMPORARY] table [if exists] [表名] ;
 ```
 
 
-## **数据类型**
-
-
-### **数值**
-
-数值类型分为整形和浮点型。
-
-|类型|大小|说明|
-|:-:|:-:|:-:|
-tingint [unsigned]|1Byte| $[-2^{7},2^{7}-1]$
-smallint [unsigned]|2Byte|$[-2^{15},2^{15}-1]$
-mediumint [unsigned]|3Byte|$[-2^{23},2^{23}-1]$
-int [unsigned]|4Byte|$[-2^{31},2^{31}-1]$
-bigint [unsigned]|8Byte|$[-2^{63},2^{63}-1]$
-bool|1bit|使用0 和 1表示真假|
-bit[(m)]| - |位字段类型。M表示每个值的位数，范围从1到64。
-float [(m,d)] [unsigned]|4Byte| M指定显示长度，d指定小数位数|
-double [(m,d)] [unsigned]|8Byte| M指定显示长度，d指定小数位数|
-decimal [(m,d)] [unsigned]| - | 定点数，M指定长度（最大 65），d指定小数位数（最大 30），默认为(10,0)|
-
-当插入的数值超过数据范围，会插入失败。要注意的是 bit 类型，在显示时是默认以 ascii 码的形式显示的。float 和 double 都会有精度问题，decimal 可以精确显示数据。
-
-### **文本二进制**
-
-|类型|大小|说明|
-|:-:|:-:|:-:|
-char(size)| size | 固定长度字符串，最大 255 
-varchar(size)| size | 可变长度字符串，最大 65535
-blob | - | 二进制数据
-text | - | 大文本，不支持全局索引，不支持默认值
-
-
-### **日期类型**
-
-
