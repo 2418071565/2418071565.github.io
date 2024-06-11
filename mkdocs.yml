@@ -134,6 +134,9 @@ nav:
       - 数据类型: MySql/SQL/DataType.md
       - 表的约束: MySql/SQL/table/constraints.md
       - 表的增删查改: MySql/SQL/table/idsu.md
+      - MySQL内置函数: MySql/SQL/table/buildin_fun.md
+      - 复合查询: MySql/SQL/Query.md
+    - MySQL 索引: MySql/MySql_index/MySql_index.md
   - Others:
     - Git: 
       - 简介: Others/Git/index.md

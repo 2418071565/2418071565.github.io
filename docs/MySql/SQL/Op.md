@@ -1,5 +1,5 @@
 
-### **创建表**
+## **创建表**
 
 ```sql
 CREATE TABLE table_name (
@@ -31,8 +31,15 @@ eg:
 
 不同引擎索引数据的方式不同，所以创建的文件也有所不同。
 
+### **从表创建表**
 
-### **查看表结构**
+```sql
+create table table_name1 select column,[column...] from table_name2 [where ...];
+```
+
+该语句可以从表 table_name2 中拷贝指定列指定行到表 table_name1; 
+
+## **查看表结构**
 
 显示当前数据库下的所有表：
 
@@ -56,7 +63,7 @@ show create table [表名];
   ![Image title](./10.png){ width="550" }
 </figure>
 
-### **修改表结构**
+## **修改表结构**
 
 ```sql
 ALTER TABLE tablename ADD (column datatype [DEFAULT expr][,columndatatype]...);

@@ -22,6 +22,66 @@ fork 函数被调用后会做以下这些事，也就是创建进程要做的：
 
 fork 函数后的代码会被父子进程都执行，因为子进程会和父进程共享代码，并且子进程的 eip （程序计数器，记录CPU下一个需要执行的指令）是从父进程拷贝而来，所以不会从头重新执行程序。
 
+
+### **线程安全问题**
+
+系统调用 `fork` 并不是线程安全的。这意味着在一个多线程程序中调用 `fork` 可能会导致一些复杂的问题。
+
+- 在多线程程序中调用 `fork` 时，只会复制调用 `fork` 的线程，而其他线程不会被复制。这可能会导致子进程处于不一致的状态，因为只有一部分线程的状态被复制。
+
+- 如果父进程中的其他线程持有锁，调用 `fork` 后，这些锁可能会在子进程中被保持住，但这些锁不会被其他线程释放（因为其他线程没有被复制）。这可能会导致死锁或不一致的状态。
+
+### 解决方法
+
+为了解决这些问题，可以结合使用 `fork` 和 `exec` 系统调用，或者使用 POSIX 标准中的 `pthread_atfork` 函数来处理。
+
+#### 1. `fork` + `exec` 模式
+
+通常的模式是在 `fork` 后立即调用 `exec` 系列函数之一，如 `execl`, `execv`, `execle`, `execve` 等，以执行新的程序。这种方法可以避免大多数线程相关的问题，因为 `exec` 会用新的程序映像替换当前的进程映像，不会继承父进程的线程状态和锁。
+
+```c
+if (fork() == 0) {
+    // Child process
+    execl("/path/to/command", "command", (char *)NULL);
+    // If exec fails
+    perror("execl");
+    exit(EXIT_FAILURE);
+} else {
+    // Parent process
+    // Continue execution
+}
+```
+
+#### 2. `pthread_atfork` 函数
+
+POSIX 提供了 `pthread_atfork` 函数，它允许你在 `fork` 前后定义处理函数。这些处理函数可以用于在 `fork` 之前解锁锁，并在 `fork` 后重新加锁，以避免死锁和不一致的状态。
+
+```c
+void prepare() {
+    // Lock mutexes or perform other necessary actions
+}
+
+void parent() {
+    // Unlock mutexes or perform other necessary actions in parent
+}
+
+void child() {
+    // Unlock mutexes or perform other necessary actions in child
+}
+
+pthread_atfork(prepare, parent, child);
+
+if (fork() == 0) {
+    // Child process
+    // Continue execution
+} else {
+    // Parent process
+    // Continue execution
+}
+```
+
+
+
 ## **进程终止 — exit 函数**
 
 一般情况下进程终止时会有几种情况：
