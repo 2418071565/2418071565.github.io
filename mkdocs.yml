@@ -142,6 +142,9 @@ nav:
       - 简介: Others/Git/index.md
     - JSON:
       - 简介: Others/JSON/index.md
+    - xmake:
+      - 简介: Others/xmake/index.md
+      - xmake.lua 语法: Others/xmake/config.md
   # - 工具:
   # Qt 废弃
   # - Qt: 
