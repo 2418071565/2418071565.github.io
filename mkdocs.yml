@@ -67,7 +67,7 @@ nav:
         - gcc: Linux/Tools/GNU/gcc/gcc.md
         - gdb: Linux/Tools/GNU/gdb/gdb.md
         - make: Linux/Tools/GNU/make/make.md
-        - flex: Linux/Tools/GNU/lex\yacc/flex.md
+        - flex: Linux/Tools/GNU/flex_yacc/flex.md
     - 基础知识:
       - 概念: Linux/SysConcept/SysConcept.md
       - 进程:
@@ -94,6 +94,7 @@ nav:
       - SheBang: Linux/others/sheBang/sheBang.md
   - 计算机网络: 
     - 简介: Network/index.md
+    - 专业术语: Network/pro_term.md
     - 应用层:
       - 概述: Network/Application/index.md
       - HTTP: Network/Application/http.md
