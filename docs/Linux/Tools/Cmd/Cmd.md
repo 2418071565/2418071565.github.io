@@ -59,7 +59,27 @@ netstat [address_family_options] [--tcp|-t]  [--udp|-u] [--numeric|-n]
 netstat {--interfaces|-i} [--all|-a] [--program|-p] 
 ```
 
+- -p ：显示服务名称。
+
+- -l ：显示 listen 状态的服务，不带就显示非 listen 状态的服务。 
+
+- -a ：显示所有状态的服务。
+
+
 eg:`netstat -aup` 显示当前系统中所有 udp 协议的进程。
+
+还有一个 `ss` 命令和 `netstat` 命令效果相同。
+
+## **pidof**
+
+在查看服务器的进程id时非常方便.
+
+```shell
+pidof [进程名] 
+```
+
+功能：通过进程名, 查看进程id
+
 
 ## **jobs/fg/bg**
 
