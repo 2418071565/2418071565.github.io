@@ -2,7 +2,14 @@
 **详细查看 man 手册，这里将接口列出。**
 
 
+## **删除文件**
 
+删除指定文件
+
+```c
+#include<unistd.h>
+int unlink(const char* pathname);
+```
 
 ## **设置/获取资源限制**
 
