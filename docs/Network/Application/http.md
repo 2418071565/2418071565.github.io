@@ -22,33 +22,23 @@ HTTP 的却点就是明文传输不安全，无状态难以实现一些需要记
 
 ## **内容**
 
-### **Header**
+HTTP 协议的报文格式如下：
 
+请求报文：
 
-HTTP 报文的头部是一系列的 Key-Value 的键值对，如下就是一个 HTTP 请求报文头部：
+<figure markdown="span">
+  ![Image title](./05.png){ width="400" }
+</figure>
 
-```
-GET / HTTP/1.1
-Host: 127.0.0.1:8888
-Connection: keep-alive
-Cache-Control: max-age=0
-sec-ch-ua: "Google Chrome";v="125", "Chromium";v="125", "Not.A/Brand";v="24"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "Windows"
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
-Sec-Fetch-Site: cross-site
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br, zstd
-Accept-Language: zh-CN,zh;q=0.9
-```
+响应报文：
 
-- **第一行：**标识了 HTTP 请求的类型，有 GET，POST，PUT，DELETE 等。还有 HTTP 协议的版本，有 1.0，1.1，2，3 等。
+<figure markdown="span">
+  ![Image title](./06.png){ width="450" }
+</figure>
 
-#### **请求头/响应头**
+### **请求行/响应行**
+
+标识了 HTTP 协议的版本，有 1.0，1.1，2，3 等。
 
 如果是请求头，会标识 HTTP 请求的类型，有 GET，POST，PUT，DELETE 等，会有访问的资源路径，这里是 `\`。还有 HTTP 协议的版本，有 1.0、1.1、2、3 等。
 
@@ -85,6 +75,9 @@ DELETE：请求服务器删除Request-URI所标识的资源。
 
 有一点对不上的是，我们在一个网站第一次登录之后，后续访问网站就不需要再次登录，这是因为使用了 Cookie，在后文介绍。
 
+### **Headers**
+
+HTTP 报文的头部是一系列的 Key-Value 的键值对。
 
 
 #### **Host**

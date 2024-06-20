@@ -2,6 +2,16 @@
 **详细查看 man 手册，这里将接口列出。**
 
 
+## **关闭 Socket 的读端或写端**
+
+
+```c
+#include <sys/socket.h>
+int shutdown(int sockfd, int how);
+```
+
+shutdown（）调用会关闭与 sockfd 关联的套接字上的全部或部分全双工连接。如果 how 是 SHUT_ RD，就关闭 socket 的读端。如果how 是 SHUT_WR，就关闭写端。如果 how 是 SHUT_RDWR ，读写都被关闭，类似 `close()`。
+
 ## **删除文件**
 
 删除指定文件

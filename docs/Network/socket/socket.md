@@ -343,4 +343,77 @@ ssize_t recv(int sockfd, void *buf, size_t len, int flags);
 
 **send：**在建立连接后，向建立连接的 socket 文件中发送 buf 缓冲区者中长度为 len 的数据。flags 填 0 即可。
 
-**recv：**在建立连接后，从建立连接的 socket 文件中向 buf 缓冲区者中读入长度为 len 的数据。flags 填 0 即可。
+**recv：**在建立连接后，从建立连接的 socket 文件中向 buf 缓冲区者中读入长度为 len 的数据。flags 填 0 即可，标识阻塞时接收数据。
+
+其他常见标志位：
+
+- MSG_OOB（Out-of-Band data）：用于接收带外数据。带外数据是一种紧急数据，通常用于发送紧急信号。
+在 TCP 中，带外数据由紧急指针（Urgent Pointer）标记，接收方可以通过设置 MSG_OOB 标志来读取这些数据。
+
+- MSG_PEEK：允许窥探接收缓冲区中的数据，而不将数据从缓冲区中移除。这意味着后续的 recv 调用仍然可以读取相同的数据。
+  
+- MSG_WAITALL：指示 recv 函数在读取到指定数量的字节之前不会返回。这可以确保接收到完整的数据，但也可能导致函数阻塞，直到接收到所有的数据或发生错误。
+
+- MSG_DONTWAIT：使 recv 函数在非阻塞模式下工作，如果没有数据可读取，则立即返回，而不是阻塞等待数据。
+
+- MSG_TRUNC（仅用于套接字选项，例如 recvfrom）：表示返回的数据已被截断。使用该字段后，如果提供的缓冲区小于实际接收到的数据包大小，函数返回的大小是数据包的实际长度，而不是缓冲区的大小。
+
+- MSG_ERRQUEUE：用于接收错误消息队列中的数据，通常与套接字错误处理相关。
+
+
+#### **套接字状态**
+
+套接字状态是描述 TCP 连接在其生命周期中所处的不同阶段的一个重要概念。每个状态都对应着特定的操作和事件，从连接的建立到连接的关闭。
+
+当然可以。套接字状态是描述 TCP 连接在其生命周期中所处的不同阶段的一个重要概念。每个状态都对应着特定的操作和事件，从连接的建立到连接的关闭。以下是详细描述 TCP 套接字状态的各个阶段：
+
+- CLOSED：初始状态，表示套接字未被使用。
+
+
+- LISTEN：服务器端套接字在侦听连接请求。
+
+- SYN-SENT：客户端套接字发送了 SYN 请求，等待服务器的 SYN-ACK 响应。
+
+
+- SYN-RECEIVED：服务器端接收到 SYN 请求，并发送了 SYN-ACK 响应，等待客户端的 ACK 确认。
+
+
+- ESTABLISHED：连接已经建立，双方可以进行数据传输。
+
+- FIN-WAIT-1：主动关闭方发送了 FIN 包，等待对方的 ACK 确认。
+
+
+- FIN-WAIT-2：主动关闭方接收到对方的 ACK 包，等待对方的 FIN 包。
+
+
+- CLOSE-WAIT：被动关闭方接收到 FIN 包，发送 ACK 包，并等待应用程序关闭连接。
+
+
+- CLOSING：双方几乎同时关闭连接，发送了 FIN 包但尚未接收到对方的 FIN 包。
+
+
+- LAST-ACK：被动关闭方在发送了 FIN 包后，等待对方的 ACK 包。
+
+
+- TIME-WAIT：主动关闭方在发送了最后的 ACK 包后，等待一段时间以确保对方接收到了 ACK 包，等待两倍的最大报文段寿命（2MSL），然后进入 CLOSED 状态。
+
+
+
+连接建立（三次握手）时套接字状态变化：
+
+1. **CLOSED -> SYN-SENT**：客户端调用 `connect()` 发送 SYN 包。
+2. **LISTEN -> SYN-RECEIVED**：服务器接收到 SYN 包，发送 SYN-ACK 包。
+3. **SYN-SENT -> ESTABLISHED**：客户端接收到 SYN-ACK 包，发送 ACK 包，连接建立。
+4. **SYN-RECEIVED -> ESTABLISHED**：服务器接收到 ACK 包，连接建立。
+
+连接终止（四次挥手）时套接字状态变化：
+
+1. **ESTABLISHED -> FIN-WAIT-1**：主动关闭方调用 `close()` 发送 FIN 包。
+2. **ESTABLISHED -> CLOSE-WAIT**：被动关闭方接收到 FIN 包，发送 ACK 包。
+3. **FIN-WAIT-1 -> FIN-WAIT-2**：主动关闭方接收到 ACK 包。
+4. **CLOSE-WAIT -> LAST-ACK**：被动关闭方调用 `close()` 发送 FIN 包。
+5. **FIN-WAIT-2 -> TIME-WAIT**：主动关闭方接收到 FIN 包，发送 ACK 包。
+6. **LAST-ACK -> CLOSED**：被动关闭方接收到 ACK 包。
+7. **TIME-WAIT -> CLOSED**：主动关闭方等待 2MSL 后关闭连接。
+
+。
