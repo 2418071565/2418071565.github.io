@@ -363,57 +363,89 @@ ssize_t recv(int sockfd, void *buf, size_t len, int flags);
 
 #### **套接字状态**
 
-套接字状态是描述 TCP 连接在其生命周期中所处的不同阶段的一个重要概念。每个状态都对应着特定的操作和事件，从连接的建立到连接的关闭。
-
-当然可以。套接字状态是描述 TCP 连接在其生命周期中所处的不同阶段的一个重要概念。每个状态都对应着特定的操作和事件，从连接的建立到连接的关闭。以下是详细描述 TCP 套接字状态的各个阶段：
+套接字状态是描述 TCP 连接在其生命周期中所处的不同阶段的一个重要概念。每个状态都对应着特定的操作和事件，从连接的建立到连接的关闭。以下是详细描述 TCP 套接字状态的各个阶段：
 
 - CLOSED：初始状态，表示套接字未被使用。
-
 
 - LISTEN：服务器端套接字在侦听连接请求。
 
 - SYN-SENT：客户端套接字发送了 SYN 请求，等待服务器的 SYN-ACK 响应。
 
-
 - SYN-RECEIVED：服务器端接收到 SYN 请求，并发送了 SYN-ACK 响应，等待客户端的 ACK 确认。
-
 
 - ESTABLISHED：连接已经建立，双方可以进行数据传输。
 
 - FIN-WAIT-1：主动关闭方发送了 FIN 包，等待对方的 ACK 确认。
 
-
 - FIN-WAIT-2：主动关闭方接收到对方的 ACK 包，等待对方的 FIN 包。
-
 
 - CLOSE-WAIT：被动关闭方接收到 FIN 包，发送 ACK 包，并等待应用程序关闭连接。
 
-
 - CLOSING：双方几乎同时关闭连接，发送了 FIN 包但尚未接收到对方的 FIN 包。
-
 
 - LAST-ACK：被动关闭方在发送了 FIN 包后，等待对方的 ACK 包。
 
-
 - TIME-WAIT：主动关闭方在发送了最后的 ACK 包后，等待一段时间以确保对方接收到了 ACK 包，等待两倍的最大报文段寿命（2MSL），然后进入 CLOSED 状态。
 
+### **socket 选项**
 
+我们通过以下函数设置或获取一个 socket 的选项：
 
-连接建立（三次握手）时套接字状态变化：
+```c
+#include <sys/types.h>      
+#include <sys/socket.h>
 
-1. **CLOSED -> SYN-SENT**：客户端调用 `connect()` 发送 SYN 包。
-2. **LISTEN -> SYN-RECEIVED**：服务器接收到 SYN 包，发送 SYN-ACK 包。
-3. **SYN-SENT -> ESTABLISHED**：客户端接收到 SYN-ACK 包，发送 ACK 包，连接建立。
-4. **SYN-RECEIVED -> ESTABLISHED**：服务器接收到 ACK 包，连接建立。
+int getsockopt(int sockfd, int level, int optname,
+                void *optval, socklen_t *optlen);
+int setsockopt(int sockfd, int level, int optname,
+                const void *optval, socklen_t optlen);
+```
 
-连接终止（四次挥手）时套接字状态变化：
+参数说明：
 
-1. **ESTABLISHED -> FIN-WAIT-1**：主动关闭方调用 `close()` 发送 FIN 包。
-2. **ESTABLISHED -> CLOSE-WAIT**：被动关闭方接收到 FIN 包，发送 ACK 包。
-3. **FIN-WAIT-1 -> FIN-WAIT-2**：主动关闭方接收到 ACK 包。
-4. **CLOSE-WAIT -> LAST-ACK**：被动关闭方调用 `close()` 发送 FIN 包。
-5. **FIN-WAIT-2 -> TIME-WAIT**：主动关闭方接收到 FIN 包，发送 ACK 包。
-6. **LAST-ACK -> CLOSED**：被动关闭方接收到 ACK 包。
-7. **TIME-WAIT -> CLOSED**：主动关闭方等待 2MSL 后关闭连接。
+- **socket**：要设置选项的套接字描述符。
 
-。
+- **level**：选项的级别，决定了选项的类型。常见的级别包括：
+
+  SOL_SOCKET：通用套接字选项。
+
+  IPPROTO_IP：IPv4 选项。
+
+  IPPROTO_IPV6：IPv6 选项。
+
+  IPPROTO_TCP：TCP 选项。
+
+  IPPROTO_UDP：UDP 选项。
+
+- **option_name**：要设置的选项名称。不同级别有不同的选项名称，例如：
+
+  SOL_SOCKET 下的 **SO_REUSEADDR** 选项允许地址复用。它通常用于如下场景：
+
+服务器重启：在服务器程序崩溃或重启后，立即重新绑定到相同的地址和端口，以便尽快恢复服务。
+
+多重绑定：允许多个套接字绑定到相同的地址和端口，通常用于多播。
+
+  SOL_SOCKET 下的 **SO_LINGER** 选项用于控制套接字关闭行为。
+
+当 option_name 设置为 SO_LINGER 时，optval 需要是 struct linger 结构体：
+
+```c
+struct linger {
+    int l_onoff;  // 是否启用 linger 选项
+    int l_linger; // 延迟时间（以秒为单位）
+};
+```
+
+如果启用了 SO_LINGER（l_onoff 设置为非零），则 l_linger 决定了延迟关闭的时间：
+
+内核将在经过 l_linger 秒的时间后，将 socket 关闭，不论数据是否发送完成。如果 l_linger = 0，则会向对端发送一个 RST 包，连接的断开会跳过四次挥手。
+
+如果禁用了 SO_LINGER（l_onoff 设置为 0），则套接字关闭时的默认行为是：
+
+在调用 close 函数时，如果有未发送的数据，close 函数会立即返回，但内核会在后台继续尝试发送数据，直到发送完成或重试超时。
+
+- **option_value**：指向包含新选项值的缓冲区。对于 get 后两个是输出型参数。
+
+- **option_len**：option_value 缓冲区的大小，以字节为单位。
+
+返回值：成功时返回 0，失败时返回 -1，并设置 errno 以指示错误原因。

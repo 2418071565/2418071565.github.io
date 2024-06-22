@@ -19,8 +19,10 @@ RFC（Request for Comments）是由互联网工程任务组（IETF）及其前�
 网络业务提供商(Internet Service Provider，简称ISP)，互联网服务提供商，即向广大用户综合提供互联网接入业务、信息业务、和增值业务的电信运营商。在互联网应用服务产业链“设备供应商——基础网络运营商——内容收集者和生产者——业务提供者——用户”中，ISP处于内容收集者、生产者以及业务提供者的位置。
 
 
-## **RTT/RTO**
+## **RTT/RTO/MSS**
 
 RTT（Round-Trip Time 往返时延）：是数据发送时刻到接收到确认的时刻的差值，也就是包的往返时间。
 
 RTO （Retransmission Timeout 超时重传时间）。
+
+MSS（Maximum Segment Size，最大报文段大小）是指 TCP 协议中单个数据段（不包括 TCP 和 IP 头部）的最大数据负载大小。MSS 是在 TCP 连接建立时通过 TCP 三次握手过程协商确定的。MSS 的确定可以帮助双方在传输数据时避免 IP 分片，提高传输效率和稳定性。
