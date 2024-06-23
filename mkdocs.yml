@@ -98,6 +98,7 @@ nav:
     - 应用层:
       - 概述: Network/Application/index.md
       - HTTP: Network/Application/http.md
+      - DHCP: Network/Application/dhcp.md
     - 传输层:
       - 概述: Network/Transport/index.md
       - UDP: Network/Transport/udp.md
@@ -105,6 +106,9 @@ nav:
     - 网络层:
       - 概述: Network/network/index.md
       - IP: Network/network/ip.md
+    - 链路层:
+      - 概述: Network/link/index.md
+      - Ethernet: Network/link/Ethernet.md
     - 网络编程:
       - 基础: Network/basic/basic.md
       - 自定义协议: Network/socket/Custom.md

@@ -19,10 +19,25 @@ RFC（Request for Comments）是由互联网工程任务组（IETF）及其前�
 网络业务提供商(Internet Service Provider，简称ISP)，互联网服务提供商，即向广大用户综合提供互联网接入业务、信息业务、和增值业务的电信运营商。在互联网应用服务产业链“设备供应商——基础网络运营商——内容收集者和生产者——业务提供者——用户”中，ISP处于内容收集者、生产者以及业务提供者的位置。
 
 
-## **RTT/RTO/MSS**
+## **RTT/RTO/MSS/TTL**
 
 RTT（Round-Trip Time 往返时延）：是数据发送时刻到接收到确认的时刻的差值，也就是包的往返时间。
 
 RTO （Retransmission Timeout 超时重传时间）。
 
 MSS（Maximum Segment Size，最大报文段大小）是指 TCP 协议中单个数据段（不包括 TCP 和 IP 头部）的最大数据负载大小。MSS 是在 TCP 连接建立时通过 TCP 三次握手过程协商确定的。MSS 的确定可以帮助双方在传输数据时避免 IP 分片，提高传输效率和稳定性。
+
+
+TTL（Time To Live，生存时间）是网络层中的一个重要概念，它用于控制数据包在网络中的生命周期。TTL 的主要目的是防止数据包在网络中无限循环，从而导致网络拥塞。
+
+
+## **CIDR**
+
+CIDR（Classless Inter-Domain Routing，无类别域间路由）是用于 IP 地址分配和路由的一种方法，旨在替代早期的基于类的 IP 地址分配方式。CIDR 引入了一种更灵活和高效的地址分配机制，从而改善了 IP 地址空间的利用效率和路由表的规模管理。
+
+采用子网掩码（Subnet Mask）的方式进行 IP 地址的划分，而非固定的分类。
+
+
+## **NAT**
+
+网络地址转换（Network Address Translation，NAT）是一种用于修改网络设备中 IP 地址信息的技术，主要用于在私有网络（如家庭网络或公司内部网络）和公共网络（如互联网）之间进行 IP 地址转换。NAT 可以解决 IPv4 地址不足的问题，并提供一定程度的网络安全。
