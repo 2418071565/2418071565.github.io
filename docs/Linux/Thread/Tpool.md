@@ -73,17 +73,20 @@
 
                 template<class Callable,class ...Args>
                 _m_invoke_impl(Callable&& __f,Args&&... __args)
-                    :__m_t(std::tuple<Callable,Args...>(__f,__args...))
+                    :__m_t(
+                        std::tuple<Callable,Args...>(
+                            __f,std::forward<Args>(__args)...
+                        )
+                    )
                 { }
 
                 // 调用 __f(__args...)
                 template<size_t ..._Ind>
                 void _m_invoke(tuple_indices<_Ind...>)
                 {
-                    
                     std::get<0>(__m_t)(std::get<_Ind>(std::move(__m_t))...);
                 }
-                
+
                 // 生成 tuple 索引包，并调用函数
                 virtual void run()
                 { 
@@ -100,9 +103,11 @@
             thread_task() = default;
 
             template<class Callable,class ...Args>
-            thread_task(Callable&& func,Args... args)
+            thread_task(Callable&& func,Args&&... args)
                 :_m_impl(
-                    new _m_invoke_impl<std::tuple<Callable,Args...>>(func,args...)
+                    new _m_invoke_impl<std::tuple<Callable,Args...>>(
+                        func,std::forward<Args>(args)...
+                    )
                 )
             { }
 
@@ -186,13 +191,15 @@
             template<class Callable,class ...Args>
             void add_task(Callable&& _func,Args&&... _args)
             {
-                _task_que.put(::thread_task(_func,_args...));
+                _task_que.put(::thread_task(_func,std::forward<Args>(_args)...));
             }
         };
 
 
         thread_pool* thread_pool::_single = nullptr;
         std::mutex thread_pool::_single_mt;
+
+
 
         ```
 
