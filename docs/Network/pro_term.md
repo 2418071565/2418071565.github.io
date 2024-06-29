@@ -36,7 +36,7 @@ ICANN（Internet Corporation for Assigned Names and Numbers） 是一个非营�
 
 ## **TLD**
 
-顶级域（Top-Level Domain, TLD）是互联网域名系统（DNS）的最上层域。TLD 是域名的最后一部分，在“.”后面，例如在 www.example.com 中，.com 就是 TLD。TLD 由互联网名称与数字地址分配机构（ICANN）管理。以下是一些有关 TLD 的详细概念：
+顶级域（Top-Level Domain, TLD）是互联网域名系统（DNS）的最上层域。TLD 是域名的最后一部分，在“.”后面，例如在 www.example.com 中，.com 就是 TLD。TLD 由互联网名称与数字地址分配机构（ICANN）管理。
 
 ## **RIP/OSPF/BGP**
 
@@ -46,17 +46,20 @@ ICANN（Internet Corporation for Assigned Names and Numbers） 是一个非营�
 
 
 
-## **RTT/RTO/MSS/TTL**
+## **RTT/RTO/TTL/MSL/MTU/MSS**
 
 RTT（Round-Trip Time 往返时延）：是数据发送时刻到接收到确认的时刻的差值，也就是包的往返时间。
 
 RTO （Retransmission Timeout 超时重传时间）。
 
+TTL（Time To Live，生存时间）是网络层中的一个重要概念，它用于控制数据包在网络中的生命周期。TTL 的主要目的是防止数据包在网络中无限循环，从而导致网络拥塞。
+
+MSL（Maximum Segment Lifetime）是 TCP（传输控制协议）中的一个重要概念，它定义了 TCP 段（Segment）在网络中可以存活的最长时间。
+
 MSS（Maximum Segment Size，最大报文段大小）是指 TCP 协议中单个数据段（不包括 TCP 和 IP 头部）的最大数据负载大小。MSS 是在 TCP 连接建立时通过 TCP 三次握手过程协商确定的。MSS 的确定可以帮助双方在传输数据时避免 IP 分片，提高传输效率和稳定性。
 
 
-TTL（Time To Live，生存时间）是网络层中的一个重要概念，它用于控制数据包在网络中的生命周期。TTL 的主要目的是防止数据包在网络中无限循环，从而导致网络拥塞。
-
+MTU（Maximum Transmission Unit，最大传输单元）是计算机网络中一个关键的概念，它定义了一个数据包在网络上传输时的最大尺寸。MTU 的值表示一个数据包的最大字节数，包括头部信息和数据部分。在不同的网络介质和协议中，MTU 的值可能会有所不同。
 
 ## **CIDR**
 
