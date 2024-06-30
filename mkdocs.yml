@@ -136,6 +136,7 @@ nav:
     - C++14:
       - decltype(auto): C++/c++14/decltype(auto).md
     - C++17:
+      - Fold expressions: C++/c++17/fold.md
       - 文件库: C++/c++17/filesystem.md
     - C++20:
       - format: C++/c++20/format/format.md

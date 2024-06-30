@@ -217,16 +217,16 @@ int pthread_mutex_unlock(pthread_mutex_t *mutex);
 #include <pthread.h>
 
 int pthread_cond_destroy(pthread_cond_t *cond);
-// cond 要销毁的锁
+// cond 要销毁的条件变量
 
 int pthread_cond_init(pthread_cond_t *restrict cond,
         const pthread_condattr_t *restrict attr);
-// cond 要初始化的锁，attr 初始化选项，填 nullptr
+// cond 要初始化的条件变量，attr 初始化选项，填 nullptr
 
 pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 ```
 
-对于创建的局部条件变量要使用 `pthread_cond_destroy` 和 `pthread_cond_init` 来销毁和初始化，定义全局的条件变量要使用 `PTHREAD_COND_INITIALIZER` 来初始化，不需要手动销毁。
+对于局部条件变量要使用 `pthread_cond_destroy` 和 `pthread_cond_init` 来销毁和初始化，全局的条件变量使用 `PTHREAD_COND_INITIALIZER` 来初始化，不需要手动销毁。
 
 
 #### **线程等待**
