@@ -255,6 +255,8 @@ int pthread_cond_signal(pthread_cond_t *cond);
 
 唤醒的队列会重新加入到锁的竞争中。
 
+??? warning "虚假唤醒"
+
 
 ??? code "线程同步"
     ```cpp

@@ -105,7 +105,7 @@ nav:
       - TCP: Network/Transport/tcp.md
     - 网络层:
       - 概述: Network/network/index.md
-      - IP: Network/network/ip.md
+      - IPv4: Network/network/ip.md
       - ICMP: Network/network/icmp.md
     - 链路层:
       - 概述: Network/link/index.md
@@ -139,6 +139,7 @@ nav:
       - Fold expressions: C++/c++17/fold.md
       - 文件库: C++/c++17/filesystem.md
     - C++20:
+      - 信号量: C++/c++20/semaphore/semaphore.md
       - format: C++/c++20/format/format.md
   - MySQL:
     - 简介: MySql/index.md
