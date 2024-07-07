@@ -84,9 +84,12 @@ nav:
         - 线程互斥与同步: Linux/Thread/Sync.md
         - 线程池: Linux/Thread/Tpool.md
       - 文件系统:
-        - 文件 IO: Linux/FileSys/FileIO/FileIO.md
-        - 磁盘文件系统: Linux/FileSys/FileSys/FileSys.md
+        - 基础 IO: Linux/FileSys/FileIO/FileIO.md
+        - ext2 文件系统: Linux/FileSys/FileSys/FileSys.md
         - 虚拟文件系统: Linux/FileSys/VFS/VFS.md
+      - I/O:
+        - I/O 模型: Linux/IO/IOmodel/model.md
+        - 多路复用: Linux/IO/Multiplexing/Multiplexing.md
     - 其他:
       - 根目录: Linux/others/root/root.md
       - 环境变量: Linux/others/envir/envir.md
