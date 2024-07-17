@@ -26,6 +26,7 @@ nav:
       - 哈希表: DS/HTable/HTable.md
       - 并查集: DS/UnionFind/UF.md
       - 分块: DS/Block/Block.md
+      - 线段树: DS\Block\Block.md
       - 树状数组: 
         - 树状数组: DS/BIT/BIT.md
         - 二维树状数组: DS/BIT/2_BIT.md
@@ -125,7 +126,8 @@ nav:
       - 继承: C++/继承多态/继承.md
       - 多态: C++/继承多态/多态.md
     # - 内存管理: C++/内存管理/new&delete.md
-    - 异常处理（未完工）: C++/异常处理/异常.md
+    - 异常处理: C++/异常处理/异常.md
+    - IO 流: C++/IO流/IO.md
     - C++11:
       - 列表初始化: C++/c++11/列表初始化.md
       - 类的新功能: C++/c++11/类的新功能.md
