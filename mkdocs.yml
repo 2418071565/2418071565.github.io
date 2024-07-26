@@ -26,7 +26,6 @@ nav:
       - 哈希表: DS/HTable/HTable.md
       - 并查集: DS/UnionFind/UF.md
       - 分块: DS/Block/Block.md
-      - 线段树: DS\Block\Block.md
       - 树状数组: 
         - 树状数组: DS/BIT/BIT.md
         - 二维树状数组: DS/BIT/2_BIT.md
