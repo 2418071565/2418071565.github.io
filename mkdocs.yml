@@ -120,7 +120,7 @@ nav:
   - C++:
     - 简介: C++/intro.md
     - 基础: C++/c++初阶杂项.md
-    - 模板: C++/模板.md
+    - 模板基础: C++/模板.md
     - 继承多态:
       - 继承: C++/继承多态/继承.md
       - 多态: C++/继承多态/多态.md
@@ -133,14 +133,14 @@ nav:
       - 类型声明: C++/c++11/类型声明.md
       - 原始字符串: C++/c++11/原始字符串.md
       - 右值引用和移动语义: C++/c++11/右值引用和移动语义.md
-      - 可变参数模板: C++/c++11/可变参数模板.md
       - 智能指针: C++/c++11/智能指针.md
       - STL 的改动（未完工）: C++/c++11/STL.md
-      - 多线程: C++/c++11/多线程.md
+      - 元编程相关: C++/c++11/cppmate.md
+      - 多线程相关: C++/c++11/多线程.md
     - C++14:
       - decltype(auto): C++/c++14/decltype(auto).md
     - C++17:
-      - Fold expressions: C++/c++17/fold.md
+      - 元编程相关: C++/c++17/cppmate.md
       - 文件库: C++/c++17/filesystem.md
     - C++20:
       - 信号量: C++/c++20/semaphore/semaphore.md
