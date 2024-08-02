@@ -80,3 +80,14 @@ void topo()
 我们进行一次拓扑排序之后，我们可以发现，所有不在环上的点入度都变成了 $0$ ，而在环上的点入度都不为 $0$。
 
 在处理一些有环图问题时（如：基环树），首先将环处理出来，可以很大程度上降低问题的难度。
+
+=================
+
+
+## **Exercise**
+
+|题目|难度|知识|
+|:-:|:-:|:-:|
+|[B3644](https://www.luogu.com.cn/problem/B3644)|普及−|拓扑排序模板|
+|[P1347](https://www.luogu.com.cn/problem/P1347)|普及+/提高|拓扑排序判断环|
+|[LC.2603](https://leetcode.cn/problems/collect-coins-in-a-tree/description/)|困难|拓扑排序变形|

@@ -42,6 +42,7 @@ nav:
       - 树（未完工）: 
         - 树基础: Graph/Tree/Basic/Basic.md
         - 最小生成树: Graph/Tree/MST/MST.md
+        - 树链剖分: Graph/Tree/hld/hld.md
     - 数学:
       - 计算几何:
         - 二维计算几何基础: Math/Geometry/2DGeometry/2D.md
@@ -135,12 +136,13 @@ nav:
       - 右值引用和移动语义: C++/c++11/右值引用和移动语义.md
       - 智能指针: C++/c++11/智能指针.md
       - STL 的改动（未完工）: C++/c++11/STL.md
-      - 元编程相关: C++/c++11/cppmate.md
+      - 模板相关: C++/c++11/cppmate.md
       - 多线程相关: C++/c++11/多线程.md
     - C++14:
+      - 模板相关: C++/c++14/cppmate.md
       - decltype(auto): C++/c++14/decltype(auto).md
     - C++17:
-      - 元编程相关: C++/c++17/cppmate.md
+      - 模板相关: C++/c++17/cppmate.md
       - 文件库: C++/c++17/filesystem.md
     - C++20:
       - 信号量: C++/c++20/semaphore/semaphore.md

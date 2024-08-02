@@ -146,11 +146,11 @@ Stack a{"Hello World"};
 Stack<char[12]>
 ```
 
-这导致我们无法再插入其他长度的字符串，这并不是我们希望的。导致这样的原因就是因为构造函数为**引用传值**无法进行类型退化，使字符串数组类型退化为指针。
+这导致我们无法再插入其他长度的字符串，这并不是我们希望的。导致这样的原因就是因为构造函数为**引用传值**，在模板类型推导时无法进行类型退化，使字符串数组类型退化为指针。
 
 解决方法有两种：
 
-- 使用参数改用按值传递：
+- 参数改用按值传递：
 
 ```cpp
 Stack(Tp elem)
@@ -161,19 +161,42 @@ Stack(Tp elem)
 - 使用**推断指引**，它的语法如下：
 
 ```cpp
+// 非模板推导指引
+ClassName(...) -> ClassName<...>;
+
+// 模板推断指引
 template <typename ...Args>
 ClassName(Args...) -> ClassName<deduced_types>;
 ```
 
-其中：
-
-- `ClassName(Args...)` 是一个构造函数的声明或模式，用于匹配调用时提供的参数类型。
-
-- `-> ClassName<deduced_types>` 是返回类型，指定了如何从构造函数参数类型推导出模板参数类型。
 
 在这个例子里，它需要写成这样：
 
 ```cpp
 template<class Tp>
-Stack(Tp)->Stack<Tp>;
+Stack(Tp) -> Stack<Tp>;
 ```
+
+这句推导指引的意思是：当构造 `Stack` 类接收到任意一个类型时，我们应当使用其值类型进行模板类型的推导，而不是使用类型的引用进行推导。要注意的是这个指引语句必须出现在和模板类定义相同的作用域活命名空间内。
+
+#### **变参推断指引**
+
+推断指引也可以和可变模板参数结合在一起，如下是STL 库中为 `std::array` 定义的一个推导指引：
+
+```cpp
+namespace std {
+    template<class Tp, class ...Tps> array(Tp, Tps...)
+        ->array<
+            enable_if_t<(is_same_v<Tp, Tps> and ...), Tp>, 
+            (1 + sizeof...(Tps))
+        >;
+}
+```
+
+它实现了这样的数组初始化：
+
+```cpp
+std::array arr{ 1,1,4,5,1,4 };
+```
+
+同时他会进行类型检查，保证所有的类型都相同。
