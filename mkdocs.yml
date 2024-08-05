@@ -144,6 +144,7 @@ nav:
     - C++17:
       - 模板相关: C++/c++17/cppmate.md
       - 文件库: C++/c++17/filesystem.md
+      - if 语句: C++/c++17/ifstatement.md
     - C++20:
       - 信号量: C++/c++20/semaphore/semaphore.md
       - format: C++/c++20/format/format.md
@@ -163,6 +164,8 @@ nav:
       - 简介: Others/Git/index.md
     - JSON:
       - 简介: Others/JSON/index.md
+    - cmake: 
+      - 简介: Others/CMake/HelloWorld.md
     - xmake:
       - 简介: Others/xmake/index.md
       - xmake.lua 语法: Others/xmake/config.md
