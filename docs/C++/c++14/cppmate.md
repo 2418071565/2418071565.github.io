@@ -10,7 +10,7 @@ auto f = [](auto a, auto b) {
 };
 ```
 
-就是再 lambda 中使用 `auto` 关键字，它会在编译时生成如下成员模板：
+就是在 lambda 表达式中使用 `auto` 关键字，它会在编译时生成如下成员模板：
 
 ```cpp
 class lambdaName {

@@ -127,6 +127,7 @@ nav:
       - 多态: C++/继承多态/多态.md
     # - 内存管理: C++/内存管理/new&delete.md
     - 异常处理: C++/异常处理/异常.md
+    - 强制类型转换: C++/typeCast.md
     - IO 流: C++/IO流/IO.md
     - C++11:
       - 列表初始化: C++/c++11/列表初始化.md
@@ -145,6 +146,7 @@ nav:
       - 模板相关: C++/c++17/cppmate.md
       - 文件库: C++/c++17/filesystem.md
       - if 语句: C++/c++17/ifstatement.md
+      - 结构化绑定: C++/c++17/StructBinding.md
     - C++20:
       - 信号量: C++/c++20/semaphore/semaphore.md
       - format: C++/c++20/format/format.md
@@ -158,7 +160,7 @@ nav:
       - 表的增删查改: MySql/SQL/table/idsu.md
       - MySQL内置函数: MySql/SQL/table/buildin_fun.md
       - 复合查询: MySql/SQL/Query.md
-    - MySQL 索引: MySql/MySql_index/MySql_index.md
+    - 数据库的存储: MySql/MySql_index/MySql_index.md
   - Others:
     - Git: 
       - 简介: Others/Git/index.md
@@ -169,6 +171,7 @@ nav:
     - xmake:
       - 简介: Others/xmake/index.md
       - xmake.lua 语法: Others/xmake/config.md
+    - 智能指针杂谈: Others/SPoiner.md
   # - 工具:
   # Qt 废弃
   # - Qt: 

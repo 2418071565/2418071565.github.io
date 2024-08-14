@@ -1,5 +1,5 @@
 
-本文的创作参考了[《背包九讲》](https://github.com/tianyicui/pack){target="_blank"}([原文pdf](./%E8%83%8C%E5%8C%85%E4%B9%9D%E8%AE%B2.pdf))，使用 C/C++ 实现了文中的伪代码，并对文章中的思路给出自己的理解。
+本文的创作参考了[《背包九讲》](https://github.com/tianyicui/pack){target="_blank"}([原文pdf](./%E8%83%8C%E5%8C%85%E4%B9%9D%E8%AE%B2.pdf){target=_blank})，使用 C/C++ 实现了文中的伪代码，并对文章中的思路给出自己的理解。
 
 
 ## **1.01背包**
@@ -125,14 +125,14 @@ for (int i = 0; i < N; ++i) {
 我们将每一类状态单独拿出来进行推导。我们可以得到递推式：
 
 $$
-dp[j]=max\{dp[k]+\frac{w_i(j-k)}{c_i}\mid j-n_ic_i< k\le j , k\equiv j(mod\ c_i)\}
+dp[j]=max\{dp[k]+\frac{w_i(j-k)}{c_i}\mid k = j - xc_i,0 \leq x < \frac{j}{c_i}\}
 $$
 
 有递推式可知，我们要求得就是 $(j-n_ic_i,j]$ ，之间上式的最大值，这不就是维护一个滑动窗口求区间最大值嘛，我们就可以用单调队列来维护。那么问题又来了，这递推式中有 $j$ 呀，区间元素是个变量，这怎么用单调队列来维护？
 很简单，我们将上式中 $j$ 从 $max$ 中提出来即可:
 
 $$
-dp[j]=max\{dp[k]-\frac{w_ik}{c_i}\mid j-n_ic_i< k\le j , k\equiv j(mod\ c_i)\}+\frac{w_ij}{c_i}
+dp[j]=max\{dp[k]-\frac{w_ik}{c_i}\mid k = j - xc_i,0 \leq x < \frac{j}{c_i}\}+\frac{w_ij}{c_i}
 $$
 
 这样单调队列维护上式中 $max$ 表达式中的值， $dp[j]$ 的值 $O(1)$ 时间复杂度就可以计算出来。

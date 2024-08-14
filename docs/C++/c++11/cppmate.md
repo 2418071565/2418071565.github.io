@@ -1,5 +1,29 @@
 
 
+## **模板参数模板**
+
+C++11 引入了模板参数模板（Template Template Parameters）。这个特性允许模板参数本身也可以是模板，从而提供了更高的灵活性和抽象能力。以下是一个简单的示例：
+
+```cpp
+#include <iostream>
+#include <vector>
+
+template <template <typename, typename> class Container, typename T>
+void printContainer(const Container<T, std::allocator<T>>& container) {
+    for (const auto& elem : container) {
+        std::cout << elem << " ";
+    }
+    std::cout << std::endl;
+}
+
+int main() {
+    std::vector<int> vec = {1, 2, 3, 4, 5};
+    printContainer(vec);
+    return 0;
+}
+```
+
+在这个示例中，`printContainer`函数模板使用了模板参数模板。`Container`是一个模板参数，它本身也是一个模板，接受两个类型参数。通过这种方式，`printContainer`函数模板可以接受像`std::vector`这样的容器模板作为参数。
 
 
 
