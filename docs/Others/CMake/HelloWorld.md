@@ -21,4 +21,19 @@ set(CMAKE_CXX_STANDARD 11)  # C++ 标准版本
 add_executable(HelloWorld main.cpp) 
 ```
 
+- add_executable 的格式如下：
+
+```cmake
+# 样式1
+add_executable(app add.c div.c main.c mult.c sub.c)
+# 样式2
+add_executable(app add.c;div.c;main.c;mult.c;sub.c)
+```
+
+
+<hr>
+
+参考：
+
+[CMake 保姆级教程](https://subingwen.cn/cmake/CMake-primer/#2-1-1-%E5%85%B1%E5%A4%84%E4%B8%80%E5%AE%A4){_blank=target}
 
