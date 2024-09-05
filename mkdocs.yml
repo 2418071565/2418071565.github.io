@@ -43,6 +43,8 @@ nav:
         - 树基础: Graph/Tree/Basic/Basic.md
         - 最小生成树: Graph/Tree/MST/MST.md
         - 树链剖分: Graph/Tree/hld/hld.md
+      - 强连通相关:
+        - 强连通分量: Graph/scc/scc.md
     - 数学:
       - 计算几何:
         - 二维计算几何基础: Math/Geometry/2DGeometry/2D.md
@@ -150,18 +152,19 @@ nav:
     - C++20:
       - 信号量: C++/c++20/semaphore/semaphore.md
       - format: C++/c++20/format/format.md
-  - MySQL:
-    - 简介: MySql/index.md
+  - 数据库系统:
+    - 简介: DB/index.md
     - SQL: 
-      - 库操作: MySql/SQL/BaseOp.md
-      - 表操作: MySql/SQL/Op.md
-      - 数据类型: MySql/SQL/DataType.md
-      - 表的约束: MySql/SQL/table/constraints.md
-      - 表的增删查改: MySql/SQL/table/idsu.md
-      - MySQL内置函数: MySql/SQL/table/buildin_fun.md
-      - 复合查询: MySql/SQL/Query.md
-    - 数据库的存储: MySql/MySql_index/MySql_index.md
-    - 缓存池: MySql/BufferPool/BufferPool.md
+      - 库操作: DB/SQL/BaseOp.md
+      - 表操作: DB/SQL/Op.md
+      - 数据类型: DB/SQL/DataType.md
+      - 表的约束: DB/SQL/table/constraints.md
+      - 表的增删查改: DB/SQL/table/idsu.md
+      - MySQL 内置函数: DB/SQL/table/buildin_fun.md
+      - 复合查询: DB/SQL/Query.md
+    - 数据库的存储: DB/storage/storage.md
+    - 缓存池: DB/BufferPool/BufferPool.md
+    - 索引: DB/index/index.md
   - Others:
     - Git: 
       - 简介: Others/Git/index.md
