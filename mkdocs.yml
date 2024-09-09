@@ -164,7 +164,8 @@ nav:
       - 复合查询: DB/SQL/Query.md
     - 数据库的存储: DB/storage/storage.md
     - 缓存池: DB/BufferPool/BufferPool.md
-    - 索引: DB/index/index.md
+    - 数据结构: 
+      - 哈希表: DB/DS/HTable.md
   - Others:
     - Git: 
       - 简介: Others/Git/index.md
