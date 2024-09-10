@@ -99,3 +99,28 @@ $$
 -  $(a-b)mod\space n=(a\space mod \space n-b\space mod\space n)mod\space n$
 -  $(a\times  b)mod\space n=(a\space mod \space n\times b\space mod\space n)mod\space n$
 - 除法不具有这样的性质
+
+
+## **积性函数**
+
+### **定义**
+
+**数论函数：**指定义域为正整数的函数。数论函数也可以视作一个数列。
+
+若函数 $f(n)$ 满足 $f(1) = 1$ 且对于任意两个互质的整数 $a,b$，有 $f(ab) = f(a)f(b)$，则 $f(n)$ 为**积性函数**。
+
+
+若函数 $f(n)$ 满足 $f(1) = 1$ 且对于任意两个整数 $a,b$，有 $f(ab) = f(a)f(b)$，则 $f(n)$ 为**完全积性函数**。
+
+### **性质**
+
+若 $f(x)$ 和 $g(x)$ 都是积性函数，则一下函数 $h(x)$ 也是积性函数：
+
+$$
+\begin{matrix}
+h(x) =&f(x^p)\\
+h(x) =&f^p(x)\\
+h(x) =&f(x)g(x)\\
+h(x) =&\sum_{d\mid x}f(d)g(\frac{x}{d})
+\end{matrix}
+$$
