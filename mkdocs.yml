@@ -53,6 +53,7 @@ nav:
         - 数论基础: Math/NumberTheory/Fd.md
         - 快速幂: Math/NumberTheory/Qpow/qpow.md
         - 乘法逆元: Math/NumberTheory/Inv/Inv.md
+        - 筛法: Math/NumberTheory/sieve/sieve.md
       - 数值计算:
         - 牛顿迭代法: Math/Numerical/NtsMethod/Nt.md
         - 快速平方根倒数算法: Math/Numerical/QSqrt/QSqrt.md
