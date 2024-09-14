@@ -138,15 +138,36 @@ Cuckoo 译为布谷鸟，也就是杜鹃，杜鹃会占据其他鸟类的巢穴�
 
 每个可以扩展哈希表头/目录/桶的大小都不能超过一个页（在 p2 中要我们实现的三种页，就对应这三部分），这也是方便我们实现，不然横跨多页的结构，要多做很多工作。
 
+在 Header Page 中，有两个字段：
 
-还有一些其他的变量：
+- `directory_page_ids_`：记录所有目录的页 id。
 
-- 全局深度（Global Depth）：与 directories 关联，global depth 等于 id（二进制串）的位长。
-
-- 局部深度（Local Depth）：与每一个 bucket 关联，local depth 等于对应 bucket 哈希值的位长。local depth 总是小于等于 global depth。若一个 bucket 的 local depth 小于 global depth，那么有多个 directoy 指向该 bucket。
+- `max_depth_`：Header Page 是对 hash 的 MSB 进行索引，所以这里 `max_depth_` 是处理高位的最大数量。`1 << max_depth_` 就是可以记录的最大目录数。
 
 
-每当桶的元素满了以后，就要分裂桶，并将 Local Depth 加 1，如果此时 Local Depth 高于 Global Depth，就要将桶目录进行扩充，将 Global Depth 加 1，然后大小扩大二倍：
+
+在 Directory Page 有如下字段：
+
+- `max_depth_`：Directory Page 是对 hash 的 LSB 进行索引，这里的 `max_depth_` 是能处理的最低为的最大数量。`1 << max_depth_` 是可以记录的最大桶数量。
+
+- `global_depth_`：当前目录处理 hash 的 LSB 数量。
+
+- `local_depths_`：每个桶处理 hash 的 LSB 数量。
+
+- `bucket_page_ids_`：每个桶对应的页 id。
+
+在 Bucket Page 有如下字段：
+
+- `size_`：当前桶中键值对个数。
+
+- `max_size_`：当前桶能放的最多键值对个数。
+
+- `array_`：存放键值对的数组。
+
+
+我们通过 hash 值索引到对应的桶中，将数据插入。当桶满了以后，就要将桶的 `local_depth_` 加一，表示该桶要多考虑一位，这个操作会将桶分裂为两部分。
+
+如果 `local_depth_` 超过了 `global_depth_`，就要将目录的 `global_depth_` 也加一，存放目录的数量扩大一倍。
 
 <figure markdown="span">
     ![Image title](./08.png){ width="550" }

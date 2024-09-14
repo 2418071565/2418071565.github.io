@@ -167,6 +167,8 @@ nav:
     - 缓存池: DB/BufferPool/BufferPool.md
     - 数据结构: 
       - 哈希表: DB/DS/HTable.md
+      - B+ 树: DB/DS/Bplus.md
+      - 并发控制: DB/DS/CC.md
   - Others:
     - Git: 
       - 简介: Others/Git/index.md
@@ -178,8 +180,9 @@ nav:
       - 简介: Others/xmake/index.md
       - xmake.lua 语法: Others/xmake/config.md
     - 智能指针杂谈: Others/SPoiner.md
-    - 八股整理: 
-      - C++: Others/bg/Cpp.md
+    - 面试: 
+      - 自我介绍 : Others/interview/ps.md
+      - C++: Others/interview/Cpp.md
   # - 工具:
   # Qt 废弃
   # - Qt: 
