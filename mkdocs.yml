@@ -163,12 +163,14 @@ nav:
       - 表的增删查改: DB/SQL/table/idsu.md
       - MySQL 内置函数: DB/SQL/table/buildin_fun.md
       - 复合查询: DB/SQL/Query.md
-    - 数据库的存储: DB/storage/storage.md
-    - 缓存池: DB/BufferPool/BufferPool.md
-    - 数据结构: 
-      - 哈希表: DB/DS/HTable.md
-      - B+ 树: DB/DS/Bplus.md
-      - 并发控制: DB/DS/CC.md
+    - Database Storage: DB/storage/storage.md
+    - Memory Management: DB/BufferPool/BufferPool.md
+    - Access Methods: 
+      - Hash Tables: DB/DS/HTable.md
+      - Trees Indexes: DB/DS/Bplus.md
+      - Index Concurrency Control: DB/DS/CC.md
+    - Operator Execution:
+      - Sorting & Aggregations Algorithms: DB/OpExe/sort.md
   - Others:
     - Git: 
       - 简介: Others/Git/index.md
