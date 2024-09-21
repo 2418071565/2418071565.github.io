@@ -171,6 +171,7 @@ nav:
       - Index Concurrency Control: DB/DS/CC.md
     - Operator Execution:
       - Sorting & Aggregations Algorithms: DB/OpExe/sort.md
+      - Joins Algorithms: DB/OpExe/join.md
   - Others:
     - Git: 
       - 简介: Others/Git/index.md
