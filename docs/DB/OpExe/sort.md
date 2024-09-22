@@ -85,7 +85,7 @@ value：有两种表示方式：
 
 比如：原先我们有 $B$ 个可用页面，我们划分为两个 $B/2$ 的 buffer pool，这样我们只能进行 $\frac{B}{2} - 1$ 路归并。但是我们减少了 CPU 等待磁盘 I/O 请求的时间。
 
-因为遍历次数是 $1 + \left \lceil \log_{B-1}{\left \lceil \frac{N}{B}\right \rceil} \right \rceil$，所以有些时候 $B$ 减少一半并不会减少遍历次数。
+因为遍历次数是 $1 + \left \lceil \log_{B-1}{\left \lceil \frac{2N}{B}\right \rceil} \right \rceil$，所以有些时候 $B$ 减少一半并不会增加遍历次数，我们就可以使用双缓冲，来提高整体效率。
 
 ### **Using B+ Trees**
 
