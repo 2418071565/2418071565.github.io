@@ -154,7 +154,7 @@ nav:
       - 信号量: C++/c++20/semaphore/semaphore.md
       - format: C++/c++20/format/format.md
   - 数据库系统:
-    - 简介: DB/index.md
+    - Introduction: DB/index.md
     - SQL: 
       - 库操作: DB/SQL/BaseOp.md
       - 表操作: DB/SQL/Op.md
@@ -172,6 +172,7 @@ nav:
     - Operator Execution:
       - Sorting & Aggregations Algorithms: DB/OpExe/sort.md
       - Joins Algorithms: DB/OpExe/join.md
+      - Query Processing: DB/OpExe/query.md
   - Others:
     - Git: 
       - 简介: Others/Git/index.md
