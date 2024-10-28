@@ -173,6 +173,7 @@ nav:
       - Sorting & Aggregations Algorithms: DB/OpExe/sort.md
       - Joins Algorithms: DB/OpExe/join.md
       - Query Processing: DB/OpExe/query.md
+      - Parallel Executin: DB/OpExe/cc.md
   - Others:
     - Git: 
       - 简介: Others/Git/index.md
