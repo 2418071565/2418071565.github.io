@@ -252,9 +252,9 @@ extra_css:
   - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css
 
 extra:
-  social:
+  social: 
     - icon: fontawesome/brands/github
-      link: https://github.com/2418071565
+      link: https://github.com/2418071565/2418071565.github.io.git
     - icon: fontawesome/solid/paper-plane
       link: mailto:idlecyb@163.com
 

@@ -28,6 +28,7 @@ BDMS 支持两次并行方式：查询间并行和查询内并行。
 
     [Latency numbers you should know.](https://blog.bytebytego.com/p/ep22-latency-numbers-you-should-know){target=_blank}
 
+<hr>
 
 ## **Parallel vs Distributed Databases**
 
@@ -40,6 +41,8 @@ BDMS 支持两次并行方式：查询间并行和查询内并行。
 - 分布式数据，资源相距很远，可能两个节点间横跨国家甚至大陆，这就导致节点间的通信代价很大，而且缓慢，容易失败。
 
 尽管数据库被分散到多个节点上，但对于应用来说，逻辑上只有一个数据库实例。因此在单机数据库执行的操作，在并行数据库上获得的结果应该相同。
+
+<hr>
 
 ## **Process Models**
 
@@ -105,6 +108,7 @@ DBMS 一定比 OS 更了解每个执行计划优先需要的资源。在 SQL Ser
 
 由测是嵌入式数据库的一些例子。最著名的就是 SQLite，他被广泛嵌入在各种应用程序中（e.g. 微信），大多数程序当需要数据库时，就会将其嵌入， 只需要链接一个 SQL 库，然后调用就可以。在 SQLite 的官网，它提供了一个 C 的头文件，在这个文件中包含整个数据库的实现。
 
+<hr>
 
 ## **Inter-Query Parallelism**
 
@@ -112,6 +116,7 @@ DBMS 一定比 OS 更了解每个执行计划优先需要的资源。在 SQL Ser
 
 当查询是只读的，多查询并行不会有问题，但是当有写操作时，就会导致数据竞争。这个问题将在 lecture 15 讨论。
 
+<hr>
 
 ## **Intra-Query parallelism**
 
@@ -141,4 +146,75 @@ DBMS 一定比 OS 更了解每个执行计划优先需要的资源。在 SQL Ser
 
 ### **Inter-Operator Parallelism (Vertical)**
 
-算子间并行
+算子间并行，DBMS 将算子串联成 pipeline，数据自下而上流动，执行流同时执行多个算子，每一个算子都不会阻塞整个过程，它每计算过一个记录，就将结果交给下一个算子，也称为 pipelined parallelism：
+
+<figure markdown="span">
+  ![Image title](./37.png){ width="550" }
+</figure>
+
+<img src="../38.png" align="right" height="150" width="150">
+
+这种方式在流式 DBMS 中非常流行，数据不间断的流入系统，系统不断计算出新的结果。但在一般的 DBMS 中，这中方法并不适用，因为传统数据库的聚合操作，需要整个数据集，才能得出结果，这就导致了数据流的阻塞，不能很好的发挥多核性能。
+
+而且在流式系统中，聚合操作有所不同，它计算的是输入流当前输入的所有数据的聚合值，对于传统 DBMS 每次有输入，都要重新计算一次，对于流式数据库，一次查询会一直执行，每次有新的数据输入，就将其值聚合进之前的结果中，然后输出，避免了多次的重复计算。右侧是一些常见的流式系统：Flink，Kafka 等等，国内有 Timeplus 等等。
+
+<br>
+<br>
+
+
+### **Bushy Parallelism**
+
+这种并行方式，就是上面两张的混合，执行流即同时执行多个算子，每个算子内也有多个执行流来加速单个算子，使用 exchange 算子合并多个执行流输出的答案。
+
+<figure markdown="span">
+  ![Image title](./39.png){ width="650" }
+</figure>
+
+
+<hr>  
+
+## **I/O Parallelism**
+
+如果磁盘 IO 是性能瓶颈，那么使用额外的线程执行算子也无法提高效率。这就要用到 IO 并行，有两种办法：多磁盘并行、数据库分块。它们的主要想法都是将数据库分布到多个存储设备上。举个例子，当我们有四个磁盘时，我们可以将数据分布在不同的磁盘上，多个线程执行不同的数据集时，可以实现同时向磁盘写入。
+
+许多不同的选择都需要权衡利弊：
+
+- Multiple Disks per Database
+
+- One Database per Disk
+
+- One Relation per Disk
+
+- Split Relation across Multiple Disks
+
+### **Multi-Disk Parallelism**
+
+通过 OS 或硬件配置将 DBMS 的数据文件存储到多个存储设备上。这可以通过 RAID（redundant array of inexpensive disks， 廉价磁盘冗余阵列） 实现，对于 RAID0 ，每个 page 在磁盘中有一份，DBMS 访问不同部分时，可以并行的进行 IO 处理，但是如果数据页出现错误，那么这页的数据就完全丢失了。对于 RAID1 ，每份数据有多份备份，也就是下图所示，DBMS 依然可以并行的访问，当有数据出现错误，也可以使用备份，但是空间占用很大。
+
+<figure markdown="span">
+  ![Image title](./40.png){ width="450" }
+</figure>
+
+备份的数量，取决于对磁盘容量和安全性的权衡。多磁盘的并行对于上层的 DBMS 来说是透明的。
+
+### **Database Partitioning**
+
+数据库分区，它是将数据库分为几个不相交的子集，不同子集分配个离散的磁盘。在分布式系统中，不同的磁盘可能相距甚远，运行在一个节点上的 DBMS 如果可以指定数据的流向，这就会很舒服，它可以把常用数据分配到距自己近一点的存储节点中，这会大大降低 IO 的消耗。
+
+一些数据库允许指定 database 所在的磁盘位置，如果 DBMS 将每个 database 存储在单独的目录中，则在文件系统级别很容易做到这一点，例如一些嵌入式的数据库，不同的 database 对应不同目录位置，单节点环境下这很简单，对于对节点有更复杂的机制。
+
+如果没有这样的机制，但是有 buffer pool 的存在，这会减轻数据分布的痛苦，因为常用的数据页会被缓存在 buffer pool 中。
+
+数据库的分区对上层的应用要是透明的。
+
+## **Conclusion**
+
+并发执行很重要，几乎所有 DBMS 都需要它，但要将这件事做对很难，体现在
+
+- Coordination Overhead
+
+- Scheduling
+
+- Concurrency Issues
+
+- Resource Contention
