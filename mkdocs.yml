@@ -1,11 +1,11 @@
 repo_url: https://github.com/2418071565/2418071565.github.io.git
-site_name: Made By CYB
+site_name: Made By Cyb
 
 copyright: "CopyRight &copy CYB"
 edit_uri: edit/master/docs
 
 nav:
-  - 主页: index.md
+  - Start: index.md
   - 数据结构与算法: 
     - 简介: DS_Algo.md
     - 算法: 
@@ -58,7 +58,6 @@ nav:
         - 牛顿迭代法: Math/Numerical/NtsMethod/Nt.md
         - 快速平方根倒数算法: Math/Numerical/QSqrt/QSqrt.md
     - 问题总结:
-      # - 树上最小支配集:
       - 整数拆分: UsualQ/IntPartition/IntPartition.md
       - 区间最大子段和: UsualQ/MaxSumOfSub/MaxSumOfSub.md
       - 暑期集训: UsualQ/SummerTraining/SumTraining.md
