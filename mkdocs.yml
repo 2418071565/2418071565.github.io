@@ -5,7 +5,9 @@ copyright: "CopyRight &copy CYB"
 edit_uri: edit/master/docs
 
 nav:
-  - Start: index.md
+  - About: 
+    - 👨‍💻: index.md
+    - 😋: hobbies.md
   - 数据结构与算法: 
     - 简介: DS_Algo.md
     - 算法: 
@@ -76,8 +78,6 @@ nav:
       - 进程:
         - 进程概念: Linux/ProCon/ProCon.md
         - 进程状态: Linux/ProStatus/ProStatus.md
-        # - 进程调度策略: Linux/PSStrategy/PSStrategy.md
-        # - 进程地址空间: Linux/ProAddrSpace/ProAddrSpace.md
         - 进程控制: Linux/ProCtrl/ProCtrl.md
         - 进程间通信: Linux/IPC/IPC.md
         - 守护进程: Linux/DaePro/DaePro.md
@@ -176,6 +176,7 @@ nav:
       - Query Planning & Optimization: DB/OpExe/qo.md
     - Concurrency Control:
       - Concurrency Control Theory: DB/CC/cct.md
+      - Two Phase Locking: DB/CC/2pl.md
   - Others:
     - Git: 
       - 简介: Others/Git/index.md
