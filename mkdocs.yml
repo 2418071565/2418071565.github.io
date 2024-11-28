@@ -127,7 +127,7 @@ nav:
     - 继承多态:
       - 继承: C++/继承多态/继承.md
       - 多态: C++/继承多态/多态.md
-    # - 内存管理: C++/内存管理/new&delete.md
+    - 内存管理: C++/内存管理/new&delete.md
     - 异常处理: C++/异常处理/异常.md
     - 强制类型转换: C++/typeCast.md
     - IO 流: C++/IO流/IO.md
@@ -176,7 +176,8 @@ nav:
       - Query Planning & Optimization: DB/OpExe/qo.md
     - Concurrency Control:
       - Concurrency Control Theory: DB/CC/cct.md
-      - Two Phase Locking: DB/CC/2pl.md
+      - Two Phase Locking: DB/CC/tpl.md
+      - Timestamp Ordering Concurrency Control: DB/CC/TOCC.md
   - Others:
     - Git: 
       - 简介: Others/Git/index.md
@@ -191,12 +192,6 @@ nav:
     # - 面试: 
     #   - 自我介绍 : Others/interview/ps.md
     #   - C++: Others/interview/Cpp.md
-  # - 工具:
-  # Qt 废弃
-  # - Qt: 
-  #   - 简介: Qt/start.md
-  #   - 初识Qt: Qt/QtBasis/QtBasis.md
-  #   - 信号与槽: Qt/SigAndSlot/SigAndSlot.md
 
 
 theme:

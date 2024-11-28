@@ -90,7 +90,7 @@ TCP 首部中没有明确的数据大小字段，TCP 包的大小要用 IP 数�
 
 TCP 包中数据大小 = IP 报总长度 - IP 头部长度 - TCP 头部长度。
 
-对于 TCP 包的长度通常不宜过大，因为链路层的 MAC 帧的 MTU（Maximum Transmission Unit，最大传输单元）是 1500Byte，所以 IP 报如果超过 MTU 的话，IP 是会对数据进行分片的，分片又会导致数据重传的概率，所以整个 IP 报的长度最好不超过 MTU，这也是 TCP 要分包的原因。（详细会在 [IP 章节](/Network/network/ip) 详细说明）
+对于 TCP 包的长度通常不宜过大，因为链路层的 MAC 帧的 MTU（Maximum Transmission Unit，最大传输单元）是 1500Byte，所以 IP 报如果超过 MTU 的话，IP 是会对数据进行分片的，分片又会导致数据重传的概率，所以整个 IP 报的长度最好不超过 MTU，这也是 TCP 要分包的原因。（详细会在 [IP 章节](../network/ip.md) 详细说明）
 
 ## **可靠传输**
 
