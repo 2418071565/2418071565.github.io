@@ -146,11 +146,11 @@ $WriteSet(T_i) \cap WriteSet(T_j) = \phi$
 
 OCC 与 Basic T/O 的思路类似，都是在检查事务之间的 WW、WR 冲突。当冲突发生的频率很低时，即：
 
-- 大部分事务都是读事务
+- 大部分事务都是读事务时
 
-- 大部分事务之间访问的数据间没有交集
+- 大部分事务之间访问的数据间没有交集时
 
-OCC 的表现很好，如在数据库体量较大，workload 比较均衡的场景下。但依然存在一些问题：
+OCC 的表现很好，如在数据库体量较大， workload 比较均衡的场景下。但依然存在一些问题：
 
 - 将数据本地复制到事务的私有工作区的开销很高。
 
@@ -159,3 +159,127 @@ OCC 的表现很好，如在数据库体量较大，workload 比较均衡的场�
 - 中止可能比其他协议更浪费时间，因为它们仅在事务已经执行之后发生。
 
 - 时间戳分配瓶颈。
+
+<hr>
+
+## **Dynamic Databases and The Phantom Problem**
+
+在之前的讨论中，我们考虑了对数据库中的一组静态对象进行操作的事务。然而，当事务执行插入、更新和删除时，我们会遇到一系列新的复杂情况。当事务仅锁定现有记录而忽略正在创建的记录时，就会出现幻读（Phantom Read）问题。这种疏忽可能会导致 non-serializable Schedule 的执行。
+
+<figure markdown="span">
+  ![Image title](./16.png){ width="750" }
+</figure>
+
+> 幻读和不可重复读不同，不可重复读是对同一个记录，多次读读到不同的值，而幻读是多次读读到的数据数量不同。
+
+解决这个问题的方法：
+
+- 重新执行扫描（Re-Execute Scans）：事务可能会在提交时重新运行查询以检查不同的结果，指示由于新记录或删除记录而错过的更改。
+
+- 谓词锁定（Predicate Locking）: 这涉及根据查询的谓词获取锁，确保满足谓词的任何数据都不能被其他事务修改。
+
+- 索引锁定（Index Locking）：利用索引键来保护数据范围，通过确保没有新数据落入锁定范围内来防止幻象。
+
+### **Re-Execute Scans**
+
+DBMS 跟踪事务执行的所有查询的 WHERE 子句。在提交时，它重新执行读的过程，然后检查是否产生相同的数据集合。
+
+例如，对于一个 `UPDATE` 查询，在 commit 时，会重新执行查询的 scan 过程，检查是否和第一次执行读到的数据相同，但是不再执行修改过程。
+
+### **Predicate Locking**
+
+predicate locking 指的是通过一个逻辑表达式来为潜在的记录加锁，如：`status = 'lit'` 。然而，predicate locking 的成本很高，对每条新插入的数据都需要做校验。基本没有 DBMS 用这种方式实现，一种更高效的做法是 index locking。
+
+<figure markdown="span">
+  ![Image title](./17.png){ width="750" }
+</figure>
+
+该方案最初是在 System R 中提出的，但并未得到广泛实施。
+
+### **Index Locking**
+
+我们假设这样的常见，一个查询会读取 $[14,16)$ 范围的数据，另一个查询要插入一个 key 为 $15$ 的元素。最开始 B+ 树的叶节点为：
+
+<figure markdown="span">
+  ![Image title](./18.png){ width="750" }
+</figure>
+
+对于最简单的 **Key-Value Locks**，我们只获得 $14$ 的锁，插入 $15$ 会造成幻读。这时候对于不存在的值，我们也要加上锁，避免其他插入，于是就有了 gap lock。在读的时候，我们获取 $[14,16)$ 这个范围的锁，就能避免数据的插入：
+
+<figure markdown="span">
+  ![Image title](./19.png){ width="750" }
+</figure>
+
+我们可以使用 range lock，每个锁会锁定一个范围内的值，每个范围都是从关系中出现的一个键到出现的下一个键。
+
+<figure markdown="span">
+  ![Image title](./20.png){ width="750" }
+</figure>
+
+当记录数量庞大时，为了减少锁的数量，也可以配合 2pl 那里提到的 Hierarchical lock：
+
+<figure markdown="span">
+  ![Image title](./21.png){ width="750" }
+</figure>
+
+### **Lock Without An Index**
+
+如果没有合适的索引在查询的字段中，例如我们的查询中有 `where status = 'lit'`，但 `status` 字段并没有索引，我们要加如下的锁来避免幻读：
+
+- 获取 table 的每个 page 上的锁，防止其它记录的 `status` 被修改成 `'lit'`。
+
+- 获取 table 本身的锁，防止满足 `status = 'lit'` 的记录被插入或删除
+
+<hr>
+
+## **Isolation Levels**
+
+Serializability 很有用，因为它允许程序员忽略并发问题，但强制执行它可能会导致并行性过低并限制性能。我们可能希望使用较弱的一致性级别来提高可扩展性。
+
+隔离级别控制事务暴露给其他并发事务的操作的程度。首先看我们可能遇到的异常情况：
+
+- 脏读：如果一个事务「读到」了另一个「未提交事务修改过的数据」，就意味着发生了「脏读」现象。
+
+- 不可重复读：在一个事务内多次读取同一个数据，如果出现前后两次读到的数据不一样的情况，就意味着发生了「不可重复读」现象。
+
+- 幻读：在一个事务内多次查询某个符合查询条件的「记录数量」，如果出现前后两次查询到的记录数量不一样的情况，就意味着发生了「幻读」现象。
+
+要解决就涉及到事务的隔离级别，SQL 标准提出了四种隔离级别来规避这些现象，隔离级别越高，性能效率就越低，这四个隔离级别如下：
+
+<img src="../23.png" align="left" height="80" width="80">
+
+- 读未提交（read uncommitted），指一个事务还没提交时，它做的变更就能被其他事务看到；
+
+- 读提交（read committed），指一个事务提交之后，它做的变更才能被其他事务看到；
+
+- 可重复读（repeatable read），指一个事务执行过程中看到的数据，一直跟这个事务启动时看到的数据是一致的，MySQL InnoDB 引擎的默认隔离级别； 
+
+- 串行化（serializable ），会对记录加上读写锁，在多个事务对这条记录进行读写操作时，如果发生了读写冲突的时候，后访问的事务必须等前一个事务执行完成，才能继续执行；
+
+总结如下表：
+
+<figure markdown="span">
+  ![Image title](./22.png){ width="750" }
+</figure>
+
+SQL-92 中定义了数据库设置隔离级别的命令：
+
+```sql
+SET TRANSACTION ISOLATION LEVEL <isolation-level>;   // 全局设定
+BEGIN TRANSACTION ISOLATION LEVEL <isolation-level>; // 单事务设定
+```
+
+但并非所有数据库在所有运行环境中都能支持所有隔离级别，且数据库的默认隔离级别取决于它的实现。一些数据库的默认隔离级别和最高隔离级别：
+
+<figure markdown="span">
+  ![Image title](./24.png){ width="750" }
+</figure>
+
+SQL-92 中也允许用户提示数据库自己的事务是否会修改数据：
+
+```sql
+SET TRANSACTION <access-mode>;   // 全局设置
+BEGIN TRANSACTION <access-mode>; // 单个事务设置
+```
+
+其中 access-mode 有两种模式：READ WRITE 和 READ ONLY。当然，即便在 SQL 语句中添加了这种提示，也不是所有数据库都会利用它来优化 SQL 语句的执行。
