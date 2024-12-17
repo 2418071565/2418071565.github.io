@@ -5,192 +5,193 @@ copyright: "CopyRight &copy CYB"
 edit_uri: edit/master/docs
 
 nav:
-  - About: 
+  - About:
     - 👨‍💻: index.md
     - 😋: hobbies.md
-  - 数据结构与算法: 
-    - 简介: DS_Algo.md
-    - 算法: 
-      - 动态规划（未完工）:
-        - 背包问题: Algorithm/DP/Knapsack/Knapsack.md
-      - 倍增: Algorithm/BinaryLifting/BinaryLifting.md
-      - 排序（未完工）: 
-        - 简介: Algorithm/Sort/Sort.md
-        - 冒泡排序: Algorithm/Sort/BubbleSort/Bubble.md
-    - 字符串:
-      - 字典树: String/Trie/Trie.md
-      - 字符串哈希: String/StringHash/StringHash.md
+  - DSA:
+    - Introduction: DS_Algo.md
+    - Algorithms:
+      - Dynamic Programming (Incomplete):
+        - Knapsack Problem: Algorithm/DP/Knapsack/Knapsack.md
+      - Binary Lifting: Algorithm/BinaryLifting/BinaryLifting.md
+      - Sorting (Incomplete):
+        - Introduction: Algorithm/Sort/Sort.md
+        - Bubble Sort: Algorithm/Sort/BubbleSort/Bubble.md
+    - Strings:
+      - Trie: String/Trie/Trie.md
+      - String Hashing: String/StringHash/StringHash.md
       - KMP: String/KMP/KMP.md
-      - 马拉车: String/Manacher/Manacher.md
-    - 数据结构:
-      - 堆: 
-        - 二叉堆: DS/Heap/BinHp.md
-      - 哈希表: DS/HTable/HTable.md
-      - 并查集: DS/UnionFind/UF.md
-      - 分块: DS/Block/Block.md
-      - 树状数组: 
-        - 树状数组: DS/BIT/BIT.md
-        - 二维树状数组: DS/BIT/2_BIT.md
-      - 平衡搜索树: 
+      - Manacher: String/Manacher/Manacher.md
+    - Data Structures:
+      - Heap:
+        - Binary Heap: DS/Heap/BinHp.md
+      - Hash Table: DS/HTable/HTable.md
+      - Union-Find: DS/UnionFind/UF.md
+      - Block: DS/Block/Block.md
+      - Binary Indexed Tree:
+        - BIT: DS/BIT/BIT.md
+        - 2D BIT: DS/BIT/2_BIT.md
+      - Balanced Search Trees:
         - Splay: DS/Splay/Splay.md
-        - B 树: DS/BTree/BTree.md
-        - AVL（待修改）: DS/AVLTree/AVL.md
-      - 线段树: 
-        - 基础线段树（待修改）: DS/SegTr/SegTr.md
-        - 吉如一线段树: DS/SegTr/JRYSegTr.md
-    - 图论: 
-      - 图的存储: Graph/StorageOfGraphs/Storage.md
-      - 拓朴排序: Graph/TopoSort/Topo.md
-      - 树（未完工）: 
-        - 树基础: Graph/Tree/Basic/Basic.md
-        - 最小生成树: Graph/Tree/MST/MST.md
-        - 树链剖分: Graph/Tree/hld/hld.md
-      - 强连通相关:
-        - 强连通分量: Graph/scc/scc.md
-    - 数学:
-      - 计算几何:
-        - 二维计算几何基础: Math/Geometry/2DGeometry/2D.md
-        - 凸包: Math/Geometry/ConvexHull/CH.md
-      - 数论:
-        - 数论基础: Math/NumberTheory/Fd.md
-        - 快速幂: Math/NumberTheory/Qpow/qpow.md
-        - 乘法逆元: Math/NumberTheory/Inv/Inv.md
-        - 筛法: Math/NumberTheory/sieve/sieve.md
-      - 数值计算:
-        - 牛顿迭代法: Math/Numerical/NtsMethod/Nt.md
-        - 快速平方根倒数算法: Math/Numerical/QSqrt/QSqrt.md
-    - 问题总结:
-      - 整数拆分: UsualQ/IntPartition/IntPartition.md
-      - 区间最大子段和: UsualQ/MaxSumOfSub/MaxSumOfSub.md
-      - 暑期集训: UsualQ/SummerTraining/SumTraining.md
-  - 操作系统:
-    - 简介: OSindex.md
-    - 工具:
-      - 指令（未完工）: Linux/Tools/Cmd/Cmd.md
-      - 系统调用: Linux/Tools/Syscall/Syscall.md
-      - GNU 工具链:
+        - B Tree: DS/BTree/BTree.md
+        - AVL (To be modified): DS/AVLTree/AVL.md
+      - Segment Tree:
+        - Basic Segment Tree (To be modified): DS/SegTr/SegTr.md
+        - JiRuYi Segment Tree: DS/SegTr/JRYSegTr.md
+    - Graph Theory:
+      - Graph Storage: Graph/StorageOfGraphs/Storage.md
+      - Topological Sort: Graph/TopoSort/Topo.md
+      - Trees (Incomplete):
+        - Tree Basics: Graph/Tree/Basic/Basic.md
+        - Minimum Spanning Tree: Graph/Tree/MST/MST.md
+        - Heavy-Light Decomposition: Graph/Tree/hld/hld.md
+      - Strongly Connected Components:
+        - SCC: Graph/scc/scc.md
+    - Mathematics:
+      - Computational Geometry:
+        - 2D Computational Geometry Basics: Math/Geometry/2DGeometry/2D.md
+        - Convex Hull: Math/Geometry/ConvexHull/CH.md
+      - Number Theory:
+        - Number Theory Basics: Math/NumberTheory/Fd.md
+        - Fast Exponentiation: Math/NumberTheory/Qpow/qpow.md
+        - Multiplicative Inverse: Math/NumberTheory/Inv/Inv.md
+        - Sieve Method: Math/NumberTheory/sieve/sieve.md
+      - Numerical Methods:
+        - Newton's Method: Math/Numerical/NtsMethod/Nt.md
+        - Fast Inverse Square Root: Math/Numerical/QSqrt/QSqrt.md
+    - Problem Summaries:
+      - Integer Partition: UsualQ/IntPartition/IntPartition.md
+      - Maximum Subarray Sum: UsualQ/MaxSumOfSub/MaxSumOfSub.md
+      - Summer Training: UsualQ/SummerTraining/SumTraining.md
+  - OS:
+    - Introduction: OSindex.md
+    - Tools:
+      - Commands (Incomplete): Linux/Tools/Cmd/Cmd.md
+      - System Calls: Linux/Tools/Syscall/Syscall.md
+      - GNU Toolchain:
         - gcc: Linux/Tools/GNU/gcc/gcc.md
         - gdb: Linux/Tools/GNU/gdb/gdb.md
         - make: Linux/Tools/GNU/make/make.md
         - flex: Linux/Tools/GNU/flex_yacc/flex.md
-    - 基础知识:
-      - 概念: Linux/SysConcept/SysConcept.md
-      - 进程:
-        - 进程概念: Linux/ProCon/ProCon.md
-        - 进程状态: Linux/ProStatus/ProStatus.md
-        - 进程控制: Linux/ProCtrl/ProCtrl.md
-        - 进程间通信: Linux/IPC/IPC.md
-        - 守护进程: Linux/DaePro/DaePro.md
-      - 信号: Linux/Signal/signal.md
-      - 线程: 
-        - 线程基础: Linux/Thread/Thread.md
-        - 线程互斥与同步: Linux/Thread/Sync.md
-        - 线程池: Linux/Thread/Tpool.md
-      - 文件系统:
-        - 基础 IO: Linux/FileSys/FileIO/FileIO.md
-        - ext2 文件系统: Linux/FileSys/FileSys/FileSys.md
-        - 虚拟文件系统: Linux/FileSys/VFS/VFS.md
+    - Basic Knowledge:
+      - Concepts: Linux/SysConcept/SysConcept.md
+      - Processes:
+        - Process Concepts: Linux/ProCon/ProCon.md
+        - Process States: Linux/ProStatus/ProStatus.md
+        - Process Control: Linux/ProCtrl/ProCtrl.md
+        - Inter-process Communication: Linux/IPC/IPC.md
+        - Daemon Processes: Linux/DaePro/DaePro.md
+      - Signals: Linux/Signal/signal.md
+      - Threads:
+        - Thread Basics: Linux/Thread/Thread.md
+        - Thread Synchronization: Linux/Thread/Sync.md
+        - Thread Pool: Linux/Thread/Tpool.md
+      - File Systems:
+        - Basic IO: Linux/FileSys/FileIO/FileIO.md
+        - ext2 File System: Linux/FileSys/FileSys/FileSys.md
+        - Virtual File System: Linux/FileSys/VFS/VFS.md
       - I/O:
-        - I/O 模型: Linux/IO/IOmodel/model.md
-        - 多路复用: Linux/IO/Multiplexing/Multiplexing.md
-    - 其他:
-      - 根目录: Linux/others/root/root.md
-      - 环境变量: Linux/others/envir/envir.md
-      - 动态库和静态库: Linux/others/Lib/Lib.md
+        - I/O Models: Linux/IO/IOmodel/model.md
+        - Multiplexing: Linux/IO/Multiplexing/Multiplexing.md
+    - Others:
+      - Root Directory: Linux/others/root/root.md
+      - Environment Variables: Linux/others/envir/envir.md
+      - Dynamic & Static Libraries: Linux/others/Lib/Lib.md
       - SheBang: Linux/others/sheBang/sheBang.md
-  - 计算机网络: 
-    - 简介: Network/index.md
-    - 专业术语: Network/pro_term.md
-    - 应用层:
-      - 概述: Network/Application/index.md
+  - Network:
+    - Introduction: Network/index.md
+    - Terminology: Network/pro_term.md
+    - Application Layer:
+      - Overview: Network/Application/index.md
       - HTTP: Network/Application/http.md
       - DHCP: Network/Application/dhcp.md
-    - 传输层:
-      - 概述: Network/Transport/index.md
+    - Transport Layer:
+      - Overview: Network/Transport/index.md
       - UDP: Network/Transport/udp.md
       - TCP: Network/Transport/tcp.md
-    - 网络层:
-      - 概述: Network/network/index.md
+    - Network Layer:
+      - Overview: Network/network/index.md
       - IPv4: Network/network/ip.md
       - ICMP: Network/network/icmp.md
-    - 链路层:
-      - 概述: Network/link/index.md
+    - Link Layer:
+      - Overview: Network/link/index.md
       - Ethernet: Network/link/Ethernet.md
-    - socket 编程:
-      - 基础: Network/basic/basic.md
-      - 自定义协议: Network/socket/Custom.md
+    - Socket Programming:
+      - Basics: Network/basic/basic.md
+      - Custom Protocol: Network/socket/Custom.md
       - Socket: Network/socket/socket.md
   - C++:
-    - 简介: C++/intro.md
-    - 基础: C++/c++初阶杂项.md
-    - 模板基础: C++/模板.md
-    - 继承多态:
-      - 继承: C++/继承多态/继承.md
-      - 多态: C++/继承多态/多态.md
-    - 内存管理: C++/内存管理/new&delete.md
-    - 异常处理: C++/异常处理/异常.md
-    - 强制类型转换: C++/typeCast.md
-    - IO 流: C++/IO流/IO.md
+    - Introduction: C++/intro.md
+    - Basics: C++/c++初阶杂项.md
+    - Template Basics: C++/模板.md
+    - Inheritance & Polymorphism:
+      - Inheritance: C++/继承多态/继承.md
+      - Polymorphism: C++/继承多态/多态.md
+    - Memory Management: C++/内存管理/new&delete.md
+    - Exception Handling: C++/异常处理/异常.md
+    - Type Casting: C++/typeCast.md
+    - I/O Streams: C++/IO流/IO.md
     - C++11:
-      - 列表初始化: C++/c++11/列表初始化.md
-      - 类的新功能: C++/c++11/类的新功能.md
-      - 类型声明: C++/c++11/类型声明.md
-      - 原始字符串: C++/c++11/原始字符串.md
-      - 右值引用和移动语义: C++/c++11/右值引用和移动语义.md
-      - 智能指针: C++/c++11/智能指针.md
-      - STL 的改动（未完工）: C++/c++11/STL.md
-      - 模板相关: C++/c++11/cppmate.md
-      - 多线程相关: C++/c++11/多线程.md
+      - List Initialization: C++/c++11/列表初始化.md
+      - New Features for Classes: C++/c++11/类的新功能.md
+      - Type Declarations: C++/c++11/类型声明.md
+      - Raw Strings: C++/c++11/原始字符串.md
+      - Rvalue References & Move Semantics: C++/c++11/右值引用和移动语义.md
+      - Smart Pointers: C++/c++11/智能指针.md
+      - STL Changes (Incomplete): C++/c++11/STL.md
+      - Templates: C++/c++11/cppmate.md
+      - Multithreading: C++/c++11/多线程.md
     - C++14:
-      - 模板相关: C++/c++14/cppmate.md
+      - Templates: C++/c++14/cppmate.md
       - decltype(auto): C++/c++14/decltype(auto).md
     - C++17:
-      - 模板相关: C++/c++17/cppmate.md
-      - 文件库: C++/c++17/filesystem.md
-      - if 语句: C++/c++17/ifstatement.md
-      - 结构化绑定: C++/c++17/StructBinding.md
+      - Templates: C++/c++17/cppmate.md
+      - Filesystem: C++/c++17/filesystem.md
+      - if Statements: C++/c++17/ifstatement.md
+      - Structured Bindings: C++/c++17/StructBinding.md
     - C++20:
-      - 信号量: C++/c++20/semaphore/semaphore.md
-      - format: C++/c++20/format/format.md
-  - 数据库系统:
+      - Semaphore: C++/c++20/semaphore/semaphore.md
+      - Format: C++/c++20/format/format.md
+  - DBS:
     - Introduction: DB/index.md
-    - SQL: 
-      - 库操作: DB/SQL/BaseOp.md
-      - 表操作: DB/SQL/Op.md
-      - 数据类型: DB/SQL/DataType.md
-      - 表的约束: DB/SQL/table/constraints.md
-      - 表的增删查改: DB/SQL/table/idsu.md
-      - MySQL 内置函数: DB/SQL/table/buildin_fun.md
-      - 复合查询: DB/SQL/Query.md
+    - SQL:
+      - Basic Operations: DB/SQL/BaseOp.md
+      - Table Operations: DB/SQL/Op.md
+      - Data Types: DB/SQL/DataType.md
+      - Table Constraints: DB/SQL/table/constraints.md
+      - CRUD Operations on Tables: DB/SQL/table/idsu.md
+      - MySQL Built-in Functions: DB/SQL/table/buildin_fun.md
+      - Composite Queries: DB/SQL/Query.md
     - Database Storage: DB/storage/storage.md
     - Memory Management: DB/BufferPool/BufferPool.md
-    - Access Methods: 
+    - Access Methods:
       - Hash Tables: DB/DS/HTable.md
-      - Trees Indexes: DB/DS/Bplus.md
+      - Tree Indexes: DB/DS/Bplus.md
       - Index Concurrency Control: DB/DS/CC.md
     - Operator Execution:
-      - Sorting & Aggregations Algorithms: DB/OpExe/sort.md
-      - Joins Algorithms: DB/OpExe/join.md
+      - Sorting & Aggregation Algorithms: DB/OpExe/sort.md
+      - Join Algorithms: DB/OpExe/join.md
       - Query Processing: DB/OpExe/query.md
-      - Parallel Executin: DB/OpExe/pe.md
+      - Parallel Execution: DB/OpExe/pe.md
       - Query Planning & Optimization: DB/OpExe/qo.md
     - Concurrency Control:
-      - Concurrency Control Theory: DB/CC/cct.md
-      - Two Phase Locking: DB/CC/tpl.md
-      - Timestamp Ordering Concurrency Control: DB/CC/TOCC.md
+      - Theory: DB/CC/cct.md
+      - Two-Phase Locking: DB/CC/tpl.md
+      - Timestamp Ordering: DB/CC/TOCC.md
+      - Multi-Version Concurrency Control: DB/CC/MVCC.md
   - Others:
-    - Git: 
-      - 简介: Others/Git/index.md
+    - Git:
+      - Introduction: Others/Git/index.md
     - JSON:
-      - 简介: Others/JSON/index.md
-    - cmake: 
-      - 简介: Others/CMake/HelloWorld.md
+      - Introduction: Others/JSON/index.md
+    - cmake:
+      - Introduction: Others/CMake/HelloWorld.md
     - xmake:
-      - 简介: Others/xmake/index.md
-      - xmake.lua 语法: Others/xmake/config.md
-    - 智能指针杂谈: Others/SPoiner.md
-    # - 面试: 
-    #   - 自我介绍 : Others/interview/ps.md
+      - Introduction: Others/xmake/index.md
+      - xmake.lua Syntax: Others/xmake/config.md
+    - Smart Pointer Discussion: Others/SPoiner.md
+    # - Interviews:
+    #   - Self Introduction: Others/interview/ps.md
     #   - C++: Others/interview/Cpp.md
 
 
